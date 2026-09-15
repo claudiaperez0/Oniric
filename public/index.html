@@ -123,8 +123,33 @@ const TEXTOS = {
     rutina:{titulo:"Tu rutina de práctica",intro:"Marca cada día las técnicas que practiques.",anadir:"Añadir"},
     perfil:{titulo:"Tu perfil",nombre:"Nombre",idioma:"Idioma",guardar:"Guardar",totalSuenos:"Sueños registrados",totalLucidos:"Sueños lúcidos"},
     comun:{racha:"días seguidos",cargando:"Cargando..."} },
+
+  ca:{ nav:{inicio:"Inici",educacion:"Educació",tecnicas:"Tècniques",diario:"Diari",comunidad:"Comunitat",suenoDatos:"Dades de son",cerebro:"Cervell",rutina:"Rutina",perfil:"Perfil",login:"Inicia sessió",registro:"Crea un compte",salir:"Surt"},
+    home:{titulo:"Aprèn a habitar els teus somnis",subtitulo:"Guia científica i pràctica per descobrir, entrenar i gaudir dels somnis lúcids, amb el teu progrés personal.",cta:"Crea un compte",cta2:"Veure la ciència"},
+    auth:{email:"Correu electrònic",password:"Contrasenya",nombre:"Nom",entrar:"Entra",crear:"Crea un compte",yaCuenta:"Ja tinc compte",noCuenta:"Encara no tinc compte"},
+    educacion:{titulo:"Què és un somni lúcid?",intro:"Un somni lúcid és, senzillament, un somni en què t'adones que estàs somiant mentre passa.",cerebroTitulo:"Què passa al cervell mentre somies?",cerebroTexto:"La majoria de somnis vívids passen en la fase REM. El cervell està molt actiu, gairebé com despert, mentre el cos roman paralitzat. En un somni lúcid augmenta l'activitat a l'escorça prefrontal, la zona del raonament i l'autoconsciència.",beneficiosTitulo:"Beneficis i riscos",beneficiosTexto:"Entre els beneficis: menys malsons recurrents, un espai segur per practicar habilitats, i l'experiència creativa d'explorar la teva pròpia ment. Amb moderació: algunes tècniques poden generar cansament si se n'abusa."},
+    tecnicas:{titulo:"Tècniques d'inducció",intro:"Cinc mètodes amb suport científic. Toca cadascuna per desplegar-la."},
+    diario:{titulo:"El teu diari de somnis",nuevo:"+ Nou somni",fecha:"Data",texto:"Explica el teu somni",nivel:"Nivell de lucidesa",senales:"Senyals oníriques (separades per comes)",guardar:"Desa",actualizar:"Actualitza",cancelar:"Cancel·la",vacio:"Encara no has registrat cap somni.",editar:"Edita",borrar:"Esborra"},
+    comunidad:{titulo:"Comunitat",intro:"Comparteix les teves experiències en temps real.",placeholder:"Escriu un missatge...",enviar:"Envia"},
+    suenoDatos:{titulo:"Dades de son (simulades)",intro:"Així es veuria la teva nit amb un rellotge intel·ligent connectat.",duracionTotal:"Durada total",rem:"REM",profundo:"Profund",ligero:"Lleuger"},
+    cerebro:{titulo:"El cervell que somia",intro:"Toca cada zona per descobrir el seu paper durant el son."},
+    rutina:{titulo:"La teva rutina de pràctica",intro:"Marca cada dia les tècniques que practiquis.",anadir:"Afegeix"},
+    perfil:{titulo:"El teu perfil",nombre:"Nom",idioma:"Idioma",guardar:"Desa",totalSuenos:"Somnis registrats",totalLucidos:"Somnis lúcids"},
+    comun:{racha:"dies seguits",cargando:"Carregant..."} },
+
+  en:{ nav:{inicio:"Home",educacion:"Learn",tecnicas:"Techniques",diario:"Journal",comunidad:"Community",suenoDatos:"Sleep data",cerebro:"Brain",rutina:"Routine",perfil:"Profile",login:"Log in",registro:"Sign up",salir:"Log out"},
+    home:{titulo:"Learn to inhabit your dreams",subtitulo:"A scientific, practical guide to discovering, training and enjoying lucid dreams, with your own personal progress.",cta:"Create account",cta2:"See the science"},
+    auth:{email:"Email",password:"Password",nombre:"Name",entrar:"Log in",crear:"Create account",yaCuenta:"I already have an account",noCuenta:"I don't have an account yet"},
+    educacion:{titulo:"What is a lucid dream?",intro:"A lucid dream is simply a dream in which you realize you're dreaming while it's happening.",cerebroTitulo:"What happens in the brain while you dream?",cerebroTexto:"Most vivid dreams happen during REM sleep. The brain is very active, almost as if awake, while the body stays paralyzed. During a lucid dream, activity increases in the prefrontal cortex, the area responsible for reasoning and self-awareness.",beneficiosTitulo:"Benefits and risks",beneficiosTexto:"Possible benefits include fewer recurring nightmares, a safe space to practice skills, and the creative experience of exploring your own mind. In moderation: some techniques can cause tiredness if overused."},
+    tecnicas:{titulo:"Induction techniques",intro:"Five methods with scientific backing. Tap each one to expand it."},
+    diario:{titulo:"Your dream journal",nuevo:"+ New dream",fecha:"Date",texto:"Tell your dream",nivel:"Lucidity level",senales:"Dream signs (comma separated)",guardar:"Save",actualizar:"Update",cancelar:"Cancel",vacio:"You haven't logged any dreams yet.",editar:"Edit",borrar:"Delete"},
+    comunidad:{titulo:"Community",intro:"Share your experiences in real time.",placeholder:"Write a message...",enviar:"Send"},
+    suenoDatos:{titulo:"Sleep data (simulated)",intro:"This is what your night would look like with a smartwatch connected.",duracionTotal:"Total duration",rem:"REM",profundo:"Deep",ligero:"Light"},
+    cerebro:{titulo:"The dreaming brain",intro:"Tap each area to discover its role during sleep."},
+    rutina:{titulo:"Your practice routine",intro:"Check off the techniques you practice each day.",anadir:"Add"},
+    perfil:{titulo:"Your profile",nombre:"Name",idioma:"Language",guardar:"Save",totalSuenos:"Dreams logged",totalLucidos:"Lucid dreams"},
+    comun:{racha:"days in a row",cargando:"Loading..."} },
 };
-TEXTOS.ca = TEXTOS.es; TEXTOS.en = TEXTOS.es; // resto de idiomas reutilizan ES en esta versión reducida
 
 let idioma = localStorage.getItem("onirico_idioma") || "es";
 function t(ruta){ let v=TEXTOS[idioma]; for(const p of ruta.split(".")) v=v?.[p]; return v??ruta; }
@@ -238,47 +263,104 @@ async function renderEducacion(main){
 }
 
 // --- TÉCNICAS ---
-const TECNICAS = [
-  {nombre:"MILD (Inducción Mnemónica)",resumen:"Usar tu intención y memoria justo antes de dormir.",base:"Se apoya en la memoria prospectiva: recordar hacer algo en el futuro.",pasos:["Repite mentalmente: 'la próxima vez que esté soñando, recordaré que estoy soñando'.","Visualiza un sueño reciente dándote cuenta de que era un sueño.","Repite mientras te quedas dormido."],cuando:"Muy bien combinada con WBTB.",consejos:"No lo repitas mecánicamente: visualiza de verdad."},
-  {nombre:"WBTB (Despertar y Volver a Dormir)",resumen:"Interrumpir el sueño de madrugada para aprovechar el REM largo.",base:"El REM se alarga progresivamente durante la noche.",pasos:["Alarma 5-6h después de acostarte.","Levántate 10-30 min con algo tranquilo.","Vuelve a la cama con intención clara (combínalo con MILD)."],cuando:"De madrugada, no todas las noches.",consejos:"Evita pantallas brillantes al despertar."},
-  {nombre:"SSILD",resumen:"Ciclos breves de atención a vista, oído y tacto.",base:"Ejercitar la atención sensorial ayuda a mantener conciencia al dormir.",pasos:["Atiende solo a lo que 'ves'.","Luego solo a lo que oyes.","Luego solo a lo que sientes.","Repite 3-6 ciclos."],cuando:"Tras un WBTB o al acostarte.",consejos:"Atención suave, sin tensión."},
-  {nombre:"Reality Checks",resumen:"Preguntarte '¿estoy despierto?' varias veces al día.",base:"Formación de hábitos: se traslada también a tus sueños.",pasos:["Elige 2-3 comprobaciones.","Hazlas preguntándote de verdad.","Repite 10-20 veces al día."],cuando:"Durante todo el día.",consejos:"Sin duda genuina, no se transfiere al sueño."},
-  {nombre:"Dream Recall",resumen:"Entrenar la memoria para recordar más sueños.",base:"El recuerdo depende de lo cerca que estés despierto tras el sueño.",pasos:["Diario a mano antes de dormir.","Al despertar, recuerda la última escena.","Anota todo, aunque sean fragmentos."],cuando:"Justo al despertar.",consejos:"No mires el móvil nada más despertar."}
-];
+const TECNICAS_POR_IDIOMA = {
+  es: [
+    {nombre:"MILD (Inducción Mnemónica)",resumen:"Usar tu intención y memoria justo antes de dormir.",base:"Se apoya en la memoria prospectiva: recordar hacer algo en el futuro.",pasos:["Repite mentalmente: 'la próxima vez que esté soñando, recordaré que estoy soñando'.","Visualiza un sueño reciente dándote cuenta de que era un sueño.","Repite mientras te quedas dormido."],cuando:"Muy bien combinada con WBTB.",consejos:"No lo repitas mecánicamente: visualiza de verdad."},
+    {nombre:"WBTB (Despertar y Volver a Dormir)",resumen:"Interrumpir el sueño de madrugada para aprovechar el REM largo.",base:"El REM se alarga progresivamente durante la noche.",pasos:["Alarma 5-6h después de acostarte.","Levántate 10-30 min con algo tranquilo.","Vuelve a la cama con intención clara (combínalo con MILD)."],cuando:"De madrugada, no todas las noches.",consejos:"Evita pantallas brillantes al despertar."},
+    {nombre:"SSILD",resumen:"Ciclos breves de atención a vista, oído y tacto.",base:"Ejercitar la atención sensorial ayuda a mantener conciencia al dormir.",pasos:["Atiende solo a lo que 'ves'.","Luego solo a lo que oyes.","Luego solo a lo que sientes.","Repite 3-6 ciclos."],cuando:"Tras un WBTB o al acostarte.",consejos:"Atención suave, sin tensión."},
+    {nombre:"Reality Checks",resumen:"Preguntarte '¿estoy despierto?' varias veces al día.",base:"Formación de hábitos: se traslada también a tus sueños.",pasos:["Elige 2-3 comprobaciones.","Hazlas preguntándote de verdad.","Repite 10-20 veces al día."],cuando:"Durante todo el día.",consejos:"Sin duda genuina, no se transfiere al sueño."},
+    {nombre:"Dream Recall",resumen:"Entrenar la memoria para recordar más sueños.",base:"El recuerdo depende de lo cerca que estés despierto tras el sueño.",pasos:["Diario a mano antes de dormir.","Al despertar, recuerda la última escena.","Anota todo, aunque sean fragmentos."],cuando:"Justo al despertar.",consejos:"No mires el móvil nada más despertar."}
+  ],
+  ca: [
+    {nombre:"MILD (Inducció Mnemònica)",resumen:"Usar la teva intenció i memòria just abans de dormir.",base:"Es basa en la memòria prospectiva: recordar fer alguna cosa en el futur.",pasos:["Repeteix mentalment: 'la propera vegada que estigui somiant, recordaré que estic somiant'.","Visualitza un somni recent adonant-te que era un somni.","Repeteix mentre t'adorms."],cuando:"Molt bé combinada amb WBTB.",consejos:"No ho repeteixis mecànicament: visualitza-ho de debò."},
+    {nombre:"WBTB (Despertar i Tornar a Dormir)",resumen:"Interrompre el son de matinada per aprofitar el REM llarg.",base:"El REM s'allarga progressivament durant la nit.",pasos:["Alarma 5-6h després d'anar-te'n al llit.","Aixeca't 10-30 min amb alguna cosa tranquil·la.","Torna al llit amb intenció clara (combina-ho amb MILD)."],cuando:"De matinada, no totes les nits.",consejos:"Evita pantalles brillants en despertar."},
+    {nombre:"SSILD",resumen:"Cicles breus d'atenció a la vista, l'oïda i el tacte.",base:"Exercitar l'atenció sensorial ajuda a mantenir consciència en adormir-se.",pasos:["Para atenció només a allò que 'veus'.","Després només al que sents.","Després només al que notes a la pell.","Repeteix 3-6 cicles."],cuando:"Després d'un WBTB o en anar al llit.",consejos:"Atenció suau, sense tensió."},
+    {nombre:"Reality Checks",resumen:"Preguntar-te '¿estic despert?' diverses vegades al dia.",base:"Formació d'hàbits: es trasllada també als teus somnis.",pasos:["Tria 2-3 comprovacions.","Fes-les preguntant-te de debò.","Repeteix-les 10-20 vegades al dia."],cuando:"Durant tot el dia.",consejos:"Sense dubte genuí, no es transfereix al somni."},
+    {nombre:"Dream Recall",resumen:"Entrenar la memòria per recordar més somnis.",base:"El record depèn de com de a prop estàs de despert després del somni.",pasos:["Diari a mà abans de dormir.","En despertar, recorda l'última escena.","Anota-ho tot, encara que siguin fragments."],cuando:"Just en despertar.",consejos:"No miris el mòbil just en despertar."}
+  ],
+  en: [
+    {nombre:"MILD (Mnemonic Induction)",resumen:"Use your intention and memory right before sleep.",base:"Based on prospective memory: remembering to do something in the future.",pasos:["Repeat mentally: 'next time I'm dreaming, I will remember I'm dreaming'.","Visualize a recent dream, imagining yourself realizing it was a dream.","Repeat as you fall asleep."],cuando:"Works very well combined with WBTB.",consejos:"Don't repeat it mechanically: really visualize the scene."},
+    {nombre:"WBTB (Wake Back To Bed)",resumen:"Interrupt sleep in the early morning to catch the longer REM period.",base:"REM periods get progressively longer throughout the night.",pasos:["Set an alarm 5-6 hours after going to bed.","Get up and stay awake 10-30 minutes doing something calm.","Go back to bed with a clear intention (combine with MILD)."],cuando:"In the early morning, not every night.",consejos:"Avoid bright screens right after waking up."},
+    {nombre:"SSILD",resumen:"Short cycles of attention to sight, hearing and touch.",base:"Repeatedly exercising sensory attention helps maintain awareness while falling asleep.",pasos:["Pay attention only to what you 'see'.","Then only to what you hear.","Then only to what you feel on your skin.","Repeat 3-6 cycles."],cuando:"After a WBTB or when going to bed.",consejos:"Keep the attention soft, without tension."},
+    {nombre:"Reality Checks",resumen:"Asking yourself 'am I awake?' several times a day.",base:"Habit formation: the habit also carries over into your dreams.",pasos:["Pick 2-3 checks.","Do them while genuinely questioning reality.","Repeat 10-20 times a day."],cuando:"Throughout the day.",consejos:"Without genuine doubt, the habit won't transfer to the dream."},
+    {nombre:"Dream Recall",resumen:"Training your memory to remember more dreams.",base:"Dream recall depends on how close to waking you are right after the dream.",pasos:["Keep your journal handy before sleeping.","On waking, recall the last scene.","Write down everything, even loose fragments."],cuando:"Right upon waking.",consejos:"Don't check your phone right after waking up."}
+  ]
+};
 async function renderTecnicas(main){
   main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("tecnicas.titulo")}</h1><p style="color:var(--niebla-300);">${t("tecnicas.intro")}</p></header></div>`;
   const cont = main.querySelector(".seccion");
+  const TECNICAS = TECNICAS_POR_IDIOMA[idioma] || TECNICAS_POR_IDIOMA.es;
   TECNICAS.forEach((tec,i)=>{
     const div = document.createElement("div"); div.className="tarjeta";
     div.innerHTML = `<div class="tecnica-header"><div><h3 class="font-display" style="margin:0;font-size:1.1rem;">${tec.nombre}</h3><p style="color:var(--niebla-500);font-size:0.88rem;margin:4px 0 0;">${tec.resumen}</p></div><span style="color:var(--aurora-400);font-size:1.3rem;">+</span></div>
-    <div class="tecnica-cuerpo"><div><h4>Base científica</h4><p>${tec.base}</p></div><div><h4>Pasos</h4><ol>${tec.pasos.map(p=>`<li>${p}</li>`).join("")}</ol></div><div><h4>¿Cuándo?</h4><p>${tec.cuando}</p></div><div><h4 style="color:var(--luna-500);">Consejos</h4><p>${tec.consejos}</p></div></div>`;
+    <div class="tecnica-cuerpo"><div><h4>${{es:"Base científica",ca:"Base científica",en:"Scientific basis"}[idioma]}</h4><p>${tec.base}</p></div><div><h4>${{es:"Pasos",ca:"Passos",en:"Steps"}[idioma]}</h4><ol>${tec.pasos.map(p=>`<li>${p}</li>`).join("")}</ol></div><div><h4>${{es:"¿Cuándo?",ca:"Quan?",en:"When?"}[idioma]}</h4><p>${tec.cuando}</p></div><div><h4 style="color:var(--luna-500);">${{es:"Consejos",ca:"Consells",en:"Tips"}[idioma]}</h4><p>${tec.consejos}</p></div></div>`;
     div.querySelector(".tecnica-header").onclick=()=>{ const c=div.querySelector(".tecnica-cuerpo"); const s=div.querySelector("span"); c.classList.toggle("abierta"); s.textContent=c.classList.contains("abierta")?"−":"+"; };
     cont.appendChild(div);
   });
 }
 
 // --- CEREBRO ---
-const ZONAS = {
-  prefrontal:{nombre:"Corteza prefrontal",color:"#8b7fd6",texto:"Razonamiento y autoconciencia. En un sueño lúcido se reactiva parcialmente: por eso te 'das cuenta' de que sueñas."},
-  limbico:{nombre:"Sistema límbico",color:"#e8c97a",texto:"Incluye la amígdala, muy activa en REM. Explica la intensidad emocional de los sueños."},
-  tronco:{nombre:"Tronco encefálico",color:"#4fd1c5",texto:"Activa el REM y paraliza el cuerpo, evitando que actúes físicamente lo que sueñas."}
+const ZONAS_POR_IDIOMA = {
+  es: {
+    prefrontal:{nombre:"Corteza prefrontal",color:"#8b7fd6",texto:"Razonamiento y autoconciencia. En un sueño lúcido se reactiva parcialmente: por eso te 'das cuenta' de que sueñas."},
+    limbico:{nombre:"Sistema límbico",color:"#e8c97a",texto:"Incluye la amígdala, muy activa en REM. Explica la intensidad emocional de los sueños."},
+    tronco:{nombre:"Tronco encefálico",color:"#4fd1c5",texto:"Activa el REM y paraliza el cuerpo, evitando que actúes físicamente lo que sueñas."}
+  },
+  ca: {
+    prefrontal:{nombre:"Escorça prefrontal",color:"#8b7fd6",texto:"Raonament i autoconsciència. En un somni lúcid es reactiva parcialment: per això 't'adones' que estàs somiant."},
+    limbico:{nombre:"Sistema límbic",color:"#e8c97a",texto:"Inclou l'amígdala, molt activa en REM. Explica la intensitat emocional dels somnis."},
+    tronco:{nombre:"Tronc encefàlic",color:"#4fd1c5",texto:"Activa el REM i paralitza el cos, evitant que actuïs físicament el que somies."}
+  },
+  en: {
+    prefrontal:{nombre:"Prefrontal cortex",color:"#8b7fd6",texto:"Reasoning and self-awareness. In a lucid dream it partially reactivates: that's why you 'realize' you're dreaming."},
+    limbico:{nombre:"Limbic system",color:"#e8c97a",texto:"Includes the amygdala, very active during REM. This explains the emotional intensity of dreams."},
+    tronco:{nombre:"Brainstem",color:"#4fd1c5",texto:"Triggers REM sleep and paralyzes the body, stopping you from physically acting out your dreams."}
+  }
 };
 let zonaActiva = "prefrontal";
 async function renderCerebro(main){
+  const ZONAS = ZONAS_POR_IDIOMA[idioma] || ZONAS_POR_IDIOMA.es;
   main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("cerebro.titulo")}</h1><p style="color:var(--niebla-300);">${t("cerebro.intro")}</p></header>
   <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
-    <svg viewBox="0 0 300 260" style="width:100%;max-width:300px;">
-      <path d="M60 120 C40 60 100 20 160 25 C220 20 270 60 260 120 C280 160 250 210 200 220 C180 245 120 245 100 220 C50 210 40 160 60 120 Z" fill="var(--noche-800)" stroke="var(--noche-700)" stroke-width="2"/>
-      <ellipse class="zona" data-z="prefrontal" cx="95" cy="90" rx="45" ry="40" fill="${ZONAS.prefrontal.color}" fill-opacity="0.35" stroke="#05060d" stroke-width="2"/>
-      <circle class="zona" data-z="limbico" cx="165" cy="120" r="30" fill="${ZONAS.limbico.color}" fill-opacity="0.35" stroke="#05060d" stroke-width="2"/>
-      <rect class="zona" data-z="tronco" x="150" y="165" width="35" height="65" rx="16" fill="${ZONAS.tronco.color}" fill-opacity="0.35" stroke="#05060d" stroke-width="2"/>
+    <svg viewBox="0 0 320 280" style="width:100%;max-width:320px;">
+      <defs>
+        <clipPath id="clip-cerebro">
+          <path d="M52,102 C57,76 64,60 92,50 C112,42 132,38 152,40 C186,38 210,45 226,60 C246,75 259,96 255,116 C266,126 269,146 259,161 C267,171 261,183 246,181 C241,196 221,202 206,193 C196,206 176,211 161,201 C141,211 121,209 109,196 C86,199 66,191 63,171 C49,161 43,141 46,121 C41,113 45,105 52,102 Z"/>
+        </clipPath>
+      </defs>
+
+      <!-- Silueta base del cerebro (vista lateral) -->
+      <path d="M52,102 C57,76 64,60 92,50 C112,42 132,38 152,40 C186,38 210,45 226,60 C246,75 259,96 255,116 C266,126 269,146 259,161 C267,171 261,183 246,181 C241,196 221,202 206,193 C196,206 176,211 161,201 C141,211 121,209 109,196 C86,199 66,191 63,171 C49,161 43,141 46,121 C41,113 45,105 52,102 Z"
+        fill="var(--noche-700)" stroke="var(--noche-600)" stroke-width="2"/>
+
+      <!-- Líneas de la corteza (surcos), puramente decorativas -->
+      <g stroke="var(--noche-900)" stroke-width="2" fill="none" opacity="0.5" clip-path="url(#clip-cerebro)">
+        <path d="M75,65 q10,15 0,28 q-8,12 4,24"/>
+        <path d="M105,52 q10,16 -2,30 q-10,14 2,26"/>
+        <path d="M140,48 q10,16 -2,30 q-10,16 4,28"/>
+        <path d="M175,50 q10,14 0,28 q-8,14 4,26"/>
+        <path d="M208,58 q10,14 0,26 q-8,14 4,24"/>
+      </g>
+
+      <!-- Cerebelo (decorativo, parte trasera-inferior) -->
+      <path d="M228,150 q18,-6 30,8 q8,12 -4,22 q-14,10 -28,-2 q-8,-10 2,-28 Z" fill="var(--noche-600)" stroke="var(--noche-500,#3a4160)" stroke-width="1.5" opacity="0.8"/>
+
+      <!-- Tronco encefálico (forma + zona clicable) -->
+      <path class="zona" data-z="tronco" d="M158,196 C162,212 166,228 170,244 C172,253 178,259 188,260 C197,258 200,247 197,237 C202,221 199,206 193,193 C182,199 169,199 158,196 Z"
+        fill="${ZONAS.tronco.color}" fill-opacity="0.4" stroke="#05060d" stroke-width="2"/>
+
+      <!-- Corteza prefrontal (zona clicable, lóbulo frontal) -->
+      <ellipse class="zona" data-z="prefrontal" cx="92" cy="86" rx="46" ry="40" fill="${ZONAS.prefrontal.color}" fill-opacity="0.4" stroke="#05060d" stroke-width="2" clip-path="url(#clip-cerebro)"/>
+
+      <!-- Sistema límbico (zona clicable, estructura profunda central) -->
+      <circle class="zona" data-z="limbico" cx="172" cy="118" r="26" fill="${ZONAS.limbico.color}" fill-opacity="0.45" stroke="#05060d" stroke-width="2" stroke-dasharray="4 3"/>
     </svg>
     <div class="tarjeta" id="info-zona" style="flex:1;min-width:240px;"></div>
   </div></div>`;
   function actualizar(){
     const z = ZONAS[zonaActiva];
     main.querySelector("#info-zona").innerHTML = `<h3 class="font-display" style="color:${z.color};margin:0 0 8px;">${z.nombre}</h3><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${z.texto}</p>`;
-    main.querySelectorAll(".zona").forEach(el=> el.setAttribute("fill-opacity", el.dataset.z===zonaActiva?"0.9":"0.35"));
+    main.querySelectorAll(".zona").forEach(el=> el.setAttribute("fill-opacity", el.dataset.z===zonaActiva?"0.85":"0.4"));
   }
   main.querySelectorAll(".zona").forEach(el=> el.onclick=()=>{ zonaActiva=el.dataset.z; actualizar(); });
   actualizar();
