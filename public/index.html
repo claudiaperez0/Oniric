@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onírico — Sueños lúcidos</title>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Sora:wght@400;500;600;700&display=swap");
+  :root{
+    --noche-950:#05060d; --noche-900:#0b0e1a; --noche-800:#141829; --noche-700:#1f2438; --noche-600:#2c3350;
+    --aurora-400:#a99bf0; --aurora-500:#8b7fd6; --rem-500:#4fd1c5; --luna-500:#e8c97a;
+    --niebla-100:#edeef5; --niebla-300:#c3c6d9; --niebla-500:#8a8fae;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--noche-950);color:var(--niebla-100);font-family:"Sora",system-ui,sans-serif;min-height:100vh;}
+  h1,h2,h3,.font-display{font-family:"Fraunces",serif;}
+  #estrellas{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at top, rgba(139,127,214,0.15), transparent 60%);}
+  header{position:sticky;top:0;z-index:20;background:rgba(5,6,13,0.75);backdrop-filter:blur(6px);border-bottom:1px solid var(--noche-700);}
+  .header-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;flex-wrap:wrap;gap:10px;}
+  .logo{font-family:"Fraunces",serif;font-size:1.2rem;}
+  nav{display:flex;gap:6px;flex-wrap:wrap;}
+  nav button{background:none;border:1px solid transparent;color:var(--niebla-300);padding:6px 12px;border-radius:999px;font-size:0.85rem;cursor:pointer;font-family:inherit;}
+  nav button.activo{background:var(--aurora-500);color:var(--noche-950);font-weight:600;}
+  nav button:not(.activo):hover{border-color:var(--aurora-500);color:var(--aurora-400);}
+  .idiomas{display:flex;gap:2px;background:var(--noche-800);border:1px solid var(--noche-700);border-radius:999px;padding:3px;}
+  .idiomas button{padding:4px 9px;font-size:0.72rem;border-radius:999px;border:none;background:none;color:var(--niebla-500);cursor:pointer;font-family:inherit;}
+  .idiomas button.activo{background:var(--aurora-500);color:var(--noche-950);font-weight:700;}
+  main{max-width:800px;margin:0 auto;padding:32px 18px 80px;}
+  .seccion{display:flex;flex-direction:column;gap:22px;}
+  .tarjeta{background:var(--noche-800);border:1px solid var(--noche-700);border-radius:14px;padding:22px;}
+  .pill{display:inline-block;background:var(--noche-700);color:var(--luna-500);border-radius:999px;font-size:0.72rem;padding:3px 10px;}
+  input,textarea,select{width:100%;background:var(--noche-900);border:1px solid var(--noche-700);border-radius:10px;padding:9px 12px;color:var(--niebla-100);font-family:inherit;font-size:0.92rem;}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--aurora-500);border-color:var(--aurora-500);}
+  label{font-size:0.82rem;color:var(--niebla-500);display:block;margin-bottom:5px;}
+  .campo{margin-bottom:14px;}
+  .btn{background:var(--aurora-500);color:var(--noche-950);font-weight:700;border:none;padding:10px 20px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:0.92rem;}
+  .btn:hover{background:var(--aurora-400);}
+  .btn:disabled{opacity:0.6;cursor:default;}
+  .btn-secundario{background:none;border:1px solid var(--noche-600);color:var(--niebla-300);padding:10px 18px;border-radius:999px;cursor:pointer;font-family:inherit;}
+  .btn-secundario:hover{border-color:var(--niebla-500);}
+  .btn-peligro{background:none;border:none;color:#f28b82;cursor:pointer;font-family:inherit;font-size:0.85rem;}
+  .error{color:#f28b82;font-size:0.85rem;}
+  .tecnica-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+  .tecnica-cuerpo{margin-top:16px;padding-top:16px;border-top:1px solid var(--noche-700);display:none;flex-direction:column;gap:12px;}
+  .tecnica-cuerpo.abierta{display:flex;}
+  .tecnica-cuerpo h4{color:var(--rem-500);font-size:0.82rem;margin:0 0 6px;}
+  .tecnica-cuerpo p, .tecnica-cuerpo ol{color:var(--niebla-300);font-size:0.9rem;line-height:1.5;margin:0;}
+  .sueno-tarjeta{background:var(--noche-800);border:1px solid var(--noche-700);border-radius:14px;padding:18px;}
+  .sueno-header{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--niebla-500);margin-bottom:8px;}
+  .senal{display:inline-block;background:rgba(139,127,214,0.15);color:var(--aurora-400);border-radius:999px;font-size:0.72rem;padding:3px 10px;margin:3px 5px 0 0;}
+  .habito{display:flex;align-items:center;justify-content:space-between;background:var(--noche-800);border:1px solid var(--noche-700);border-radius:14px;padding:14px 18px;}
+  .habito label{display:flex;align-items:center;gap:12px;cursor:pointer;color:var(--niebla-100);font-size:0.95rem;margin:0;}
+  .habito input[type=checkbox]{width:20px;height:20px;accent-color:var(--aurora-500);}
+  .barra-fase{height:26px;border-radius:5px;display:inline-block;vertical-align:middle;}
+  .leyenda{display:flex;gap:14px;flex-wrap:wrap;font-size:0.78rem;color:var(--niebla-500);margin-top:10px;}
+  .leyenda span{display:inline-flex;align-items:center;gap:6px;}
+  .cuadro{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .zona{cursor:pointer;transition:fill-opacity 0.2s;}
+  .chat-caja{display:flex;flex-direction:column;height:65vh;}
+  .chat-mensajes{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px;}
+  .msg{max-width:80%;}
+  .msg.mio{align-self:flex-end;text-align:right;}
+  .msg .autor{font-size:0.72rem;color:var(--niebla-500);margin-bottom:2px;}
+  .msg .globo{border-radius:16px;padding:8px 14px;font-size:0.9rem;display:inline-block;}
+  .msg.mio .globo{background:var(--aurora-500);color:var(--noche-950);}
+  .msg:not(.mio) .globo{background:var(--noche-700);}
+  .chat-form{display:flex;gap:8px;margin-top:14px;border-top:1px solid var(--noche-700);padding-top:14px;}
+  .chat-form input{border-radius:999px;flex:1;}
+  footer{max-width:800px;margin:0 auto;padding:0 18px 40px;color:var(--niebla-500);font-size:0.78rem;}
+  .oculto{display:none !important;}
+</style>
+</head>
+<body>
+<div id="estrellas"></div>
+<header>
+  <div class="header-inner">
+    <div class="logo">🌙 Onírico</div>
+    <nav id="nav"></nav>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="idiomas" id="idiomas"></div>
+      <div id="zona-usuario"></div>
+    </div>
+  </div>
+</header>
+<main id="main"></main>
+<footer id="footer"></footer>
+
+<script>
+/* =============================================================================
+   ONÍRICO — frontend que habla con el backend real (server.js)
+   Todas las llamadas usan fetch() con credentials:'include' para que la
+   cookie de sesión (JWT) viaje en cada petición.
+   ============================================================================= */
+
+const API = ""; // mismo origen: el backend sirve este propio archivo
+
+async function api(ruta, opciones={}){
+  const resp = await fetch(API+ruta, {
+    credentials:"include",
+    headers:{ "Content-Type":"application/json", ...(opciones.headers||{}) },
+    ...opciones
+  });
+  const datos = await resp.json().catch(()=>({}));
+  if(!resp.ok) throw new Error(datos.error || "Error de conexión.");
+  return datos;
+}
+
+// ---------------------------------------------------------------------------
+// TRADUCCIONES
+// ---------------------------------------------------------------------------
+const TEXTOS = {
+  es:{ nav:{inicio:"Inicio",educacion:"Educación",tecnicas:"Técnicas",diario:"Diario",comunidad:"Comunidad",suenoDatos:"Datos de sueño",cerebro:"Cerebro",rutina:"Rutina",perfil:"Perfil",login:"Iniciar sesión",registro:"Crear cuenta",salir:"Salir"},
+    home:{titulo:"Aprende a habitar tus sueños",subtitulo:"Guía científica y práctica para descubrir, entrenar y disfrutar los sueños lúcidos, con tu progreso personal.",cta:"Crear cuenta",cta2:"Ver la ciencia"},
+    auth:{email:"Correo electrónico",password:"Contraseña",nombre:"Nombre",entrar:"Entrar",crear:"Crear cuenta",yaCuenta:"Ya tengo cuenta",noCuenta:"Aún no tengo cuenta"},
+    educacion:{titulo:"¿Qué es un sueño lúcido?",intro:"Un sueño lúcido es, sencillamente, un sueño en el que te das cuenta de que estás soñando mientras ocurre.",cerebroTitulo:"¿Qué pasa en el cerebro mientras sueñas?",cerebroTexto:"La mayoría de sueños vívidos ocurren en la fase REM. El cerebro está muy activo, casi como despierto, mientras el cuerpo permanece paralizado. En un sueño lúcido aumenta la actividad en la corteza prefrontal, la zona del razonamiento y la autoconciencia.",beneficiosTitulo:"Beneficios y riesgos",beneficiosTexto:"Entre los beneficios: menos pesadillas recurrentes, un espacio seguro para practicar habilidades, y la experiencia creativa de explorar tu propia mente. Con moderación: algunas técnicas pueden generar cansancio si se abusa de ellas."},
+    tecnicas:{titulo:"Técnicas de inducción",intro:"Cinco métodos con respaldo científico. Toca cada una para desplegarla."},
+    diario:{titulo:"Tu diario de sueños",nuevo:"+ Nuevo sueño",fecha:"Fecha",texto:"Cuenta tu sueño",nivel:"Nivel de lucidez",senales:"Señales oníricas (separadas por comas)",guardar:"Guardar",actualizar:"Actualizar",cancelar:"Cancelar",vacio:"Todavía no has registrado ningún sueño.",editar:"Editar",borrar:"Borrar"},
+    comunidad:{titulo:"Comunidad",intro:"Comparte tus experiencias en tiempo real.",placeholder:"Escribe un mensaje...",enviar:"Enviar"},
+    suenoDatos:{titulo:"Datos de sueño (simulados)",intro:"Así se vería tu noche con un smartwatch conectado.",duracionTotal:"Duración total",rem:"REM",profundo:"Profundo",ligero:"Ligero"},
+    cerebro:{titulo:"El cerebro que sueña",intro:"Toca cada zona para descubrir su papel durante el sueño."},
+    rutina:{titulo:"Tu rutina de práctica",intro:"Marca cada día las técnicas que practiques.",anadir:"Añadir"},
+    perfil:{titulo:"Tu perfil",nombre:"Nombre",idioma:"Idioma",guardar:"Guardar",totalSuenos:"Sueños registrados",totalLucidos:"Sueños lúcidos"},
+    comun:{racha:"días seguidos",cargando:"Cargando..."} },
+};
+TEXTOS.ca = TEXTOS.es; TEXTOS.en = TEXTOS.es; // resto de idiomas reutilizan ES en esta versión reducida
+
+let idioma = localStorage.getItem("onirico_idioma") || "es";
+function t(ruta){ let v=TEXTOS[idioma]; for(const p of ruta.split(".")) v=v?.[p]; return v??ruta; }
+
+// ---------------------------------------------------------------------------
+// ESTADO
+// ---------------------------------------------------------------------------
+let usuarioActual = null;
+let seccionActual = "inicio";
+let socket = null;
+
+const SECCIONES_PUBLICAS = ["inicio","educacion","tecnicas","cerebro"];
+const SECCIONES_PRIVADAS = ["diario","comunidad","suenoDatos","rutina","perfil"];
+
+async function cargarSesion(){
+  try{ usuarioActual = (await api("/api/auth/yo")).usuario; }catch{ usuarioActual = null; }
+}
+
+function irA(sec){
+  if(SECCIONES_PRIVADAS.includes(sec) && !usuarioActual){ seccionActual="login"; render(); return; }
+  seccionActual = sec; render();
+}
+
+// ---------------------------------------------------------------------------
+// FONDO DE ESTRELLAS
+// ---------------------------------------------------------------------------
+function iniciarEstrellas(){
+  const cont = document.getElementById("estrellas");
+  const canvas = document.createElement("canvas"); cont.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+  function ajustar(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+  ajustar(); addEventListener("resize", ajustar);
+  const estrellas = Array.from({length:120},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.2+0.3,fase:Math.random()*Math.PI*2,vel:Math.random()*0.02+0.005}));
+  function dibujar(tm){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    estrellas.forEach(e=>{ const b=0.4+0.6*Math.abs(Math.sin(e.fase+tm*e.vel)); ctx.beginPath(); ctx.arc(e.x,e.y,e.r,0,7); ctx.fillStyle=`rgba(237,238,245,${b})`; ctx.fill(); });
+    requestAnimationFrame(dibujar);
+  }
+  requestAnimationFrame(dibujar);
+}
+
+// ---------------------------------------------------------------------------
+// NAV
+// ---------------------------------------------------------------------------
+function renderNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = "";
+  const secciones = usuarioActual ? [...SECCIONES_PUBLICAS,...SECCIONES_PRIVADAS] : SECCIONES_PUBLICAS;
+  secciones.forEach(sec=>{
+    const b=document.createElement("button");
+    b.textContent = t(`nav.${sec}`); if(sec===seccionActual) b.classList.add("activo");
+    b.onclick=()=>irA(sec); nav.appendChild(b);
+  });
+  const idiomasDiv = document.getElementById("idiomas"); idiomasDiv.innerHTML="";
+  ["es","ca","en"].forEach(c=>{
+    const b=document.createElement("button"); b.textContent=c.toUpperCase();
+    if(c===idioma) b.classList.add("activo");
+    b.onclick=()=>{ idioma=c; localStorage.setItem("onirico_idioma",c); render(); };
+    idiomasDiv.appendChild(b);
+  });
+  const zonaUsuario = document.getElementById("zona-usuario");
+  if(usuarioActual){
+    zonaUsuario.innerHTML = `<button class="btn-secundario" id="btn-salir" style="padding:6px 14px;">${t("nav.salir")}</button>`;
+    zonaUsuario.querySelector("#btn-salir").onclick = async ()=>{ await api("/api/auth/logout",{method:"POST"}); usuarioActual=null; irA("inicio"); if(socket) socket.disconnect(); };
+  } else {
+    zonaUsuario.innerHTML = `<button class="btn-secundario" id="btn-login" style="padding:6px 14px;">${t("nav.login")}</button>`;
+    zonaUsuario.querySelector("#btn-login").onclick = ()=>{ seccionActual="login"; render(); };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// RENDER PRINCIPAL
+// ---------------------------------------------------------------------------
+async function render(){
+  renderNav();
+  const main = document.getElementById("main");
+  main.innerHTML = `<p style="color:var(--niebla-500);text-align:center;">${t("comun.cargando")}</p>`;
+  const fns = { inicio:renderInicio, educacion:renderEducacion, tecnicas:renderTecnicas, cerebro:renderCerebro,
+    login:renderLogin, registro:renderRegistro, diario:renderDiario, comunidad:renderComunidad,
+    suenoDatos:renderSuenoDatos, rutina:renderRutina, perfil:renderPerfil };
+  main.innerHTML = "";
+  await (fns[seccionActual] || renderInicio)(main);
+  document.getElementById("footer").innerHTML = "🌙 Onírico — hecho para aprender y practicar sueños lúcidos.";
+}
+
+// --- INICIO ---
+async function renderInicio(main){
+  main.innerHTML = `
+    <div style="padding-top:20px;display:flex;flex-direction:column;gap:18px;max-width:560px;">
+      <span style="color:var(--rem-500);font-size:0.85rem;">Ciencia del sueño · Práctica guiada</span>
+      <h1 class="font-display" style="font-size:2.4rem;line-height:1.15;margin:0;">${t("home.titulo")}</h1>
+      <p style="color:var(--niebla-300);font-size:1.05rem;line-height:1.5;">${t("home.subtitulo")}</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn" id="cta1">${usuarioActual? t("nav.diario") : t("home.cta")}</button>
+        <button class="btn-secundario" id="cta2">${t("home.cta2")}</button>
+      </div>
+    </div>`;
+  main.querySelector("#cta1").onclick = ()=> usuarioActual? irA("diario") : (seccionActual="registro", render());
+  main.querySelector("#cta2").onclick = ()=> irA("educacion");
+}
+
+// --- EDUCACIÓN ---
+async function renderEducacion(main){
+  main.innerHTML = `
+    <div class="seccion">
+      <header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("educacion.titulo")}</h1>
+      <p style="color:var(--niebla-300);line-height:1.6;">${t("educacion.intro")}</p></header>
+      <div class="tarjeta"><h2 style="color:var(--rem-500);font-size:1.2rem;margin:0 0 8px;">${t("educacion.cerebroTitulo")}</h2><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${t("educacion.cerebroTexto")}</p></div>
+      <div class="tarjeta"><h2 style="color:var(--luna-500);font-size:1.2rem;margin:0 0 8px;">${t("educacion.beneficiosTitulo")}</h2><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${t("educacion.beneficiosTexto")}</p></div>
+    </div>`;
+}
+
+// --- TÉCNICAS ---
+const TECNICAS = [
+  {nombre:"MILD (Inducción Mnemónica)",resumen:"Usar tu intención y memoria justo antes de dormir.",base:"Se apoya en la memoria prospectiva: recordar hacer algo en el futuro.",pasos:["Repite mentalmente: 'la próxima vez que esté soñando, recordaré que estoy soñando'.","Visualiza un sueño reciente dándote cuenta de que era un sueño.","Repite mientras te quedas dormido."],cuando:"Muy bien combinada con WBTB.",consejos:"No lo repitas mecánicamente: visualiza de verdad."},
+  {nombre:"WBTB (Despertar y Volver a Dormir)",resumen:"Interrumpir el sueño de madrugada para aprovechar el REM largo.",base:"El REM se alarga progresivamente durante la noche.",pasos:["Alarma 5-6h después de acostarte.","Levántate 10-30 min con algo tranquilo.","Vuelve a la cama con intención clara (combínalo con MILD)."],cuando:"De madrugada, no todas las noches.",consejos:"Evita pantallas brillantes al despertar."},
+  {nombre:"SSILD",resumen:"Ciclos breves de atención a vista, oído y tacto.",base:"Ejercitar la atención sensorial ayuda a mantener conciencia al dormir.",pasos:["Atiende solo a lo que 'ves'.","Luego solo a lo que oyes.","Luego solo a lo que sientes.","Repite 3-6 ciclos."],cuando:"Tras un WBTB o al acostarte.",consejos:"Atención suave, sin tensión."},
+  {nombre:"Reality Checks",resumen:"Preguntarte '¿estoy despierto?' varias veces al día.",base:"Formación de hábitos: se traslada también a tus sueños.",pasos:["Elige 2-3 comprobaciones.","Hazlas preguntándote de verdad.","Repite 10-20 veces al día."],cuando:"Durante todo el día.",consejos:"Sin duda genuina, no se transfiere al sueño."},
+  {nombre:"Dream Recall",resumen:"Entrenar la memoria para recordar más sueños.",base:"El recuerdo depende de lo cerca que estés despierto tras el sueño.",pasos:["Diario a mano antes de dormir.","Al despertar, recuerda la última escena.","Anota todo, aunque sean fragmentos."],cuando:"Justo al despertar.",consejos:"No mires el móvil nada más despertar."}
+];
+async function renderTecnicas(main){
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("tecnicas.titulo")}</h1><p style="color:var(--niebla-300);">${t("tecnicas.intro")}</p></header></div>`;
+  const cont = main.querySelector(".seccion");
+  TECNICAS.forEach((tec,i)=>{
+    const div = document.createElement("div"); div.className="tarjeta";
+    div.innerHTML = `<div class="tecnica-header"><div><h3 class="font-display" style="margin:0;font-size:1.1rem;">${tec.nombre}</h3><p style="color:var(--niebla-500);font-size:0.88rem;margin:4px 0 0;">${tec.resumen}</p></div><span style="color:var(--aurora-400);font-size:1.3rem;">+</span></div>
+    <div class="tecnica-cuerpo"><div><h4>Base científica</h4><p>${tec.base}</p></div><div><h4>Pasos</h4><ol>${tec.pasos.map(p=>`<li>${p}</li>`).join("")}</ol></div><div><h4>¿Cuándo?</h4><p>${tec.cuando}</p></div><div><h4 style="color:var(--luna-500);">Consejos</h4><p>${tec.consejos}</p></div></div>`;
+    div.querySelector(".tecnica-header").onclick=()=>{ const c=div.querySelector(".tecnica-cuerpo"); const s=div.querySelector("span"); c.classList.toggle("abierta"); s.textContent=c.classList.contains("abierta")?"−":"+"; };
+    cont.appendChild(div);
+  });
+}
+
+// --- CEREBRO ---
+const ZONAS = {
+  prefrontal:{nombre:"Corteza prefrontal",color:"#8b7fd6",texto:"Razonamiento y autoconciencia. En un sueño lúcido se reactiva parcialmente: por eso te 'das cuenta' de que sueñas."},
+  limbico:{nombre:"Sistema límbico",color:"#e8c97a",texto:"Incluye la amígdala, muy activa en REM. Explica la intensidad emocional de los sueños."},
+  tronco:{nombre:"Tronco encefálico",color:"#4fd1c5",texto:"Activa el REM y paraliza el cuerpo, evitando que actúes físicamente lo que sueñas."}
+};
+let zonaActiva = "prefrontal";
+async function renderCerebro(main){
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("cerebro.titulo")}</h1><p style="color:var(--niebla-300);">${t("cerebro.intro")}</p></header>
+  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
+    <svg viewBox="0 0 300 260" style="width:100%;max-width:300px;">
+      <path d="M60 120 C40 60 100 20 160 25 C220 20 270 60 260 120 C280 160 250 210 200 220 C180 245 120 245 100 220 C50 210 40 160 60 120 Z" fill="var(--noche-800)" stroke="var(--noche-700)" stroke-width="2"/>
+      <ellipse class="zona" data-z="prefrontal" cx="95" cy="90" rx="45" ry="40" fill="${ZONAS.prefrontal.color}" fill-opacity="0.35" stroke="#05060d" stroke-width="2"/>
+      <circle class="zona" data-z="limbico" cx="165" cy="120" r="30" fill="${ZONAS.limbico.color}" fill-opacity="0.35" stroke="#05060d" stroke-width="2"/>
+      <rect class="zona" data-z="tronco" x="150" y="165" width="35" height="65" rx="16" fill="${ZONAS.tronco.color}" fill-opacity="0.35" stroke="#05060d" stroke-width="2"/>
+    </svg>
+    <div class="tarjeta" id="info-zona" style="flex:1;min-width:240px;"></div>
+  </div></div>`;
+  function actualizar(){
+    const z = ZONAS[zonaActiva];
+    main.querySelector("#info-zona").innerHTML = `<h3 class="font-display" style="color:${z.color};margin:0 0 8px;">${z.nombre}</h3><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${z.texto}</p>`;
+    main.querySelectorAll(".zona").forEach(el=> el.setAttribute("fill-opacity", el.dataset.z===zonaActiva?"0.9":"0.35"));
+  }
+  main.querySelectorAll(".zona").forEach(el=> el.onclick=()=>{ zonaActiva=el.dataset.z; actualizar(); });
+  actualizar();
+}
+
+// --- LOGIN / REGISTRO ---
+async function renderLogin(main){
+  main.innerHTML = `<div style="max-width:360px;margin:20px auto 0;"><h1 class="font-display" style="text-align:center;font-size:1.6rem;">${t("nav.login")}</h1>
+  <div class="tarjeta">
+    <div class="campo"><label>${t("auth.email")}</label><input type="email" id="c-email"></div>
+    <div class="campo"><label>${t("auth.password")}</label><input type="password" id="c-pass"></div>
+    <p class="error oculto" id="c-error"></p>
+    <button class="btn" style="width:100%;" id="c-entrar">${t("auth.entrar")}</button>
+    <p style="text-align:center;margin-top:14px;"><a href="#" id="ir-registro" style="color:var(--niebla-500);font-size:0.85rem;">${t("auth.noCuenta")}</a></p>
+  </div></div>`;
+  main.querySelector("#ir-registro").onclick=(e)=>{e.preventDefault(); seccionActual="registro"; render();};
+  main.querySelector("#c-entrar").onclick = async ()=>{
+    const err = main.querySelector("#c-error");
+    try{
+      const r = await api("/api/auth/login",{method:"POST",body:JSON.stringify({email:main.querySelector("#c-email").value,password:main.querySelector("#c-pass").value})});
+      usuarioActual = r.usuario; irA("diario"); conectarSocket();
+    }catch(e){ err.textContent = e.message; err.classList.remove("oculto"); }
+  };
+}
+async function renderRegistro(main){
+  main.innerHTML = `<div style="max-width:360px;margin:20px auto 0;"><h1 class="font-display" style="text-align:center;font-size:1.6rem;">${t("nav.registro")}</h1>
+  <div class="tarjeta">
+    <div class="campo"><label>${t("auth.nombre")}</label><input id="c-nombre"></div>
+    <div class="campo"><label>${t("auth.email")}</label><input type="email" id="c-email"></div>
+    <div class="campo"><label>${t("auth.password")}</label><input type="password" id="c-pass" minlength="6"></div>
+    <p class="error oculto" id="c-error"></p>
+    <button class="btn" style="width:100%;" id="c-crear">${t("auth.crear")}</button>
+    <p style="text-align:center;margin-top:14px;"><a href="#" id="ir-login" style="color:var(--niebla-500);font-size:0.85rem;">${t("auth.yaCuenta")}</a></p>
+  </div></div>`;
+  main.querySelector("#ir-login").onclick=(e)=>{e.preventDefault(); seccionActual="login"; render();};
+  main.querySelector("#c-crear").onclick = async ()=>{
+    const err = main.querySelector("#c-error");
+    try{
+      const r = await api("/api/auth/registro",{method:"POST",body:JSON.stringify({nombre:main.querySelector("#c-nombre").value,email:main.querySelector("#c-email").value,password:main.querySelector("#c-pass").value})});
+      usuarioActual = r.usuario; irA("diario"); conectarSocket();
+    }catch(e){ err.textContent = e.message; err.classList.remove("oculto"); }
+  };
+}
+
+// --- DIARIO ---
+async function renderDiario(main){
+  main.innerHTML = `<div class="seccion"><header style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <h1 class="font-display" style="font-size:1.9rem;margin:0;">${t("diario.titulo")}</h1>
+    <button class="btn" id="btn-nuevo">${t("diario.nuevo")}</button></header>
+    <div id="form-cont"></div><div id="lista-cont"></div></div>`;
+
+  main.querySelector("#btn-nuevo").onclick = ()=> mostrarForm();
+
+  function mostrarForm(sueno){
+    const cont = main.querySelector("#form-cont");
+    const hoy = new Date().toISOString().slice(0,10);
+    cont.innerHTML = `<div class="tarjeta">
+      <div class="campo"><label>${t("diario.fecha")}</label><input type="date" id="f-fecha" value="${sueno?new Date(sueno.fecha).toISOString().slice(0,10):hoy}"></div>
+      <div class="campo"><label>${t("diario.texto")}</label><textarea id="f-texto" rows="4">${sueno?sueno.texto:""}</textarea></div>
+      <div class="campo"><label>${t("diario.nivel")}: <span id="f-val" style="color:var(--luna-500);font-weight:700;">${sueno?sueno.nivelLucidez:0}</span></label><input type="range" min="0" max="5" id="f-nivel" value="${sueno?sueno.nivelLucidez:0}" style="accent-color:var(--aurora-500);"></div>
+      <div class="campo"><label>${t("diario.senales")}</label><input id="f-senales" value="${sueno?(sueno.senalesOniricas||[]).join(", "):""}"></div>
+      <div style="display:flex;gap:10px;"><button class="btn" id="f-guardar" style="flex:1;">${sueno?t("diario.actualizar"):t("diario.guardar")}</button><button class="btn-secundario" id="f-cancelar">${t("diario.cancelar")}</button></div>
+    </div>`;
+    cont.querySelector("#f-nivel").oninput=(e)=> cont.querySelector("#f-val").textContent=e.target.value;
+    cont.querySelector("#f-cancelar").onclick=()=> cont.innerHTML="";
+    cont.querySelector("#f-guardar").onclick = async ()=>{
+      const body = { fecha:cont.querySelector("#f-fecha").value, texto:cont.querySelector("#f-texto").value,
+        nivelLucidez:Number(cont.querySelector("#f-nivel").value), senalesOniricas:cont.querySelector("#f-senales").value.split(",").map(s=>s.trim()).filter(Boolean) };
+      if(!body.texto.trim()) return;
+      if(sueno) await api(`/api/suenos/${sueno._id}`,{method:"PUT",body:JSON.stringify(body)});
+      else await api("/api/suenos",{method:"POST",body:JSON.stringify(body)});
+      irA("diario");
+    };
+  }
+
+  const {suenos} = await api("/api/suenos");
+  const listaDiv = main.querySelector("#lista-cont");
+  if(suenos.length===0){ listaDiv.innerHTML = `<p style="color:var(--niebla-500);text-align:center;margin-top:20px;">${t("diario.vacio")}</p>`; return; }
+  listaDiv.style.display="flex"; listaDiv.style.flexDirection="column"; listaDiv.style.gap="14px";
+  suenos.forEach(sueno=>{
+    const art = document.createElement("div"); art.className="sueno-tarjeta";
+    art.innerHTML = `<div class="sueno-header"><span>${new Date(sueno.fecha).toLocaleDateString()}</span><span class="pill">${t("diario.nivel")}: ${sueno.nivelLucidez}/5</span></div>
+    <p style="white-space:pre-line;margin:0;">${sueno.texto}</p>
+    <div>${(sueno.senalesOniricas||[]).map(s=>`<span class="senal">${s}</span>`).join("")}</div>
+    <div style="display:flex;gap:16px;margin-top:12px;"><button class="btn-peligro" style="color:var(--rem-500);" data-a="editar">${t("diario.editar")}</button><button class="btn-peligro" data-a="borrar">${t("diario.borrar")}</button></div>`;
+    art.querySelector('[data-a="editar"]').onclick=()=>mostrarForm(sueno);
+    art.querySelector('[data-a="borrar"]').onclick=async()=>{ await api(`/api/suenos/${sueno._id}`,{method:"DELETE"}); irA("diario"); };
+    listaDiv.appendChild(art);
+  });
+}
+
+// --- COMUNIDAD (chat en tiempo real) ---
+function conectarSocket(){
+  if(socket) return;
+  socket = io();
+  socket.on("mensaje_recibido", (msg)=>{
+    if(seccionActual==="comunidad") agregarMensajeAlDom(msg);
+  });
+}
+function agregarMensajeAlDom(msg){
+  const cont = document.getElementById("chat-mensajes");
+  if(!cont) return;
+  const esMio = usuarioActual && (msg.autor===usuarioActual.id || msg.autor?._id===usuarioActual.id);
+  const div = document.createElement("div"); div.className = "msg"+(esMio?" mio":"");
+  div.innerHTML = `<div class="autor">${msg.autorNombre}</div><div class="globo">${msg.texto}</div>`;
+  cont.appendChild(div);
+  cont.scrollTop = cont.scrollHeight;
+}
+async function renderComunidad(main){
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("comunidad.titulo")}</h1><p style="color:var(--niebla-300);">${t("comunidad.intro")}</p></header>
+  <div class="tarjeta chat-caja"><div class="chat-mensajes" id="chat-mensajes"></div>
+  <form class="chat-form" id="chat-form"><input id="chat-input" placeholder="${t("comunidad.placeholder")}"><button class="btn" type="submit">${t("comunidad.enviar")}</button></form></div></div>`;
+  conectarSocket();
+  const {mensajes} = await api("/api/chat/historial");
+  mensajes.forEach(agregarMensajeAlDom);
+  main.querySelector("#chat-form").onsubmit = (e)=>{
+    e.preventDefault();
+    const input = main.querySelector("#chat-input");
+    if(!input.value.trim()) return;
+    socket.emit("mensaje_nuevo", input.value);
+    input.value = "";
+  };
+}
+
+// --- DATOS DE SUEÑO ---
+const COLOR_FASE = {despierto:"#e8c97a",ligero:"#8b7fd6",profundo:"#4fd1c5",rem:"#a99bf0"};
+async function renderSuenoDatos(main){
+  const d = await api("/api/sueno-datos/noche");
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("suenoDatos.titulo")}</h1><p style="color:var(--niebla-300);">${t("suenoDatos.intro")}</p></header>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.duracionTotal")}</div><div class="font-display" style="font-size:1.2rem;">${Math.round(d.duracionTotal/60)}h${String(d.duracionTotal%60).padStart(2,"0")}</div></div>
+    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.rem")}</div><div class="font-display" style="font-size:1.2rem;color:${COLOR_FASE.rem};">${d.resumen.rem} min</div></div>
+    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.profundo")}</div><div class="font-display" style="font-size:1.2rem;color:${COLOR_FASE.profundo};">${d.resumen.profundo} min</div></div>
+    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.ligero")}</div><div class="font-display" style="font-size:1.2rem;">${d.resumen.ligero} min</div></div>
+  </div>
+  <div class="tarjeta"><div id="barra" style="white-space:nowrap;overflow-x:auto;line-height:0;"></div>
+  <div class="leyenda"><span><span class="cuadro" style="background:${COLOR_FASE.ligero}"></span>${t("suenoDatos.ligero")}</span><span><span class="cuadro" style="background:${COLOR_FASE.profundo}"></span>${t("suenoDatos.profundo")}</span><span><span class="cuadro" style="background:${COLOR_FASE.rem}"></span>${t("suenoDatos.rem")}</span></div></div></div>`;
+  const barra = main.querySelector("#barra");
+  d.segmentos.forEach(s=>{
+    const b = document.createElement("span"); b.className="barra-fase";
+    b.style.width = Math.max(6,(s.fin-s.inicio)*3)+"px"; b.style.background=COLOR_FASE[s.fase];
+    barra.appendChild(b);
+  });
+}
+
+// --- RUTINA ---
+async function renderRutina(main){
+  const {rutina} = await api("/api/rutina");
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("rutina.titulo")}</h1><p style="color:var(--niebla-300);">${t("rutina.intro")}</p></header>
+  <div id="lista-habitos" style="display:flex;flex-direction:column;gap:12px;"></div><div id="anadir"></div></div>`;
+  const lista = main.querySelector("#lista-habitos");
+  rutina.forEach(h=>{
+    const fila = document.createElement("div"); fila.className="habito";
+    fila.innerHTML = `<label><input type="checkbox" ${h.completadoHoy?"checked":""}><span>${h.tecnica}<br><span style="font-size:0.75rem;color:var(--luna-500);">🔥 ${h.rachaDias} ${t("comun.racha")}</span></span></label><button class="btn-peligro">✕</button>`;
+    fila.querySelector("input").onchange = async()=>{ await api(`/api/rutina/${encodeURIComponent(h.tecnica)}/toggle`,{method:"PUT"}); irA("rutina"); };
+    fila.querySelector("button").onclick = async()=>{ await api(`/api/rutina/${encodeURIComponent(h.tecnica)}`,{method:"DELETE"}); irA("rutina"); };
+    lista.appendChild(fila);
+  });
+  const disponibles = ["MILD","WBTB","SSILD","Reality Checks","Dream Recall"].filter(x=>!rutina.some(h=>h.tecnica===x));
+  if(disponibles.length){
+    const cont = main.querySelector("#anadir");
+    cont.innerHTML = `<div style="display:flex;gap:10px;margin-top:6px;"><select id="sel-tec" style="flex:1;">${disponibles.map(d=>`<option value="${d}">${d}</option>`).join("")}</select><button class="btn" id="btn-anadir">${t("rutina.anadir")}</button></div>`;
+    cont.querySelector("#btn-anadir").onclick = async()=>{ await api("/api/rutina",{method:"POST",body:JSON.stringify({tecnica:cont.querySelector("#sel-tec").value})}); irA("rutina"); };
+  }
+}
+
+// --- PERFIL ---
+async function renderPerfil(main){
+  main.innerHTML = `<div style="max-width:420px;margin:0 auto;"><h1 class="font-display" style="font-size:1.9rem;">${t("perfil.titulo")}</h1>
+  <div class="tarjeta">
+    <div class="campo"><label>${t("perfil.nombre")}</label><input id="p-nombre" value="${usuarioActual.nombre}"></div>
+    <div class="campo"><label>${t("perfil.idioma")}</label><select id="p-idioma"><option value="es">Español</option><option value="ca">Català</option><option value="en">English</option></select></div>
+    <button class="btn" id="p-guardar" style="width:100%;">${t("perfil.guardar")}</button>
+  </div>
+  <div class="tarjeta" style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:center;">
+    <div><div class="font-display" style="font-size:1.8rem;color:var(--aurora-400);">${usuarioActual.estadisticas.totalSuenosRegistrados}</div><div style="font-size:0.75rem;color:var(--niebla-500);">${t("perfil.totalSuenos")}</div></div>
+    <div><div class="font-display" style="font-size:1.8rem;color:var(--luna-500);">${usuarioActual.estadisticas.totalSuenosLucidos}</div><div style="font-size:0.75rem;color:var(--niebla-500);">${t("perfil.totalLucidos")}</div></div>
+  </div></div>`;
+  main.querySelector("#p-idioma").value = usuarioActual.idiomaPreferido;
+  main.querySelector("#p-guardar").onclick = async()=>{
+    const r = await api("/api/auth/perfil",{method:"PUT",body:JSON.stringify({nombre:main.querySelector("#p-nombre").value,idiomaPreferido:main.querySelector("#p-idioma").value})});
+    usuarioActual = r.usuario; idioma = usuarioActual.idiomaPreferido; localStorage.setItem("onirico_idioma",idioma);
+    render();
+  };
+}
+
+// ---------------------------------------------------------------------------
+// ARRANQUE
+// ---------------------------------------------------------------------------
+(async function(){
+  iniciarEstrellas();
+  await cargarSesion();
+  if(usuarioActual) conectarSocket();
+  render();
+})();
+</script>
+</body>
+</html>
