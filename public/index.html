@@ -70,6 +70,29 @@
   .chat-form input{border-radius:999px;flex:1;}
   footer{max-width:800px;margin:0 auto;padding:0 18px 40px;color:var(--niebla-500);font-size:0.78rem;}
   .oculto{display:none !important;}
+
+  /* --- Insignias de evidencia científica --- */
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;font-weight:600;padding:4px 10px;border-radius:999px;}
+  .badge .punto{width:6px;height:6px;border-radius:50%;display:inline-block;}
+  .aviso{display:flex;gap:10px;align-items:flex-start;background:rgba(232,201,122,0.12);border:1px solid rgba(232,201,122,0.3);border-radius:12px;padding:12px 14px;font-size:0.85rem;color:var(--niebla-100);}
+  .filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .filtro{font-size:0.82rem;padding:6px 14px;border-radius:999px;cursor:pointer;font-family:inherit;border:1px solid var(--noche-700);background:var(--noche-800);color:var(--niebla-500);}
+  .filtro.activo{background:var(--aurora-500);color:var(--noche-950);border-color:var(--aurora-500);font-weight:600;}
+  .grid-tecnicas{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:600px){.grid-tecnicas{grid-template-columns:1fr;}}
+  .volver{display:inline-flex;align-items:center;gap:6px;color:var(--niebla-500);font-size:0.85rem;background:none;border:none;cursor:pointer;font-family:inherit;margin-bottom:14px;}
+  .volver:hover{color:var(--niebla-100);}
+  .avatar-grande{width:64px;height:64px;border-radius:50%;background:var(--noche-700);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;}
+  .avatar-opcion{font-size:1.5rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--noche-700);cursor:pointer;background:var(--noche-900);}
+  .avatar-opcion.activo{border-color:var(--aurora-500);background:rgba(139,127,214,0.18);}
+  .post-tarjeta{background:var(--noche-800);border:1px solid var(--noche-700);border-radius:14px;padding:16px 18px;}
+  .post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .categoria-tag{font-size:0.72rem;padding:3px 10px;border-radius:999px;background:rgba(139,127,214,0.15);color:var(--aurora-400);}
+  .bloque-rutina{margin-bottom:8px;}
+  .bloque-rutina h4{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--niebla-100);margin:0 0 10px;font-family:"Sora";font-weight:600;}
+  .articulo{border-bottom:1px solid var(--noche-700);padding:14px 0;}
+  .articulo:last-child{border-bottom:none;}
+  .articulo-header{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer;gap:10px;}
 </style>
 </head>
 <body>
@@ -111,40 +134,37 @@ async function api(ruta, opciones={}){
 // TRADUCCIONES
 // ---------------------------------------------------------------------------
 const TEXTOS = {
-  es:{ nav:{inicio:"Inicio",educacion:"Educación",tecnicas:"Técnicas",diario:"Diario",comunidad:"Comunidad",suenoDatos:"Datos de sueño",cerebro:"Cerebro",rutina:"Rutina",perfil:"Perfil",login:"Iniciar sesión",registro:"Crear cuenta",salir:"Salir"},
+  es:{ nav:{inicio:"Inicio",educacion:"Educación",tecnicas:"Técnicas",diario:"Diario",comunidad:"Comunidad",cerebro:"Cerebro",rutina:"Rutina",perfil:"Perfil",login:"Iniciar sesión",registro:"Crear cuenta",salir:"Salir"},
     home:{titulo:"Aprende a habitar tus sueños",subtitulo:"Guía científica y práctica para descubrir, entrenar y disfrutar los sueños lúcidos, con tu progreso personal.",cta:"Crear cuenta",cta2:"Ver la ciencia"},
     auth:{email:"Correo electrónico",password:"Contraseña",nombre:"Nombre",entrar:"Entrar",crear:"Crear cuenta",yaCuenta:"Ya tengo cuenta",noCuenta:"Aún no tengo cuenta"},
     educacion:{titulo:"¿Qué es un sueño lúcido?",intro:"Un sueño lúcido es, sencillamente, un sueño en el que te das cuenta de que estás soñando mientras ocurre.",cerebroTitulo:"¿Qué pasa en el cerebro mientras sueñas?",cerebroTexto:"La mayoría de sueños vívidos ocurren en la fase REM. El cerebro está muy activo, casi como despierto, mientras el cuerpo permanece paralizado. En un sueño lúcido aumenta la actividad en la corteza prefrontal, la zona del razonamiento y la autoconciencia.",beneficiosTitulo:"Beneficios y riesgos",beneficiosTexto:"Entre los beneficios: menos pesadillas recurrentes, un espacio seguro para practicar habilidades, y la experiencia creativa de explorar tu propia mente. Con moderación: algunas técnicas pueden generar cansancio si se abusa de ellas."},
     tecnicas:{titulo:"Técnicas de inducción",intro:"Cinco métodos con respaldo científico. Toca cada una para desplegarla."},
     diario:{titulo:"Tu diario de sueños",nuevo:"+ Nuevo sueño",fecha:"Fecha",texto:"Cuenta tu sueño",nivel:"Nivel de lucidez",senales:"Señales oníricas (separadas por comas)",guardar:"Guardar",actualizar:"Actualizar",cancelar:"Cancelar",vacio:"Todavía no has registrado ningún sueño.",editar:"Editar",borrar:"Borrar"},
     comunidad:{titulo:"Comunidad",intro:"Comparte tus experiencias en tiempo real.",placeholder:"Escribe un mensaje...",enviar:"Enviar"},
-    suenoDatos:{titulo:"Datos de sueño (simulados)",intro:"Así se vería tu noche con un smartwatch conectado.",duracionTotal:"Duración total",rem:"REM",profundo:"Profundo",ligero:"Ligero"},
     cerebro:{titulo:"El cerebro que sueña",intro:"Toca cada zona para descubrir su papel durante el sueño."},
     rutina:{titulo:"Tu rutina de práctica",intro:"Marca cada día las técnicas que practiques.",anadir:"Añadir"},
     perfil:{titulo:"Tu perfil",nombre:"Nombre",idioma:"Idioma",guardar:"Guardar",totalSuenos:"Sueños registrados",totalLucidos:"Sueños lúcidos"},
     comun:{racha:"días seguidos",cargando:"Cargando..."} },
 
-  ca:{ nav:{inicio:"Inici",educacion:"Educació",tecnicas:"Tècniques",diario:"Diari",comunidad:"Comunitat",suenoDatos:"Dades de son",cerebro:"Cervell",rutina:"Rutina",perfil:"Perfil",login:"Inicia sessió",registro:"Crea un compte",salir:"Surt"},
+  ca:{ nav:{inicio:"Inici",educacion:"Educació",tecnicas:"Tècniques",diario:"Diari",comunidad:"Comunitat",cerebro:"Cervell",rutina:"Rutina",perfil:"Perfil",login:"Inicia sessió",registro:"Crea un compte",salir:"Surt"},
     home:{titulo:"Aprèn a habitar els teus somnis",subtitulo:"Guia científica i pràctica per descobrir, entrenar i gaudir dels somnis lúcids, amb el teu progrés personal.",cta:"Crea un compte",cta2:"Veure la ciència"},
     auth:{email:"Correu electrònic",password:"Contrasenya",nombre:"Nom",entrar:"Entra",crear:"Crea un compte",yaCuenta:"Ja tinc compte",noCuenta:"Encara no tinc compte"},
     educacion:{titulo:"Què és un somni lúcid?",intro:"Un somni lúcid és, senzillament, un somni en què t'adones que estàs somiant mentre passa.",cerebroTitulo:"Què passa al cervell mentre somies?",cerebroTexto:"La majoria de somnis vívids passen en la fase REM. El cervell està molt actiu, gairebé com despert, mentre el cos roman paralitzat. En un somni lúcid augmenta l'activitat a l'escorça prefrontal, la zona del raonament i l'autoconsciència.",beneficiosTitulo:"Beneficis i riscos",beneficiosTexto:"Entre els beneficis: menys malsons recurrents, un espai segur per practicar habilitats, i l'experiència creativa d'explorar la teva pròpia ment. Amb moderació: algunes tècniques poden generar cansament si se n'abusa."},
     tecnicas:{titulo:"Tècniques d'inducció",intro:"Cinc mètodes amb suport científic. Toca cadascuna per desplegar-la."},
     diario:{titulo:"El teu diari de somnis",nuevo:"+ Nou somni",fecha:"Data",texto:"Explica el teu somni",nivel:"Nivell de lucidesa",senales:"Senyals oníriques (separades per comes)",guardar:"Desa",actualizar:"Actualitza",cancelar:"Cancel·la",vacio:"Encara no has registrat cap somni.",editar:"Edita",borrar:"Esborra"},
     comunidad:{titulo:"Comunitat",intro:"Comparteix les teves experiències en temps real.",placeholder:"Escriu un missatge...",enviar:"Envia"},
-    suenoDatos:{titulo:"Dades de son (simulades)",intro:"Així es veuria la teva nit amb un rellotge intel·ligent connectat.",duracionTotal:"Durada total",rem:"REM",profundo:"Profund",ligero:"Lleuger"},
     cerebro:{titulo:"El cervell que somia",intro:"Toca cada zona per descobrir el seu paper durant el son."},
     rutina:{titulo:"La teva rutina de pràctica",intro:"Marca cada dia les tècniques que practiquis.",anadir:"Afegeix"},
     perfil:{titulo:"El teu perfil",nombre:"Nom",idioma:"Idioma",guardar:"Desa",totalSuenos:"Somnis registrats",totalLucidos:"Somnis lúcids"},
     comun:{racha:"dies seguits",cargando:"Carregant..."} },
 
-  en:{ nav:{inicio:"Home",educacion:"Learn",tecnicas:"Techniques",diario:"Journal",comunidad:"Community",suenoDatos:"Sleep data",cerebro:"Brain",rutina:"Routine",perfil:"Profile",login:"Log in",registro:"Sign up",salir:"Log out"},
+  en:{ nav:{inicio:"Home",educacion:"Learn",tecnicas:"Techniques",diario:"Journal",comunidad:"Community",cerebro:"Brain",rutina:"Routine",perfil:"Profile",login:"Log in",registro:"Sign up",salir:"Log out"},
     home:{titulo:"Learn to inhabit your dreams",subtitulo:"A scientific, practical guide to discovering, training and enjoying lucid dreams, with your own personal progress.",cta:"Create account",cta2:"See the science"},
     auth:{email:"Email",password:"Password",nombre:"Name",entrar:"Log in",crear:"Create account",yaCuenta:"I already have an account",noCuenta:"I don't have an account yet"},
     educacion:{titulo:"What is a lucid dream?",intro:"A lucid dream is simply a dream in which you realize you're dreaming while it's happening.",cerebroTitulo:"What happens in the brain while you dream?",cerebroTexto:"Most vivid dreams happen during REM sleep. The brain is very active, almost as if awake, while the body stays paralyzed. During a lucid dream, activity increases in the prefrontal cortex, the area responsible for reasoning and self-awareness.",beneficiosTitulo:"Benefits and risks",beneficiosTexto:"Possible benefits include fewer recurring nightmares, a safe space to practice skills, and the creative experience of exploring your own mind. In moderation: some techniques can cause tiredness if overused."},
     tecnicas:{titulo:"Induction techniques",intro:"Five methods with scientific backing. Tap each one to expand it."},
     diario:{titulo:"Your dream journal",nuevo:"+ New dream",fecha:"Date",texto:"Tell your dream",nivel:"Lucidity level",senales:"Dream signs (comma separated)",guardar:"Save",actualizar:"Update",cancelar:"Cancel",vacio:"You haven't logged any dreams yet.",editar:"Edit",borrar:"Delete"},
     comunidad:{titulo:"Community",intro:"Share your experiences in real time.",placeholder:"Write a message...",enviar:"Send"},
-    suenoDatos:{titulo:"Sleep data (simulated)",intro:"This is what your night would look like with a smartwatch connected.",duracionTotal:"Total duration",rem:"REM",profundo:"Deep",ligero:"Light"},
     cerebro:{titulo:"The dreaming brain",intro:"Tap each area to discover its role during sleep."},
     rutina:{titulo:"Your practice routine",intro:"Check off the techniques you practice each day.",anadir:"Add"},
     perfil:{titulo:"Your profile",nombre:"Name",idioma:"Language",guardar:"Save",totalSuenos:"Dreams logged",totalLucidos:"Lucid dreams"},
@@ -162,7 +182,7 @@ let seccionActual = "inicio";
 let socket = null;
 
 const SECCIONES_PUBLICAS = ["inicio","educacion","tecnicas","cerebro"];
-const SECCIONES_PRIVADAS = ["diario","comunidad","suenoDatos","rutina","perfil"];
+const SECCIONES_PRIVADAS = ["diario","comunidad","rutina","perfil"];
 
 async function cargarSesion(){
   try{ usuarioActual = (await api("/api/auth/yo")).usuario; }catch{ usuarioActual = null; }
@@ -229,7 +249,7 @@ async function render(){
   main.innerHTML = `<p style="color:var(--niebla-500);text-align:center;">${t("comun.cargando")}</p>`;
   const fns = { inicio:renderInicio, educacion:renderEducacion, tecnicas:renderTecnicas, cerebro:renderCerebro,
     login:renderLogin, registro:renderRegistro, diario:renderDiario, comunidad:renderComunidad,
-    suenoDatos:renderSuenoDatos, rutina:renderRutina, perfil:renderPerfil };
+    rutina:renderRutina, perfil:renderPerfil };
   main.innerHTML = "";
   await (fns[seccionActual] || renderInicio)(main);
   document.getElementById("footer").innerHTML = "🌙 Onírico — hecho para aprender y practicar sueños lúcidos.";
@@ -251,52 +271,160 @@ async function renderInicio(main){
   main.querySelector("#cta2").onclick = ()=> irA("educacion");
 }
 
-// --- EDUCACIÓN ---
+// --- EDUCACIÓN / APRENDER ---
+const ARTICULOS_POR_IDIOMA = {
+  es: [
+    {titulo:"¿Qué son los sueños lúcidos?",resumen:"La base: darte cuenta de que estás soñando mientras el sueño continúa.",texto:"Un sueño lúcido es aquel en el que la persona se da cuenta de que está soñando mientras el sueño todavía está ocurriendo. Algunas personas, además, consiguen influir voluntariamente en lo que sucede a partir de ese momento, aunque el grado de control varía mucho de una persona a otra y de una noche a otra. No es necesario controlar el sueño para que se considere lúcido: basta con ser consciente de que lo es."},
+    {titulo:"¿Cómo funciona el sueño?",resumen:"Un vistazo rápido a las fases que atraviesa el cerebro cada noche.",texto:"El sueño se organiza en ciclos de unos 90 minutos que se repiten varias veces por noche. Cada ciclo recorre fases de sueño ligero, sueño profundo y sueño REM. A medida que avanza la noche, los periodos de sueño REM se alargan, lo que explica por qué los sueños más vívidos suelen concentrarse en la segunda mitad de la noche."},
+    {titulo:"¿Qué es el sueño REM?",resumen:"La fase asociada a los sueños más vívidos y narrativos.",texto:"REM son las siglas de 'Rapid Eye Movement' (movimiento ocular rápido). Es la fase del sueño en la que la actividad cerebral se asemeja a la vigilia, los ojos se mueven rápidamente bajo los párpados y el cuerpo entra en una especie de parálisis temporal. La mayoría de los sueños que recordamos con detalle proceden de esta fase."},
+    {titulo:"¿Cuándo suelen aparecer los sueños lúcidos?",resumen:"Casi siempre durante el sueño REM, hacia el final de la noche.",texto:"Los sueños lúcidos ocurren mayoritariamente durante fases REM, que se vuelven más largas y frecuentes en las últimas horas de sueño. Por eso muchas técnicas, como WBTB, aprovechan precisamente ese tramo final de la noche."},
+    {titulo:"¿Cómo mejorar el recuerdo de los sueños?",resumen:"El hábito que sostiene todo lo demás.",texto:"Mantenerse quieto al despertar, reconstruir el sueño mentalmente antes de moverte y anotarlo de inmediato son las estrategias con más respaldo para mejorar el recuerdo. Con constancia, la cantidad y el nivel de detalle de los sueños recordados suele aumentar de forma notable en pocas semanas."},
+    {titulo:"¿Qué son los sueños recurrentes?",resumen:"Cuando una misma escena, tema o emoción vuelve una y otra vez.",texto:"Son sueños que se repiten con un contenido, escenario o emoción similar a lo largo del tiempo. A menudo están relacionados con preocupaciones o situaciones vitales del momento, y pueden convertirse en señales oníricas muy fiables para reconocer que estás soñando."},
+    {titulo:"¿Qué son las pesadillas?",resumen:"Sueños intensos y desagradables que suelen despertarnos.",texto:"Las pesadillas son sueños con un contenido marcadamente negativo (miedo, angustia o amenaza) que a menudo provocan el despertar. Si son frecuentes o afectan al descanso o al bienestar, lo recomendable es consultar con un profesional de la salud, ya que esta app no sustituye ese tipo de atención."},
+    {titulo:"¿Qué es la parálisis del sueño?",resumen:"Un fenómeno normal, aunque puede resultar inquietante.",texto:"Ocurre cuando la mente se despierta pero el cuerpo permanece en la atonía muscular propia del sueño REM, lo que impide moverse durante unos segundos o minutos. Es un fenómeno fisiológico conocido y, aunque puede ir acompañado de sensaciones intensas, no implica ningún peligro físico."},
+    {titulo:"¿Diferencia entre un sueño lúcido y uno normal?",resumen:"La consciencia de estar soñando, no necesariamente el control.",texto:"En un sueño normal, la persona vive la narrativa sin cuestionarla, como si fuera real. En un sueño lúcido, en algún momento surge la certeza de que se trata de un sueño. A partir de ahí, algunas personas pueden decidir qué hacer dentro de él, aunque el nivel de influencia es variable."},
+    {titulo:"¿Qué se puede hacer dentro de un sueño lúcido?",resumen:"Desde observar hasta experimentar con el propio entorno onírico.",texto:"Algunas personas se limitan a observar el sueño con curiosidad; otras exploran el entorno, prueban a cambiar de escenario, practican una habilidad o simplemente disfrutan de la experiencia. El nivel de control percibido varía mucho entre personas y no debe tomarse como un objetivo obligatorio."}
+  ]
+};
+ARTICULOS_POR_IDIOMA.ca = ARTICULOS_POR_IDIOMA.es;
+ARTICULOS_POR_IDIOMA.en = ARTICULOS_POR_IDIOMA.es;
+
 async function renderEducacion(main){
-  main.innerHTML = `
-    <div class="seccion">
-      <header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("educacion.titulo")}</h1>
-      <p style="color:var(--niebla-300);line-height:1.6;">${t("educacion.intro")}</p></header>
-      <div class="tarjeta"><h2 style="color:var(--rem-500);font-size:1.2rem;margin:0 0 8px;">${t("educacion.cerebroTitulo")}</h2><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${t("educacion.cerebroTexto")}</p></div>
-      <div class="tarjeta"><h2 style="color:var(--luna-500);font-size:1.2rem;margin:0 0 8px;">${t("educacion.beneficiosTitulo")}</h2><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${t("educacion.beneficiosTexto")}</p></div>
-    </div>`;
+  const arts = ARTICULOS_POR_IDIOMA[idioma] || ARTICULOS_POR_IDIOMA.es;
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("educacion.titulo")}</h1>
+  <p style="color:var(--niebla-300);line-height:1.6;">${t("educacion.intro")}</p></header>
+  <div class="tarjeta" id="lista-articulos"></div></div>`;
+  const cont = main.querySelector("#lista-articulos");
+  arts.forEach((a,i)=>{
+    const div = document.createElement("div"); div.className="articulo";
+    div.innerHTML = `<div class="articulo-header"><div><h3 style="margin:0;font-size:1rem;color:var(--niebla-100);">${a.titulo}</h3><p style="color:var(--niebla-500);font-size:0.85rem;margin:4px 0 0;">${a.resumen}</p></div><span style="color:var(--aurora-400);font-size:1.2rem;flex-shrink:0;">+</span></div>
+    <p class="oculto" style="color:var(--niebla-300);line-height:1.6;margin:12px 0 0;font-size:0.9rem;">${a.texto}</p>`;
+    div.querySelector(".articulo-header").onclick = ()=>{
+      const p = div.querySelector("p"); const s = div.querySelector("span");
+      p.classList.toggle("oculto"); s.textContent = p.classList.contains("oculto")?"+":"−";
+    };
+    cont.appendChild(div);
+  });
 }
 
 // --- TÉCNICAS ---
-const TECNICAS_POR_IDIOMA = {
-  es: [
-    {nombre:"MILD (Inducción Mnemónica)",resumen:"Usar tu intención y memoria justo antes de dormir.",base:"Se apoya en la memoria prospectiva: recordar hacer algo en el futuro.",pasos:["Repite mentalmente: 'la próxima vez que esté soñando, recordaré que estoy soñando'.","Visualiza un sueño reciente dándote cuenta de que era un sueño.","Repite mientras te quedas dormido."],cuando:"Muy bien combinada con WBTB.",consejos:"No lo repitas mecánicamente: visualiza de verdad."},
-    {nombre:"WBTB (Despertar y Volver a Dormir)",resumen:"Interrumpir el sueño de madrugada para aprovechar el REM largo.",base:"El REM se alarga progresivamente durante la noche.",pasos:["Alarma 5-6h después de acostarte.","Levántate 10-30 min con algo tranquilo.","Vuelve a la cama con intención clara (combínalo con MILD)."],cuando:"De madrugada, no todas las noches.",consejos:"Evita pantallas brillantes al despertar."},
-    {nombre:"SSILD",resumen:"Ciclos breves de atención a vista, oído y tacto.",base:"Ejercitar la atención sensorial ayuda a mantener conciencia al dormir.",pasos:["Atiende solo a lo que 'ves'.","Luego solo a lo que oyes.","Luego solo a lo que sientes.","Repite 3-6 ciclos."],cuando:"Tras un WBTB o al acostarte.",consejos:"Atención suave, sin tensión."},
-    {nombre:"Reality Checks",resumen:"Preguntarte '¿estoy despierto?' varias veces al día.",base:"Formación de hábitos: se traslada también a tus sueños.",pasos:["Elige 2-3 comprobaciones.","Hazlas preguntándote de verdad.","Repite 10-20 veces al día."],cuando:"Durante todo el día.",consejos:"Sin duda genuina, no se transfiere al sueño."},
-    {nombre:"Dream Recall",resumen:"Entrenar la memoria para recordar más sueños.",base:"El recuerdo depende de lo cerca que estés despierto tras el sueño.",pasos:["Diario a mano antes de dormir.","Al despertar, recuerda la última escena.","Anota todo, aunque sean fragmentos."],cuando:"Justo al despertar.",consejos:"No mires el móvil nada más despertar."}
-  ],
-  ca: [
-    {nombre:"MILD (Inducció Mnemònica)",resumen:"Usar la teva intenció i memòria just abans de dormir.",base:"Es basa en la memòria prospectiva: recordar fer alguna cosa en el futur.",pasos:["Repeteix mentalment: 'la propera vegada que estigui somiant, recordaré que estic somiant'.","Visualitza un somni recent adonant-te que era un somni.","Repeteix mentre t'adorms."],cuando:"Molt bé combinada amb WBTB.",consejos:"No ho repeteixis mecànicament: visualitza-ho de debò."},
-    {nombre:"WBTB (Despertar i Tornar a Dormir)",resumen:"Interrompre el son de matinada per aprofitar el REM llarg.",base:"El REM s'allarga progressivament durant la nit.",pasos:["Alarma 5-6h després d'anar-te'n al llit.","Aixeca't 10-30 min amb alguna cosa tranquil·la.","Torna al llit amb intenció clara (combina-ho amb MILD)."],cuando:"De matinada, no totes les nits.",consejos:"Evita pantalles brillants en despertar."},
-    {nombre:"SSILD",resumen:"Cicles breus d'atenció a la vista, l'oïda i el tacte.",base:"Exercitar l'atenció sensorial ajuda a mantenir consciència en adormir-se.",pasos:["Para atenció només a allò que 'veus'.","Després només al que sents.","Després només al que notes a la pell.","Repeteix 3-6 cicles."],cuando:"Després d'un WBTB o en anar al llit.",consejos:"Atenció suau, sense tensió."},
-    {nombre:"Reality Checks",resumen:"Preguntar-te '¿estic despert?' diverses vegades al dia.",base:"Formació d'hàbits: es trasllada també als teus somnis.",pasos:["Tria 2-3 comprovacions.","Fes-les preguntant-te de debò.","Repeteix-les 10-20 vegades al dia."],cuando:"Durant tot el dia.",consejos:"Sense dubte genuí, no es transfereix al somni."},
-    {nombre:"Dream Recall",resumen:"Entrenar la memòria per recordar més somnis.",base:"El record depèn de com de a prop estàs de despert després del somni.",pasos:["Diari a mà abans de dormir.","En despertar, recorda l'última escena.","Anota-ho tot, encara que siguin fragments."],cuando:"Just en despertar.",consejos:"No miris el mòbil just en despertar."}
-  ],
-  en: [
-    {nombre:"MILD (Mnemonic Induction)",resumen:"Use your intention and memory right before sleep.",base:"Based on prospective memory: remembering to do something in the future.",pasos:["Repeat mentally: 'next time I'm dreaming, I will remember I'm dreaming'.","Visualize a recent dream, imagining yourself realizing it was a dream.","Repeat as you fall asleep."],cuando:"Works very well combined with WBTB.",consejos:"Don't repeat it mechanically: really visualize the scene."},
-    {nombre:"WBTB (Wake Back To Bed)",resumen:"Interrupt sleep in the early morning to catch the longer REM period.",base:"REM periods get progressively longer throughout the night.",pasos:["Set an alarm 5-6 hours after going to bed.","Get up and stay awake 10-30 minutes doing something calm.","Go back to bed with a clear intention (combine with MILD)."],cuando:"In the early morning, not every night.",consejos:"Avoid bright screens right after waking up."},
-    {nombre:"SSILD",resumen:"Short cycles of attention to sight, hearing and touch.",base:"Repeatedly exercising sensory attention helps maintain awareness while falling asleep.",pasos:["Pay attention only to what you 'see'.","Then only to what you hear.","Then only to what you feel on your skin.","Repeat 3-6 cycles."],cuando:"After a WBTB or when going to bed.",consejos:"Keep the attention soft, without tension."},
-    {nombre:"Reality Checks",resumen:"Asking yourself 'am I awake?' several times a day.",base:"Habit formation: the habit also carries over into your dreams.",pasos:["Pick 2-3 checks.","Do them while genuinely questioning reality.","Repeat 10-20 times a day."],cuando:"Throughout the day.",consejos:"Without genuine doubt, the habit won't transfer to the dream."},
-    {nombre:"Dream Recall",resumen:"Training your memory to remember more dreams.",base:"Dream recall depends on how close to waking you are right after the dream.",pasos:["Keep your journal handy before sleeping.","On waking, recall the last scene.","Write down everything, even loose fragments."],cuando:"Right upon waking.",consejos:"Don't check your phone right after waking up."}
-  ]
+const EVIDENCIA_ESTILOS = {
+  solida:{label:{es:"Evidencia relativamente sólida",ca:"Evidència relativament sòlida",en:"Relatively solid evidence"},color:"var(--rem-500)"},
+  prometedora:{label:{es:"Evidencia prometedora",ca:"Evidència prometedora",en:"Promising evidence"},color:"var(--aurora-400)"},
+  limitada:{label:{es:"Evidencia limitada",ca:"Evidència limitada",en:"Limited evidence"},color:"var(--luna-500)"},
+  experimental:{label:{es:"Experimental",ca:"Experimental",en:"Experimental"},color:"#d98bb0"}
 };
+const TECNICAS_POR_IDIOMA = { es: [
+  {id:"mild",nombre:"MILD",nombreCompleto:"Mnemonic Induction of Lucid Dreams",evidencia:"solida",dificultad:"Media",tiempo:"10–20 min",cuando:"Al despertar a mitad de la noche (ideal con WBTB)",
+    desc:"Una técnica basada en la intención y la memoria prospectiva: te repites que reconocerás que estás soñando la próxima vez que sueñes, mientras repasas mentalmente un sueño reciente.",
+    pasos:["Despiértate de forma natural o con una alarma tras 4,5–6 horas de sueño.","Mantente despierto unos minutos, lo justo para activar la memoria (no uses el móvil).","Recuerda un sueño reciente o uno que sueles tener.","Repite mentalmente: «La próxima vez que esté soñando, reconoceré que estoy soñando».","Visualiza que vuelves a ese sueño y en algún momento notas una señal onírica y te das cuenta de que sueñas.","Repite la frase e imagina la escena hasta que te vuelvas a dormir."],
+    errores:["Repetir la frase de forma mecánica, sin intención real detrás.","Quedarse despierto demasiado tiempo y perder el sueño.","No visualizar ninguna escena concreta."],
+    consejos:["La intención cuenta más que el número de repeticiones.","Practicarlo a diario, incluso sin despertar por la noche, refuerza el hábito."],
+    combo:"Es la combinación con WBTB la que suele mostrar mejores resultados en los estudios disponibles."},
+  {id:"wbtb",nombre:"WBTB",nombreCompleto:"Wake Back To Bed",evidencia:"prometedora",dificultad:"Media",tiempo:"20–60 min despierto",cuando:"Tras 4,5–6 horas de sueño",
+    desc:"Consiste en despertar de forma deliberada durante la noche, permanecer despierto un rato breve y volver a dormir. Se usa casi siempre como base para practicar MILD o SSILD justo después.",
+    pasos:["Pon una alarma unas 4,5–6 horas después de acostarte.","Levántate de la cama y mantente despierto entre 10 y 30 minutos.","Dedica ese rato a algo tranquilo: leer sobre sueños lúcidos o repasar tu diario.","Vuelve a la cama con la intención clara de reconocer que sueñas.","Combina inmediatamente con MILD o SSILD antes de dormirte de nuevo."],
+    errores:["Encender pantallas brillantes, lo que dificulta volver a dormir.","Permanecer despierto demasiado tiempo y acabar agotado al día siguiente."],
+    consejos:["Empieza probándolo solo una o dos noches por semana."],
+    combo:"Se combina de forma natural con MILD o SSILD justo al volver a la cama.",
+    aviso:"No se recomienda practicar WBTB todas las noches ni sacrificar horas de sueño para hacerlo: dormir lo suficiente debe ser siempre la prioridad."},
+  {id:"ssild",nombre:"SSILD",nombreCompleto:"Senses Initiated Lucid Dream",evidencia:"prometedora",dificultad:"Media",tiempo:"10–15 min",cuando:"Antes de dormir o combinada con WBTB",
+    desc:"Se basa en pasar la atención, en ciclos cortos, por tres sentidos (vista, oído, tacto) sin analizar lo que percibes, para favorecer un estado propicio a la lucidez.",
+    pasos:["Cierra los ojos y dirige la atención a lo que 'ves' tras los párpados, sin analizarlo, durante unos segundos.","Pasa la atención a lo que oyes a tu alrededor.","Pasa la atención a las sensaciones táctiles de tu cuerpo contra la cama.","Repite el ciclo (vista → oído → tacto) entre 4 y 6 veces.","Deja que el sueño llegue de forma natural, sin forzarlo."],
+    errores:["Analizar o buscar activamente estímulos en lugar de simplemente notarlos.","Hacer los ciclos demasiado rápido o demasiado largos."],
+    consejos:["Funciona bien como cierre después de un WBTB corto."],
+    combo:"Combínala con WBTB: practica los ciclos justo al volver a la cama."},
+  {id:"reality",nombre:"Reality Checks",nombreCompleto:"Comprobaciones de realidad",evidencia:"prometedora",dificultad:"Baja",tiempo:"1–2 min, varias veces al día",cuando:"Durante el día, en momentos aleatorios",
+    desc:"Consiste en preguntarte varias veces al día si estás soñando y comprobarlo con una prueba sencilla, para que el hábito se traslade también a los sueños.",
+    ejemplos:["Mirar tus manos y contar los dedos.","Intentar taparte la nariz y respirar por ella.","Leer un texto, mirar hacia otro lado y volver a leerlo.","Comprobar si un interruptor de luz funciona con normalidad."],
+    consejos:["Asócialo a momentos concretos del día (cruzar una puerta, mirar el móvil) para convertirlo en hábito.","Lo importante no es solo hacer el gesto, sino preguntarte de verdad si estás despierto o soñando."],
+    aviso:"Por sí sola, no debe presentarse como una técnica milagrosa: su papel principal parece ser reforzar el hábito mental que después aparece dentro del sueño."},
+  {id:"recall",nombre:"Dream Recall",nombreCompleto:"Recuerdo de sueños",evidencia:"solida",dificultad:"Baja",tiempo:"5–10 min al despertar",cuando:"Nada más despertar",
+    desc:"Recordar los sueños es la base de todo lo demás: sin recuerdo no hay forma de detectar señales oníricas ni de medir el progreso.",
+    pasos:["Al despertar, permanece unos segundos quieto, sin moverte ni abrir los ojos.","Intenta reconstruir el sueño desde el final hacia el principio.","Anótalo de inmediato, aunque sean solo fragmentos o sensaciones sueltas.","Con el tiempo, busca patrones: lugares, personas u objetos que se repiten."],
+    consejos:["Ten siempre a mano el diario (o esta app) antes de dormir."]},
+  {id:"fild",nombre:"FILD",nombreCompleto:"Finger Induced Lucid Dream",evidencia:"experimental",
+    desc:"Mover ligeramente los dedos tras un breve despertar, manteniendo la mente alerta mientras el cuerpo se relaja de nuevo hacia el sueño."},
+  {id:"wild",nombre:"WILD",nombreCompleto:"Wake Initiated Lucid Dream",evidencia:"limitada",
+    desc:"Mantener la consciencia mientras el cuerpo se duerme, pasando directamente de la vigilia al sueño sin perder la lucidez. Requiere práctica y puede ir acompañada de parálisis del sueño."},
+  {id:"tholey",nombre:"Reflexión de Tholey",nombreCompleto:"Técnica de autosugestión y reflexión crítica",evidencia:"limitada",
+    desc:"Preguntarte repetidamente durante el día «¿estoy soñando?» acompañado de una reflexión crítica profunda sobre tu entorno, más allá de una comprobación mecánica."}
+]};
+TECNICAS_POR_IDIOMA.ca = TECNICAS_POR_IDIOMA.es;
+TECNICAS_POR_IDIOMA.en = TECNICAS_POR_IDIOMA.es;
+
+let filtroEvidencia = "todas";
+let tecnicaSeleccionada = null;
+
+function badgeEvidencia(nivel){
+  const ev = EVIDENCIA_ESTILOS[nivel];
+  return `<span class="badge" style="color:${ev.color};background:${ev.color}22;"><span class="punto" style="background:${ev.color};"></span>${ev.label[idioma]||ev.label.es}</span>`;
+}
+
 async function renderTecnicas(main){
-  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("tecnicas.titulo")}</h1><p style="color:var(--niebla-300);">${t("tecnicas.intro")}</p></header></div>`;
-  const cont = main.querySelector(".seccion");
   const TECNICAS = TECNICAS_POR_IDIOMA[idioma] || TECNICAS_POR_IDIOMA.es;
-  TECNICAS.forEach((tec,i)=>{
-    const div = document.createElement("div"); div.className="tarjeta";
-    div.innerHTML = `<div class="tecnica-header"><div><h3 class="font-display" style="margin:0;font-size:1.1rem;">${tec.nombre}</h3><p style="color:var(--niebla-500);font-size:0.88rem;margin:4px 0 0;">${tec.resumen}</p></div><span style="color:var(--aurora-400);font-size:1.3rem;">+</span></div>
-    <div class="tecnica-cuerpo"><div><h4>${{es:"Base científica",ca:"Base científica",en:"Scientific basis"}[idioma]}</h4><p>${tec.base}</p></div><div><h4>${{es:"Pasos",ca:"Passos",en:"Steps"}[idioma]}</h4><ol>${tec.pasos.map(p=>`<li>${p}</li>`).join("")}</ol></div><div><h4>${{es:"¿Cuándo?",ca:"Quan?",en:"When?"}[idioma]}</h4><p>${tec.cuando}</p></div><div><h4 style="color:var(--luna-500);">${{es:"Consejos",ca:"Consells",en:"Tips"}[idioma]}</h4><p>${tec.consejos}</p></div></div>`;
-    div.querySelector(".tecnica-header").onclick=()=>{ const c=div.querySelector(".tecnica-cuerpo"); const s=div.querySelector("span"); c.classList.toggle("abierta"); s.textContent=c.classList.contains("abierta")?"−":"+"; };
-    cont.appendChild(div);
+  if(tecnicaSeleccionada){ renderTecnicaDetalle(main, TECNICAS.find(t=>t.id===tecnicaSeleccionada)); return; }
+
+  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("tecnicas.titulo")}</h1><p style="color:var(--niebla-300);">${t("tecnicas.intro")}</p></header>
+  <div class="filtros" id="filtros"></div>
+  <div class="grid-tecnicas" id="grid-tecnicas"></div></div>`;
+
+  const filtrosDiv = main.querySelector("#filtros");
+  const niveles = [["todas",{es:"Todas",ca:"Totes",en:"All"}], ...Object.entries(EVIDENCIA_ESTILOS).map(([k,v])=>[k,v.label])];
+  niveles.forEach(([clave,label])=>{
+    const b = document.createElement("button"); b.className="filtro"+(filtroEvidencia===clave?" activo":"");
+    b.textContent = label[idioma]||label.es;
+    b.onclick = ()=>{ filtroEvidencia = clave; render(); };
+    filtrosDiv.appendChild(b);
   });
+
+  const grid = main.querySelector("#grid-tecnicas");
+  const lista = filtroEvidencia==="todas" ? TECNICAS : TECNICAS.filter(t=>t.evidencia===filtroEvidencia);
+  lista.forEach(tec=>{
+    const card = document.createElement("div"); card.className="tarjeta";
+    card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+      <div><h3 class="font-display" style="margin:0;font-size:1.1rem;">${tec.nombre}</h3><p style="color:var(--niebla-500);font-size:0.78rem;margin:2px 0 0;">${tec.nombreCompleto}</p></div>
+      ${badgeEvidencia(tec.evidencia)}
+    </div>
+    <p style="color:var(--niebla-300);font-size:0.88rem;margin:10px 0 0;">${tec.desc}</p>
+    <button class="btn-secundario" style="margin-top:14px;font-size:0.82rem;padding:6px 16px;">${idioma==="en"?"See guide":idioma==="ca"?"Veure guia":"Ver guía"} →</button>`;
+    card.querySelector("button").onclick = ()=>{ tecnicaSeleccionada = tec.id; render(); };
+    grid.appendChild(card);
+  });
+}
+
+function renderTecnicaDetalle(main, tec){
+  const L = {volver:{es:"Volver a técnicas",ca:"Tornar a tècniques",en:"Back to techniques"},
+    dificultad:{es:"Dificultad",ca:"Dificultat",en:"Difficulty"},tiempo:{es:"Tiempo",ca:"Temps",en:"Time"},cuando:{es:"Cuándo",ca:"Quan",en:"When"},
+    pasos:{es:"Guía paso a paso",ca:"Guia pas a pas",en:"Step by step guide"},ejemplos:{es:"Ejemplos",ca:"Exemples",en:"Examples"},
+    errores:{es:"Errores frecuentes",ca:"Errors freqüents",en:"Common mistakes"},consejos:{es:"Consejos",ca:"Consells",en:"Tips"},
+    combo:{es:"Combinación",ca:"Combinació",en:"Combination"},evidenciaTitulo:{es:"Evidencia científica",ca:"Evidència científica",en:"Scientific evidence"},
+    nivelActual:{es:"Nivel actual",ca:"Nivell actual",en:"Current level"}};
+  const l = (k)=> L[k][idioma]||L[k].es;
+
+  main.innerHTML = `<div style="max-width:680px;">
+  <button class="volver">← ${l("volver")}</button>
+  ${badgeEvidencia(tec.evidencia)}
+  <h1 class="font-display" style="font-size:1.9rem;margin:14px 0 2px;">${tec.nombre}</h1>
+  <p style="color:var(--niebla-500);font-size:0.9rem;margin:0;">${tec.nombreCompleto}</p>
+  <div style="display:flex;flex-wrap:wrap;gap:16px;margin:16px 0;font-size:0.85rem;color:var(--niebla-500);">
+    ${tec.dificultad?`<span>${l("dificultad")}: <strong style="color:var(--niebla-100);">${tec.dificultad}</strong></span>`:""}
+    ${tec.tiempo?`<span>${l("tiempo")}: <strong style="color:var(--niebla-100);">${tec.tiempo}</strong></span>`:""}
+    ${tec.cuando?`<span>${l("cuando")}: <strong style="color:var(--niebla-100);">${tec.cuando}</strong></span>`:""}
+  </div>
+  <p style="color:var(--niebla-100);line-height:1.6;">${tec.desc}</p>
+  ${tec.aviso?`<div class="aviso" style="margin:16px 0;">⚠️ ${tec.aviso}</div>`:""}
+  ${tec.pasos?`<h3 class="font-display" style="font-size:1.05rem;margin:22px 0 10px;">${l("pasos")}</h3><ol style="color:var(--niebla-300);line-height:1.7;padding-left:20px;">${tec.pasos.map(p=>`<li>${p}</li>`).join("")}</ol>`:""}
+  ${tec.ejemplos?`<h3 class="font-display" style="font-size:1.05rem;margin:22px 0 10px;">${l("ejemplos")}</h3><ul style="color:var(--niebla-300);line-height:1.7;padding-left:20px;">${tec.ejemplos.map(p=>`<li>${p}</li>`).join("")}</ul>`:""}
+  ${tec.errores?`<h3 class="font-display" style="font-size:1.05rem;margin:22px 0 10px;">${l("errores")}</h3><ul style="color:var(--niebla-500);line-height:1.7;padding-left:20px;">${tec.errores.map(p=>`<li>${p}</li>`).join("")}</ul>`:""}
+  ${tec.consejos?`<h3 class="font-display" style="font-size:1.05rem;margin:22px 0 10px;color:var(--luna-500);">${l("consejos")}</h3><ul style="color:var(--niebla-500);line-height:1.7;padding-left:20px;">${tec.consejos.map(p=>`<li>${p}</li>`).join("")}</ul>`:""}
+  ${tec.combo?`<div class="tarjeta" style="margin-top:18px;border-color:var(--rem-500);"><p style="margin:0;font-size:0.88rem;"><strong style="color:var(--rem-500);">${l("combo")}:</strong> ${tec.combo}</p></div>`:""}
+  <div class="tarjeta" style="margin-top:18px;">
+    <h3 style="margin:0 0 6px;font-size:0.95rem;">🛡️ ${l("evidenciaTitulo")}</h3>
+    <p style="color:var(--niebla-500);font-size:0.85rem;margin:0;">${l("nivelActual")}: <strong style="color:${EVIDENCIA_ESTILOS[tec.evidencia].color};">${EVIDENCIA_ESTILOS[tec.evidencia].label[idioma]||EVIDENCIA_ESTILOS[tec.evidencia].label.es}</strong>. ${idioma==="en"?"This card is reviewed periodically against the available scientific literature.":idioma==="ca"?"Aquesta fitxa es revisa periòdicament segons la literatura científica disponible.":"Esta ficha se revisa periódicamente frente a la literatura científica disponible."}</p>
+  </div>
+  </div>`;
+  main.querySelector(".volver").onclick = ()=>{ tecnicaSeleccionada = null; render(); };
 }
 
 // --- CEREBRO ---
@@ -356,7 +484,16 @@ async function renderCerebro(main){
       <circle class="zona" data-z="limbico" cx="172" cy="118" r="26" fill="${ZONAS.limbico.color}" fill-opacity="0.45" stroke="#05060d" stroke-width="2" stroke-dasharray="4 3"/>
     </svg>
     <div class="tarjeta" id="info-zona" style="flex:1;min-width:240px;"></div>
-  </div></div>`;
+  </div>
+  <div class="tarjeta">
+    <h3 class="font-display" style="font-size:1.05rem;margin:0 0 8px;color:var(--rem-500);">${{es:"Los ciclos de la noche",ca:"Els cicles de la nit",en:"The cycles of the night"}[idioma]}</h3>
+    <p style="color:var(--niebla-300);line-height:1.6;margin:0;">${{es:"Cada noche atraviesas entre 4 y 6 ciclos de sueño de unos 90 minutos cada uno. Cada ciclo recorre sueño ligero, sueño profundo y sueño REM, pero no a partes iguales: el sueño profundo predomina en los primeros ciclos de la noche, mientras que el REM (y con él, la mayoría de los sueños vívidos) se va alargando en los últimos. Por eso las técnicas como WBTB se practican de madrugada: es cuando hay más 'materia prima' onírica con la que trabajar.",ca:"Cada nit travesses entre 4 i 6 cicles de son d'uns 90 minuts cadascun. Cada cicle recorre son lleuger, son profund i son REM, però no a parts iguals: el son profund predomina als primers cicles de la nit, mentre que el REM (i amb ell, la majoria dels somnis vívids) es va allargant als últims. Per això tècniques com WBTB es practiquen de matinada.",en:"Each night you go through 4 to 6 sleep cycles of about 90 minutes each. Every cycle moves through light sleep, deep sleep and REM sleep, but not in equal parts: deep sleep dominates the early cycles of the night, while REM (and with it, most vivid dreams) gets longer toward the end. That's why techniques like WBTB are practiced in the early morning."}[idioma]}</p>
+  </div>
+  <div class="tarjeta">
+    <h3 class="font-display" style="font-size:1.05rem;margin:0 0 8px;color:var(--luna-500);">${{es:"La química que hace posible soñar",ca:"La química que fa possible somiar",en:"The chemistry that makes dreaming possible"}[idioma]}</h3>
+    <p style="color:var(--niebla-300);line-height:1.6;margin:0;">${{es:"Durante el sueño REM, el cerebro reduce drásticamente la producción de serotonina y noradrenalina (relacionadas con la alerta y el juicio crítico), mientras que la acetilcolina —ligada a la actividad eléctrica intensa— se mantiene alta. Esta combinación explica por qué los sueños pueden parecer tan reales y a la vez tan poco cuestionados: la parte del cerebro que normalmente diría 'esto es raro' está funcionando a media máquina.",ca:"Durant el son REM, el cervell redueix dràsticament la producció de serotonina i noradrenalina (relacionades amb l'alerta i el judici crític), mentre que l'acetilcolina —lligada a l'activitat elèctrica intensa— es manté alta. Aquesta combinació explica per què els somnis poden semblar tan reals i alhora tan poc qüestionats.",en:"During REM sleep, the brain drastically reduces serotonin and norepinephrine production (linked to alertness and critical judgment), while acetylcholine —tied to intense electrical activity— stays high. This combination explains why dreams can feel so real and go so unquestioned: the part of the brain that would normally say 'this is odd' is running at half power."}[idioma]}</p>
+  </div>
+  </div>`;
   function actualizar(){
     const z = ZONAS[zonaActiva];
     main.querySelector("#info-zona").innerHTML = `<h3 class="font-display" style="color:${z.color};margin:0 0 8px;">${z.nombre}</h3><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${z.texto}</p>`;
@@ -453,85 +590,122 @@ async function renderDiario(main){
 }
 
 // --- COMUNIDAD (chat en tiempo real) ---
+const CATEGORIAS_COMUNIDAD = {
+  es: ["General","Primer sueño lúcido","Técnicas","Pesadillas","WBTB","MILD","SSILD","Experiencias","Consejos"],
+  ca: ["General","Primer somni lúcid","Tècniques","Malsons","WBTB","MILD","SSILD","Experiències","Consells"],
+  en: ["General","First lucid dream","Techniques","Nightmares","WBTB","MILD","SSILD","Experiences","Tips"]
+};
+let mensajesComunidad = [];
+let categoriaFiltro = "Todos";
+
 function conectarSocket(){
   if(socket) return;
   socket = io();
   socket.on("mensaje_recibido", (msg)=>{
-    if(seccionActual==="comunidad") agregarMensajeAlDom(msg);
+    mensajesComunidad.push(msg);
+    if(seccionActual==="comunidad") pintarMensajes();
   });
 }
-function agregarMensajeAlDom(msg){
+function pintarMensajes(){
   const cont = document.getElementById("chat-mensajes");
   if(!cont) return;
-  const esMio = usuarioActual && (msg.autor===usuarioActual.id || msg.autor?._id===usuarioActual.id);
-  const div = document.createElement("div"); div.className = "msg"+(esMio?" mio":"");
-  div.innerHTML = `<div class="autor">${msg.autorNombre}</div><div class="globo">${msg.texto}</div>`;
-  cont.appendChild(div);
+  cont.innerHTML = "";
+  const lista = categoriaFiltro==="Todos" ? mensajesComunidad : mensajesComunidad.filter(m=>m.categoria===categoriaFiltro);
+  lista.forEach(msg=>{
+    const card = document.createElement("div"); card.className="post-tarjeta";
+    card.innerHTML = `<div class="post-header">
+        <span style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--niebla-100);"><span style="font-size:1.1rem;">${msg.autorAvatar||"🌙"}</span> ${msg.autorNombre}</span>
+        <span class="categoria-tag">${msg.categoria||"General"}</span>
+      </div>
+      <p style="margin:0;color:var(--niebla-300);font-size:0.9rem;">${msg.texto}</p>`;
+    cont.appendChild(card);
+  });
   cont.scrollTop = cont.scrollHeight;
 }
 async function renderComunidad(main){
+  const CATS = CATEGORIAS_COMUNIDAD[idioma] || CATEGORIAS_COMUNIDAD.es;
+  const catTodos = {es:"Todos",ca:"Totes",en:"All"}[idioma];
   main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("comunidad.titulo")}</h1><p style="color:var(--niebla-300);">${t("comunidad.intro")}</p></header>
+  <div class="filtros" id="filtros-cat"></div>
   <div class="tarjeta chat-caja"><div class="chat-mensajes" id="chat-mensajes"></div>
-  <form class="chat-form" id="chat-form"><input id="chat-input" placeholder="${t("comunidad.placeholder")}"><button class="btn" type="submit">${t("comunidad.enviar")}</button></form></div></div>`;
+  <form class="chat-form" id="chat-form" style="flex-wrap:wrap;">
+    <select id="chat-categoria" style="width:auto;flex:0 0 auto;">${CATS.map(c=>`<option value="${c}">${c}</option>`).join("")}</select>
+    <input id="chat-input" placeholder="${t("comunidad.placeholder")}" style="flex:1;min-width:120px;">
+    <button class="btn" type="submit">${t("comunidad.enviar")}</button>
+  </form></div></div>`;
+
+  const filtrosDiv = main.querySelector("#filtros-cat");
+  ["Todos", ...CATS].forEach((c,i)=>{
+    const b = document.createElement("button"); b.className="filtro"+((c==="Todos"&&categoriaFiltro==="Todos")||c===categoriaFiltro?" activo":"");
+    b.textContent = i===0?catTodos:c;
+    b.onclick = ()=>{ categoriaFiltro = c==="Todos"?"Todos":c; main.querySelectorAll(".filtro").forEach(x=>x.classList.remove("activo")); b.classList.add("activo"); pintarMensajes(); };
+    filtrosDiv.appendChild(b);
+  });
+
   conectarSocket();
-  const {mensajes} = await api("/api/chat/historial");
-  mensajes.forEach(agregarMensajeAlDom);
+  if(mensajesComunidad.length===0){
+    const {mensajes} = await api("/api/chat/historial");
+    mensajesComunidad = mensajes;
+  }
+  pintarMensajes();
   main.querySelector("#chat-form").onsubmit = (e)=>{
     e.preventDefault();
     const input = main.querySelector("#chat-input");
+    const categoria = main.querySelector("#chat-categoria").value;
     if(!input.value.trim()) return;
-    socket.emit("mensaje_nuevo", input.value);
+    socket.emit("mensaje_nuevo", {texto:input.value, categoria});
     input.value = "";
   };
 }
 
-// --- DATOS DE SUEÑO ---
-const COLOR_FASE = {despierto:"#e8c97a",ligero:"#8b7fd6",profundo:"#4fd1c5",rem:"#a99bf0"};
-async function renderSuenoDatos(main){
-  const d = await api("/api/sueno-datos/noche");
-  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("suenoDatos.titulo")}</h1><p style="color:var(--niebla-300);">${t("suenoDatos.intro")}</p></header>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
-    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.duracionTotal")}</div><div class="font-display" style="font-size:1.2rem;">${Math.round(d.duracionTotal/60)}h${String(d.duracionTotal%60).padStart(2,"0")}</div></div>
-    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.rem")}</div><div class="font-display" style="font-size:1.2rem;color:${COLOR_FASE.rem};">${d.resumen.rem} min</div></div>
-    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.profundo")}</div><div class="font-display" style="font-size:1.2rem;color:${COLOR_FASE.profundo};">${d.resumen.profundo} min</div></div>
-    <div class="tarjeta" style="text-align:center;padding:14px;"><div style="font-size:0.72rem;color:var(--niebla-500);">${t("suenoDatos.ligero")}</div><div class="font-display" style="font-size:1.2rem;">${d.resumen.ligero} min</div></div>
-  </div>
-  <div class="tarjeta"><div id="barra" style="white-space:nowrap;overflow-x:auto;line-height:0;"></div>
-  <div class="leyenda"><span><span class="cuadro" style="background:${COLOR_FASE.ligero}"></span>${t("suenoDatos.ligero")}</span><span><span class="cuadro" style="background:${COLOR_FASE.profundo}"></span>${t("suenoDatos.profundo")}</span><span><span class="cuadro" style="background:${COLOR_FASE.rem}"></span>${t("suenoDatos.rem")}</span></div></div></div>`;
-  const barra = main.querySelector("#barra");
-  d.segmentos.forEach(s=>{
-    const b = document.createElement("span"); b.className="barra-fase";
-    b.style.width = Math.max(6,(s.fin-s.inicio)*3)+"px"; b.style.background=COLOR_FASE[s.fase];
-    barra.appendChild(b);
-  });
-}
+// (Sección de datos de sueño simulados eliminada — no aportaba valor real sin conexión a un reloj compatible)
 
 // --- RUTINA ---
 async function renderRutina(main){
   const {rutina} = await api("/api/rutina");
+  const BLOQUES = [
+    {clave:"manana", icono:"🌅", titulo:{es:"Por la mañana",ca:"Al matí",en:"In the morning"}},
+    {clave:"dia", icono:"🧭", titulo:{es:"Durante el día",ca:"Durant el dia",en:"During the day"}},
+    {clave:"noche", icono:"🌙", titulo:{es:"Antes de dormir",ca:"Abans de dormir",en:"Before sleep"}},
+    {clave:"wbtb", icono:"⭐", titulo:{es:"Tras 5–6 horas (opcional)",ca:"Després de 5–6 hores (opcional)",en:"After 5–6 hours (optional)"}},
+  ];
   main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("rutina.titulo")}</h1><p style="color:var(--niebla-300);">${t("rutina.intro")}</p></header>
-  <div id="lista-habitos" style="display:flex;flex-direction:column;gap:12px;"></div><div id="anadir"></div></div>`;
-  const lista = main.querySelector("#lista-habitos");
-  rutina.forEach(h=>{
-    const fila = document.createElement("div"); fila.className="habito";
-    fila.innerHTML = `<label><input type="checkbox" ${h.completadoHoy?"checked":""}><span>${h.tecnica}<br><span style="font-size:0.75rem;color:var(--luna-500);">🔥 ${h.rachaDias} ${t("comun.racha")}</span></span></label><button class="btn-peligro">✕</button>`;
-    fila.querySelector("input").onchange = async()=>{ await api(`/api/rutina/${encodeURIComponent(h.tecnica)}/toggle`,{method:"PUT"}); irA("rutina"); };
-    fila.querySelector("button").onclick = async()=>{ await api(`/api/rutina/${encodeURIComponent(h.tecnica)}`,{method:"DELETE"}); irA("rutina"); };
-    lista.appendChild(fila);
+  <div id="bloques-rutina"></div>
+  <div class="aviso">⚠️ ${{es:"WBTB puede fragmentar tu descanso. Si al día siguiente notas cansancio, prioriza dormir seguido y deja WBTB para otra noche.",ca:"WBTB pot fragmentar el teu descans. Si l'endemà notes cansament, prioritza dormir seguit i deixa WBTB per a una altra nit.",en:"WBTB can fragment your rest. If you feel tired the next day, prioritize uninterrupted sleep and leave WBTB for another night."}[idioma]}</div>
+  </div>`;
+  const cont = main.querySelector("#bloques-rutina");
+  BLOQUES.forEach(bloque=>{
+    const items = rutina.filter(it=>it.bloque===bloque.clave);
+    if(items.length===0) return;
+    const div = document.createElement("div"); div.className="tarjeta bloque-rutina";
+    div.innerHTML = `<h4>${bloque.icono} ${bloque.titulo[idioma]||bloque.titulo.es}</h4>`;
+    items.forEach(it=>{
+      const fila = document.createElement("label");
+      fila.style.cssText = "display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;font-size:0.9rem;";
+      fila.style.color = it.hecho ? "var(--niebla-500)" : "var(--niebla-100)";
+      fila.style.textDecoration = it.hecho ? "line-through" : "none";
+      fila.innerHTML = `<input type="checkbox" ${it.hecho?"checked":""} style="width:18px;height:18px;accent-color:var(--aurora-500);"> ${it.texto}`;
+      fila.querySelector("input").onchange = async()=>{ await api(`/api/rutina/${it.id}/toggle`,{method:"PUT"}); irA("rutina"); };
+      div.appendChild(fila);
+    });
+    cont.appendChild(div);
   });
-  const disponibles = ["MILD","WBTB","SSILD","Reality Checks","Dream Recall"].filter(x=>!rutina.some(h=>h.tecnica===x));
-  if(disponibles.length){
-    const cont = main.querySelector("#anadir");
-    cont.innerHTML = `<div style="display:flex;gap:10px;margin-top:6px;"><select id="sel-tec" style="flex:1;">${disponibles.map(d=>`<option value="${d}">${d}</option>`).join("")}</select><button class="btn" id="btn-anadir">${t("rutina.anadir")}</button></div>`;
-    cont.querySelector("#btn-anadir").onclick = async()=>{ await api("/api/rutina",{method:"POST",body:JSON.stringify({tecnica:cont.querySelector("#sel-tec").value})}); irA("rutina"); };
-  }
 }
 
 // --- PERFIL ---
+const AVATARES = ["🌙","⭐","🌌","🦋","🔮","🌊","🦉","🌠"];
 async function renderPerfil(main){
-  main.innerHTML = `<div style="max-width:420px;margin:0 auto;"><h1 class="font-display" style="font-size:1.9rem;">${t("perfil.titulo")}</h1>
+  main.innerHTML = `<div style="max-width:460px;margin:0 auto;"><h1 class="font-display" style="font-size:1.9rem;">${t("perfil.titulo")}</h1>
+  <div class="tarjeta" style="display:flex;gap:16px;align-items:center;margin-bottom:16px;">
+    <div class="avatar-grande" id="avatar-preview">${usuarioActual.avatar||"🌙"}</div>
+    <div><p style="margin:0;color:var(--niebla-100);font-weight:600;">${usuarioActual.nombre}</p><p style="margin:2px 0 0;color:var(--niebla-500);font-size:0.82rem;">${usuarioActual.email}</p></div>
+  </div>
   <div class="tarjeta">
+    <div class="campo"><label>${{es:"Elige tu avatar",ca:"Tria el teu avatar",en:"Choose your avatar"}[idioma]}</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;" id="selector-avatar"></div>
+    </div>
     <div class="campo"><label>${t("perfil.nombre")}</label><input id="p-nombre" value="${usuarioActual.nombre}"></div>
+    <div class="campo"><label>${{es:"Descripción",ca:"Descripció",en:"Bio"}[idioma]}</label><textarea id="p-desc" rows="3" maxlength="280" placeholder="${{es:"Cuenta algo sobre ti o tu experiencia con los sueños lúcidos...",ca:"Explica alguna cosa sobre tu o la teva experiència amb els somnis lúcids...",en:"Tell something about you or your lucid dreaming experience..."}[idioma]}">${usuarioActual.descripcion||""}</textarea></div>
     <div class="campo"><label>${t("perfil.idioma")}</label><select id="p-idioma"><option value="es">Español</option><option value="ca">Català</option><option value="en">English</option></select></div>
     <button class="btn" id="p-guardar" style="width:100%;">${t("perfil.guardar")}</button>
   </div>
@@ -540,8 +714,23 @@ async function renderPerfil(main){
     <div><div class="font-display" style="font-size:1.8rem;color:var(--luna-500);">${usuarioActual.estadisticas.totalSuenosLucidos}</div><div style="font-size:0.75rem;color:var(--niebla-500);">${t("perfil.totalLucidos")}</div></div>
   </div></div>`;
   main.querySelector("#p-idioma").value = usuarioActual.idiomaPreferido;
+
+  let avatarElegido = usuarioActual.avatar || "🌙";
+  const selector = main.querySelector("#selector-avatar");
+  AVATARES.forEach(a=>{
+    const b = document.createElement("button"); b.type="button"; b.className="avatar-opcion"+(a===avatarElegido?" activo":"");
+    b.textContent = a;
+    b.onclick = ()=>{ avatarElegido = a; main.querySelectorAll(".avatar-opcion").forEach(x=>x.classList.remove("activo")); b.classList.add("activo"); main.querySelector("#avatar-preview").textContent = a; };
+    selector.appendChild(b);
+  });
+
   main.querySelector("#p-guardar").onclick = async()=>{
-    const r = await api("/api/auth/perfil",{method:"PUT",body:JSON.stringify({nombre:main.querySelector("#p-nombre").value,idiomaPreferido:main.querySelector("#p-idioma").value})});
+    const r = await api("/api/auth/perfil",{method:"PUT",body:JSON.stringify({
+      nombre:main.querySelector("#p-nombre").value,
+      idiomaPreferido:main.querySelector("#p-idioma").value,
+      avatar:avatarElegido,
+      descripcion:main.querySelector("#p-desc").value
+    })});
     usuarioActual = r.usuario; idioma = usuarioActual.idiomaPreferido; localStorage.setItem("onirico_idioma",idioma);
     render();
   };
