@@ -37,8 +37,8 @@ mongoose
 // ---------------------------------------------------------------------------
 // 2) MODELOS
 // ---------------------------------------------------------------------------
-const routineHabitSchema = new mongoose.Schema(
-  { tecnica: String, completadoHoy: { type: Boolean, default: false }, rachaDias: { type: Number, default: 0 } },
+const routineItemSchema = new mongoose.Schema(
+  { id: String, bloque: String, texto: String, hecho: { type: Boolean, default: false } },
   { _id: false }
 );
 
@@ -48,7 +48,9 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     idiomaPreferido: { type: String, enum: ["es", "ca", "en"], default: "es" },
-    rutina: { type: [routineHabitSchema], default: [] },
+    avatar: { type: String, default: "🌙" },
+    descripcion: { type: String, default: "", maxlength: 280 },
+    rutina: { type: [routineItemSchema], default: [] },
     estadisticas: {
       totalSuenosRegistrados: { type: Number, default: 0 },
       totalSuenosLucidos: { type: Number, default: 0 },
@@ -71,6 +73,8 @@ userSchema.methods.toSafeObject = function () {
     nombre: this.nombre,
     email: this.email,
     idiomaPreferido: this.idiomaPreferido,
+    avatar: this.avatar,
+    descripcion: this.descripcion,
     rutina: this.rutina,
     estadisticas: this.estadisticas,
   };
@@ -93,6 +97,8 @@ const chatMessageSchema = new mongoose.Schema(
   {
     autor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     autorNombre: String,
+    autorAvatar: { type: String, default: "🌙" },
+    categoria: { type: String, default: "General" },
     texto: { type: String, required: true, maxlength: 1000 },
   },
   { timestamps: true }
@@ -124,7 +130,16 @@ function requireAuth(req, res, next) {
   }
 }
 
-const TECNICAS_POR_DEFECTO = ["MILD", "WBTB", "SSILD", "Reality Checks", "Dream Recall"];
+const RUTINA_POR_DEFECTO = [
+  { id: "m1", bloque: "manana", texto: "Recordar el sueño antes de moverte" },
+  { id: "m2", bloque: "manana", texto: "Escribirlo en el diario" },
+  { id: "m3", bloque: "manana", texto: "Valorar la calidad del recuerdo" },
+  { id: "d1", bloque: "dia", texto: "Hacer 5 comprobaciones de realidad" },
+  { id: "d2", bloque: "dia", texto: "Anotar posibles señales oníricas" },
+  { id: "n1", bloque: "noche", texto: "Revisar tu objetivo de la noche" },
+  { id: "n2", bloque: "noche", texto: "Practicar MILD" },
+  { id: "w1", bloque: "wbtb", texto: "WBTB, solo si te apetece esa noche" },
+].map((it) => ({ ...it, hecho: false }));
 
 // ---------------------------------------------------------------------------
 // 4) APP EXPRESS
@@ -148,7 +163,7 @@ app.post("/api/auth/registro", async (req, res) => {
       nombre,
       email,
       password,
-      rutina: TECNICAS_POR_DEFECTO.map((t) => ({ tecnica: t })),
+      rutina: RUTINA_POR_DEFECTO,
     });
     enviarCookie(res, generarToken(usuario._id));
     res.status(201).json({ usuario: usuario.toSafeObject() });
@@ -185,9 +200,11 @@ app.get("/api/auth/yo", requireAuth, async (req, res) => {
 
 app.put("/api/auth/perfil", requireAuth, async (req, res) => {
   const usuario = await User.findById(req.usuarioId);
-  const { nombre, idiomaPreferido } = req.body;
+  const { nombre, idiomaPreferido, avatar, descripcion } = req.body;
   if (nombre) usuario.nombre = nombre;
   if (idiomaPreferido) usuario.idiomaPreferido = idiomaPreferido;
+  if (avatar) usuario.avatar = avatar;
+  if (descripcion !== undefined) usuario.descripcion = descripcion.slice(0, 280);
   await usuario.save();
   res.json({ usuario: usuario.toSafeObject() });
 });
@@ -225,55 +242,27 @@ app.delete("/api/suenos/:id", requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-// --- Rutina ---
+// --- Rutina (checklist por bloques del día) ---
 app.get("/api/rutina", requireAuth, async (req, res) => {
   const usuario = await User.findById(req.usuarioId);
-  res.json({ rutina: usuario.rutina });
-});
-app.post("/api/rutina", requireAuth, async (req, res) => {
-  const usuario = await User.findById(req.usuarioId);
-  if (!usuario.rutina.some((h) => h.tecnica === req.body.tecnica)) {
-    usuario.rutina.push({ tecnica: req.body.tecnica });
+  if (!usuario.rutina || usuario.rutina.length === 0) {
+    usuario.rutina = RUTINA_POR_DEFECTO;
     await usuario.save();
   }
   res.json({ rutina: usuario.rutina });
 });
-app.put("/api/rutina/:tecnica/toggle", requireAuth, async (req, res) => {
+app.put("/api/rutina/:id/toggle", requireAuth, async (req, res) => {
   const usuario = await User.findById(req.usuarioId);
-  const h = usuario.rutina.find((h) => h.tecnica === req.params.tecnica);
-  if (!h) return res.status(404).json({ error: "No encontrada." });
-  h.completadoHoy = !h.completadoHoy;
-  h.rachaDias = Math.max(0, h.rachaDias + (h.completadoHoy ? 1 : -1));
+  const item = usuario.rutina.find((h) => h.id === req.params.id);
+  if (!item) return res.status(404).json({ error: "No encontrado." });
+  item.hecho = !item.hecho;
   await usuario.save();
   res.json({ rutina: usuario.rutina });
-});
-app.delete("/api/rutina/:tecnica", requireAuth, async (req, res) => {
-  const usuario = await User.findById(req.usuarioId);
-  usuario.rutina = usuario.rutina.filter((h) => h.tecnica !== req.params.tecnica);
-  await usuario.save();
-  res.json({ rutina: usuario.rutina });
-});
-
-// --- Datos de sueño simulados ---
-app.get("/api/sueno-datos/noche", requireAuth, (req, res) => {
-  const segmentos = [];
-  let minuto = 0;
-  for (let ciclo = 0; ciclo < 5; ciclo++) {
-    const profundo = Math.max(5, 25 - ciclo * 4);
-    const rem = 10 + ciclo * 8;
-    for (const [fase, min] of [["ligero", 15], ["profundo", profundo], ["ligero", 10], ["rem", rem]]) {
-      segmentos.push({ fase, inicio: minuto, fin: minuto + min });
-      minuto += min;
-    }
-  }
-  const resumen = { despierto: 0, ligero: 0, profundo: 0, rem: 0 };
-  segmentos.forEach((s) => (resumen[s.fase] += s.fin - s.inicio));
-  res.json({ duracionTotal: minuto, segmentos, resumen });
 });
 
 // --- Historial de chat ---
 app.get("/api/chat/historial", requireAuth, async (req, res) => {
-  const mensajes = await ChatMessage.find().sort({ createdAt: -1 }).limit(50);
+  const mensajes = await ChatMessage.find().sort({ createdAt: -1 }).limit(80);
   res.json({ mensajes: mensajes.reverse() });
 });
 
@@ -296,13 +285,17 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("mensaje_nuevo", async (texto) => {
+  socket.on("mensaje_nuevo", async (payload) => {
+    const texto = typeof payload === "string" ? payload : payload?.texto;
+    const categoria = (typeof payload === "object" && payload?.categoria) || "General";
     if (!texto || !texto.trim()) return;
     const usuario = await User.findById(socket.usuarioId);
     if (!usuario) return;
     const mensaje = await ChatMessage.create({
       autor: usuario._id,
       autorNombre: usuario.nombre,
+      autorAvatar: usuario.avatar || "🌙",
+      categoria,
       texto: texto.trim().slice(0, 1000),
     });
     io.emit("mensaje_recibido", mensaje);
