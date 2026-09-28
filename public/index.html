@@ -252,14 +252,14 @@ async function render(){
     rutina:renderRutina, perfil:renderPerfil };
   main.innerHTML = "";
   await (fns[seccionActual] || renderInicio)(main);
-  document.getElementById("footer").innerHTML = "🌙 Onírico — hecho para aprender y practicar sueños lúcidos.";
+  document.getElementById("footer").innerHTML = "🌙 Onírico — "+({es:"hecho para aprender y practicar sueños lúcidos.",ca:"fet per aprendre i practicar somnis lúcids.",en:"made to learn and practice lucid dreaming."}[idioma]);
 }
 
 // --- INICIO ---
 async function renderInicio(main){
   main.innerHTML = `
     <div style="padding-top:20px;display:flex;flex-direction:column;gap:18px;max-width:560px;">
-      <span style="color:var(--rem-500);font-size:0.85rem;">Ciencia del sueño · Práctica guiada</span>
+      <span style="color:var(--rem-500);font-size:0.85rem;">${{es:"Ciencia del sueño · Práctica guiada",ca:"Ciència del son · Pràctica guiada",en:"Sleep science · Guided practice"}[idioma]}</span>
       <h1 class="font-display" style="font-size:2.4rem;line-height:1.15;margin:0;">${t("home.titulo")}</h1>
       <p style="color:var(--niebla-300);font-size:1.05rem;line-height:1.5;">${t("home.subtitulo")}</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
@@ -286,8 +286,31 @@ const ARTICULOS_POR_IDIOMA = {
     {titulo:"¿Qué se puede hacer dentro de un sueño lúcido?",resumen:"Desde observar hasta experimentar con el propio entorno onírico.",texto:"Algunas personas se limitan a observar el sueño con curiosidad; otras exploran el entorno, prueban a cambiar de escenario, practican una habilidad o simplemente disfrutan de la experiencia. El nivel de control percibido varía mucho entre personas y no debe tomarse como un objetivo obligatorio."}
   ]
 };
-ARTICULOS_POR_IDIOMA.ca = ARTICULOS_POR_IDIOMA.es;
-ARTICULOS_POR_IDIOMA.en = ARTICULOS_POR_IDIOMA.es;
+ARTICULOS_POR_IDIOMA.ca = [
+ {titulo:"Què són els somnis lúcids?",resumen:"La base: adonar-te que estàs somiant mentre el somni continua.",texto:"Un somni lúcid és aquell en què la persona s'adona que està somiant mentre el somni encara està passant. Algunes persones, a més, aconsegueixen influir voluntàriament en el que succeeix a partir d'aquell moment, tot i que el grau de control varia molt d'una persona a una altra i d'una nit a una altra. No cal controlar el somni perquè es consideri lúcid: n'hi ha prou amb ser conscient que ho és."},
+ {titulo:"Com funciona el son?",resumen:"Una ullada ràpida a les fases que travessa el cervell cada nit.",texto:"El son s'organitza en cicles d'uns 90 minuts que es repeteixen diverses vegades per nit. Cada cicle recorre fases de son lleuger, son profund i son REM. A mesura que avança la nit, els períodes de son REM s'allarguen, cosa que explica per què els somnis més vívids solen concentrar-se a la segona meitat de la nit."},
+ {titulo:"Què és el son REM?",resumen:"La fase associada als somnis més vívids i narratius.",texto:"REM són les sigles de 'Rapid Eye Movement' (moviment ocular ràpid). És la fase del son en què l'activitat cerebral s'assembla a la vigília, els ulls es mouen ràpidament sota les parpelles i el cos entra en una mena de paràlisi temporal. La majoria dels somnis que recordem amb detall provenen d'aquesta fase."},
+ {titulo:"Quan solen aparèixer els somnis lúcids?",resumen:"Gairebé sempre durant el son REM, cap al final de la nit.",texto:"Els somnis lúcids passen majoritàriament durant fases REM, que es tornen més llargues i freqüents a les últimes hores de son. Per això moltes tècniques, com WBTB, aprofiten precisament aquest tram final de la nit."},
+ {titulo:"Com millorar el record dels somnis?",resumen:"L'hàbit que sosté tota la resta.",texto:"Mantenir-se quiet en despertar, reconstruir el somni mentalment abans de moure't i anotar-lo de seguida són les estratègies amb més suport per millorar el record. Amb constància, la quantitat i el nivell de detall dels somnis recordats sol augmentar de manera notable en poques setmanes."},
+ {titulo:"Què són els somnis recurrents?",resumen:"Quan una mateixa escena, tema o emoció torna una vegada i una altra.",texto:"Són somnis que es repeteixen amb un contingut, escenari o emoció semblant al llarg del temps. Sovint estan relacionats amb preocupacions o situacions vitals del moment, i poden convertir-se en senyals oníriques molt fiables per reconèixer que estàs somiant."},
+ {titulo:"Què són els malsons?",resumen:"Somnis intensos i desagradables que solen despertar-nos.",texto:"Els malsons són somnis amb un contingut marcadament negatiu (por, angoixa o amenaça) que sovint provoquen el despertar. Si són freqüents o afecten el descans o el benestar, el recomanable és consultar amb un professional de la salut, ja que aquesta app no substitueix aquest tipus d'atenció."},
+ {titulo:"Què és la paràlisi del son?",resumen:"Un fenomen normal, tot i que pot resultar inquietant.",texto:"Passa quan la ment es desperta però el cos roman en l'atonia muscular pròpia del son REM, cosa que impedeix moure's durant uns segons o minuts. És un fenomen fisiològic conegut i, tot i que pot anar acompanyat de sensacions intenses, no implica cap perill físic."},
+ {titulo:"Quina diferència hi ha entre un somni lúcid i un de normal?",resumen:"La consciència d'estar somiant, no necessàriament el control.",texto:"En un somni normal, la persona viu la narrativa sense qüestionar-la, com si fos real. En un somni lúcid, en algun moment sorgeix la certesa que es tracta d'un somni. A partir d'aquí, algunes persones poden decidir què fer-hi dins, tot i que el nivell d'influència és variable."},
+ {titulo:"Què es pot fer dins d'un somni lúcid?",resumen:"Des d'observar fins a experimentar amb el propi entorn oníric.",texto:"Algunes persones es limiten a observar el somni amb curiositat; d'altres exploren l'entorn, proven de canviar d'escenari, practiquen una habilitat o simplement gaudeixen de l'experiència. El nivell de control percebut varia molt entre persones i no s'ha de prendre com un objectiu obligatori."}
+];
+ARTICULOS_POR_IDIOMA.en = [
+ {titulo:"What are lucid dreams?",resumen:"The basics: realizing you're dreaming while the dream continues.",texto:"A lucid dream is one in which the person realizes they are dreaming while the dream is still happening. Some people are also able to voluntarily influence what happens from that moment on, although the degree of control varies a lot from person to person and from night to night. You don't need to control the dream for it to count as lucid: being aware that it is one is enough."},
+ {titulo:"How does sleep work?",resumen:"A quick look at the stages the brain goes through each night.",texto:"Sleep is organized into cycles of about 90 minutes that repeat several times a night. Each cycle goes through stages of light sleep, deep sleep and REM sleep. As the night goes on, REM periods get longer, which explains why the most vivid dreams tend to concentrate in the second half of the night."},
+ {titulo:"What is REM sleep?",resumen:"The stage linked to the most vivid, story-like dreams.",texto:"REM stands for 'Rapid Eye Movement'. It is the sleep stage in which brain activity resembles wakefulness, the eyes move rapidly under the eyelids and the body enters a kind of temporary paralysis. Most of the dreams we remember in detail come from this stage."},
+ {titulo:"When do lucid dreams usually happen?",resumen:"Almost always during REM sleep, toward the end of the night.",texto:"Lucid dreams occur mostly during REM stages, which become longer and more frequent in the last hours of sleep. That's why many techniques, like WBTB, take advantage of precisely that final stretch of the night."},
+ {titulo:"How can I improve my dream recall?",resumen:"The habit that supports everything else.",texto:"Staying still upon waking, mentally reconstructing the dream before moving and writing it down right away are the best-supported strategies for improving recall. With consistency, the number and level of detail of the dreams you remember usually increases noticeably within a few weeks."},
+ {titulo:"What are recurring dreams?",resumen:"When the same scene, theme or emotion comes back again and again.",texto:"These are dreams that repeat with similar content, setting or emotion over time. They are often related to current worries or life situations, and they can become very reliable dream signs for recognizing that you're dreaming."},
+ {titulo:"What are nightmares?",resumen:"Intense, unpleasant dreams that often wake us up.",texto:"Nightmares are dreams with markedly negative content (fear, anguish or threat) that often cause waking up. If they are frequent or affect your rest or wellbeing, it's advisable to consult a health professional, as this app does not replace that kind of care."},
+ {titulo:"What is sleep paralysis?",resumen:"A normal phenomenon, although it can feel unsettling.",texto:"It happens when the mind wakes up but the body remains in the muscle atonia typical of REM sleep, which prevents movement for a few seconds or minutes. It is a well-known physiological phenomenon and, although it can come with intense sensations, it doesn't pose any physical danger."},
+ {titulo:"What's the difference between a lucid dream and a normal one?",resumen:"Awareness of dreaming, not necessarily control.",texto:"In a normal dream, the person lives the story without questioning it, as if it were real. In a lucid dream, at some point the certainty arises that it is a dream. From there, some people can decide what to do inside it, although the level of influence varies."},
+ {titulo:"What can you do inside a lucid dream?",resumen:"From simply observing to experimenting with your own dream environment.",texto:"Some people just observe the dream with curiosity; others explore the environment, try changing the scenery, practice a skill or simply enjoy the experience. The perceived level of control varies a lot between people and shouldn't be treated as a mandatory goal."}
+];
+
 
 async function renderEducacion(main){
   const arts = ARTICULOS_POR_IDIOMA[idioma] || ARTICULOS_POR_IDIOMA.es;
@@ -350,8 +373,76 @@ const TECNICAS_POR_IDIOMA = { es: [
   {id:"tholey",nombre:"Reflexión de Tholey",nombreCompleto:"Técnica de autosugestión y reflexión crítica",evidencia:"limitada",
     desc:"Preguntarte repetidamente durante el día «¿estoy soñando?» acompañado de una reflexión crítica profunda sobre tu entorno, más allá de una comprobación mecánica."}
 ]};
-TECNICAS_POR_IDIOMA.ca = TECNICAS_POR_IDIOMA.es;
-TECNICAS_POR_IDIOMA.en = TECNICAS_POR_IDIOMA.es;
+const TR_TEC = {
+ca:{
+ mild:{dificultad:"Mitjana",tiempo:"10–20 min",cuando:"En despertar-te a mitja nit (ideal amb WBTB)",
+  desc:"Una tècnica basada en la intenció i la memòria prospectiva: et repeteixes que reconeixeràs que estàs somiant la propera vegada que somiïs, mentre repasses mentalment un somni recent.",
+  pasos:["Desperta't de manera natural o amb una alarma després de 4,5–6 hores de son.","Queda't despert uns minuts, just els necessaris per activar la memòria (no facis servir el mòbil).","Recorda un somni recent o un que solguis tenir.","Repeteix mentalment: «La propera vegada que estigui somiant, reconeixeré que estic somiant».","Visualitza que tornes a aquell somni i que en algun moment notes un senyal oníric i t'adones que somies.","Repeteix la frase i imagina l'escena fins que tornis a dormir-te."],
+  errores:["Repetir la frase de manera mecànica, sense intenció real al darrere.","Quedar-se despert massa estona i perdre el son.","No visualitzar cap escena concreta."],
+  consejos:["La intenció compta més que el nombre de repeticions.","Practicar-ho cada dia, fins i tot sense despertar-te de nit, reforça l'hàbit."],
+  combo:"La combinació amb WBTB és la que sol mostrar millors resultats als estudis disponibles."},
+ wbtb:{dificultad:"Mitjana",tiempo:"20–60 min despert",cuando:"Després de 4,5–6 hores de son",
+  desc:"Consisteix a despertar-se de manera deliberada durant la nit, romandre despert una estona breu i tornar a dormir. Gairebé sempre s'usa com a base per practicar MILD o SSILD just després.",
+  pasos:["Posa una alarma unes 4,5–6 hores després d'anar a dormir.","Aixeca't del llit i queda't despert entre 10 i 30 minuts.","Dedica aquesta estona a alguna cosa tranquil·la: llegir sobre somnis lúcids o repassar el teu diari.","Torna al llit amb la intenció clara de reconèixer que somies.","Combina-ho de seguida amb MILD o SSILD abans de tornar a adormir-te."],
+  errores:["Encendre pantalles brillants, cosa que dificulta tornar a dormir.","Romandre despert massa estona i acabar esgotat l'endemà."],
+  consejos:["Comença provant-ho només una o dues nits per setmana."],
+  combo:"Es combina de manera natural amb MILD o SSILD just en tornar al llit.",
+  aviso:"No es recomana practicar WBTB totes les nits ni sacrificar hores de son per fer-ho: dormir prou ha de ser sempre la prioritat."},
+ ssild:{dificultad:"Mitjana",tiempo:"10–15 min",cuando:"Abans de dormir o combinada amb WBTB",
+  desc:"Es basa a passar l'atenció, en cicles curts, per tres sentits (vista, oïda, tacte) sense analitzar el que percebs, per afavorir un estat propici a la lucidesa.",
+  pasos:["Tanca els ulls i dirigeix l'atenció al que 'veus' darrere les parpelles, sense analitzar-ho, durant uns segons.","Passa l'atenció al que sents al teu voltant.","Passa l'atenció a les sensacions tàctils del teu cos contra el llit.","Repeteix el cicle (vista → oïda → tacte) entre 4 i 6 vegades.","Deixa que el son arribi de manera natural, sense forçar-lo."],
+  errores:["Analitzar o buscar activament estímuls en lloc de simplement notar-los.","Fer els cicles massa ràpid o massa llargs."],
+  consejos:["Funciona bé com a tancament després d'un WBTB curt."],
+  combo:"Combina-la amb WBTB: practica els cicles just en tornar al llit."},
+ reality:{dificultad:"Baixa",tiempo:"1–2 min, diverses vegades al dia",cuando:"Durant el dia, en moments aleatoris",
+  desc:"Consisteix a preguntar-te diverses vegades al dia si estàs somiant i comprovar-ho amb una prova senzilla, perquè l'hàbit es traslladi també als somnis.",
+  ejemplos:["Mirar-te les mans i comptar els dits.","Provar de tapar-te el nas i respirar-hi.","Llegir un text, mirar cap a un altre lloc i tornar-lo a llegir.","Comprovar si un interruptor de llum funciona amb normalitat."],
+  consejos:["Associa-ho a moments concrets del dia (creuar una porta, mirar el mòbil) per convertir-ho en hàbit.","El més important no és només fer el gest, sinó preguntar-te de debò si estàs despert o somiant."],
+  aviso:"Per si sola, no s'ha de presentar com una tècnica miraculosa: el seu paper principal sembla ser reforçar l'hàbit mental que després apareix dins del somni."},
+ recall:{dificultad:"Baixa",tiempo:"5–10 min en despertar",cuando:"Just en despertar",
+  desc:"Recordar els somnis és la base de tota la resta: sense record no hi ha manera de detectar senyals oníriques ni de mesurar el progrés.",
+  pasos:["En despertar, queda't uns segons quiet, sense moure't ni obrir els ulls.","Intenta reconstruir el somni des del final cap al principi.","Anota'l de seguida, encara que només siguin fragments o sensacions soltes.","Amb el temps, busca patrons: llocs, persones o objectes que es repeteixen."],
+  consejos:["Tingues sempre a mà el diari (o aquesta app) abans de dormir."]},
+ fild:{desc:"Moure lleugerament els dits després d'un breu despertar, mantenint la ment alerta mentre el cos es relaxa de nou cap al son."},
+ wild:{desc:"Mantenir la consciència mentre el cos s'adorm, passant directament de la vigília al son sense perdre la lucidesa. Requereix pràctica i pot anar acompanyada de paràlisi del son."},
+ tholey:{nombre:"Reflexió de Tholey",nombreCompleto:"Tècnica d'autosuggestió i reflexió crítica",desc:"Preguntar-te repetidament durant el dia «estic somiant?» acompanyat d'una reflexió crítica profunda sobre el teu entorn, més enllà d'una comprovació mecànica."}
+},
+en:{
+ mild:{dificultad:"Medium",tiempo:"10–20 min",cuando:"When waking up in the middle of the night (ideal with WBTB)",
+  desc:"A technique based on intention and prospective memory: you tell yourself you will recognize you're dreaming the next time you dream, while mentally replaying a recent dream.",
+  pasos:["Wake up naturally or with an alarm after 4.5–6 hours of sleep.","Stay awake for a few minutes, just enough to activate your memory (don't use your phone).","Recall a recent dream or one you tend to have.","Repeat mentally: «Next time I'm dreaming, I will recognize that I'm dreaming».","Visualize going back into that dream, noticing a dream sign at some point and realizing you're dreaming.","Keep repeating the phrase and imagining the scene until you fall asleep again."],
+  errores:["Repeating the phrase mechanically, with no real intention behind it.","Staying awake too long and losing your sleep.","Not visualizing any specific scene."],
+  consejos:["Intention matters more than the number of repetitions.","Practicing daily, even without waking during the night, strengthens the habit."],
+  combo:"The combination with WBTB is the one that tends to show the best results in the available studies."},
+ wbtb:{dificultad:"Medium",tiempo:"20–60 min awake",cuando:"After 4.5–6 hours of sleep",
+  desc:"It consists of deliberately waking up during the night, staying awake for a short while and going back to sleep. It's almost always used as the basis for practicing MILD or SSILD right afterward.",
+  pasos:["Set an alarm about 4.5–6 hours after going to bed.","Get out of bed and stay awake for 10 to 30 minutes.","Spend that time on something calm: reading about lucid dreams or reviewing your journal.","Go back to bed with the clear intention of recognizing that you're dreaming.","Combine it immediately with MILD or SSILD before falling asleep again."],
+  errores:["Turning on bright screens, which makes it harder to fall back asleep.","Staying awake too long and ending up exhausted the next day."],
+  consejos:["Start by trying it just one or two nights a week."],
+  combo:"It combines naturally with MILD or SSILD right when you get back into bed.",
+  aviso:"Practicing WBTB every night or sacrificing sleep hours to do it is not recommended: getting enough sleep must always be the priority."},
+ ssild:{dificultad:"Medium",tiempo:"10–15 min",cuando:"Before sleep or combined with WBTB",
+  desc:"It is based on moving your attention, in short cycles, through three senses (sight, hearing, touch) without analyzing what you perceive, to encourage a state conducive to lucidity.",
+  pasos:["Close your eyes and direct your attention to what you 'see' behind your eyelids, without analyzing it, for a few seconds.","Shift your attention to what you hear around you.","Shift your attention to the tactile sensations of your body against the bed.","Repeat the cycle (sight → hearing → touch) 4 to 6 times.","Let sleep come naturally, without forcing it."],
+  errores:["Analyzing or actively searching for stimuli instead of simply noticing them.","Doing the cycles too fast or too long."],
+  consejos:["It works well as a closing step after a short WBTB."],
+  combo:"Combine it with WBTB: practice the cycles right when you get back into bed."},
+ reality:{dificultad:"Low",tiempo:"1–2 min, several times a day",cuando:"During the day, at random moments",
+  desc:"It consists of asking yourself several times a day whether you're dreaming and checking it with a simple test, so the habit carries over into your dreams too.",
+  ejemplos:["Look at your hands and count your fingers.","Try to pinch your nose closed and breathe through it.","Read a text, look away and read it again.","Check whether a light switch works normally."],
+  consejos:["Tie it to specific moments of the day (walking through a door, checking your phone) to turn it into a habit.","What matters is not just doing the gesture, but genuinely asking yourself whether you're awake or dreaming."],
+  aviso:"On its own, it shouldn't be presented as a miracle technique: its main role seems to be reinforcing the mental habit that later shows up inside the dream."},
+ recall:{dificultad:"Low",tiempo:"5–10 min upon waking",cuando:"Right upon waking",
+  desc:"Remembering your dreams is the foundation of everything else: without recall there's no way to spot dream signs or measure progress.",
+  pasos:["Upon waking, stay still for a few seconds, without moving or opening your eyes.","Try to reconstruct the dream from the end back to the beginning.","Write it down right away, even if it's just fragments or loose sensations.","Over time, look for patterns: places, people or objects that repeat."],
+  consejos:["Always keep your journal (or this app) at hand before sleeping."]},
+ fild:{desc:"Slightly moving your fingers after a brief awakening, keeping your mind alert while your body relaxes back toward sleep."},
+ wild:{desc:"Maintaining awareness while the body falls asleep, going straight from wakefulness into the dream without losing lucidity. It requires practice and may come with sleep paralysis."},
+ tholey:{nombre:"Tholey's reflection",nombreCompleto:"Autosuggestion and critical reflection technique",desc:"Repeatedly asking yourself «am I dreaming?» during the day, accompanied by deep critical reflection about your surroundings, beyond a mechanical check."}
+}};
+TECNICAS_POR_IDIOMA.ca = TECNICAS_POR_IDIOMA.es.map(x=>({...x, ...(TR_TEC.ca[x.id]||{})}));
+TECNICAS_POR_IDIOMA.en = TECNICAS_POR_IDIOMA.es.map(x=>({...x, ...(TR_TEC.en[x.id]||{})}));
+
 
 let filtroEvidencia = "todas";
 let tecnicaSeleccionada = null;
@@ -661,6 +752,10 @@ async function renderComunidad(main){
 // (Sección de datos de sueño simulados eliminada — no aportaba valor real sin conexión a un reloj compatible)
 
 // --- RUTINA ---
+const RUTINA_TEXTOS = {
+ ca:{m1:"Recordar el somni abans de moure't",m2:"Escriure'l al diari",m3:"Valorar la qualitat del record",d1:"Fer 5 comprovacions de realitat",d2:"Anotar possibles senyals oníriques",n1:"Revisar el teu objectiu de la nit",n2:"Practicar MILD",w1:"WBTB, només si tens ganes aquella nit"},
+ en:{m1:"Recall the dream before moving",m2:"Write it in your journal",m3:"Rate the quality of your recall",d1:"Do 5 reality checks",d2:"Note possible dream signs",n1:"Review your goal for the night",n2:"Practice MILD",w1:"WBTB, only if you feel like it that night"}
+};
 async function renderRutina(main){
   const {rutina} = await api("/api/rutina");
   const BLOQUES = [
@@ -684,7 +779,7 @@ async function renderRutina(main){
       fila.style.cssText = "display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;font-size:0.9rem;";
       fila.style.color = it.hecho ? "var(--niebla-500)" : "var(--niebla-100)";
       fila.style.textDecoration = it.hecho ? "line-through" : "none";
-      fila.innerHTML = `<input type="checkbox" ${it.hecho?"checked":""} style="width:18px;height:18px;accent-color:var(--aurora-500);"> ${it.texto}`;
+      fila.innerHTML = `<input type="checkbox" ${it.hecho?"checked":""} style="width:18px;height:18px;accent-color:var(--aurora-500);"> ${(RUTINA_TEXTOS[idioma]||{})[it.id]||it.texto}`;
       fila.querySelector("input").onchange = async()=>{ await api(`/api/rutina/${it.id}/toggle`,{method:"PUT"}); irA("rutina"); };
       div.appendChild(fila);
     });
