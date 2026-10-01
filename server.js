@@ -22,6 +22,7 @@ const cookie = require("cookie");
 const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET || "cambia_esto_en_produccion";
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "").toLowerCase().trim();
 
 // ---------------------------------------------------------------------------
 // 1) CONEXIÓN A MONGODB
@@ -77,6 +78,7 @@ userSchema.methods.toSafeObject = function () {
     descripcion: this.descripcion,
     rutina: this.rutina,
     estadisticas: this.estadisticas,
+    esAdmin: !!ADMIN_EMAIL && this.email === ADMIN_EMAIL,
   };
 };
 const User = mongoose.model("User", userSchema);
@@ -264,6 +266,18 @@ app.put("/api/rutina/:id/toggle", requireAuth, async (req, res) => {
 app.get("/api/chat/historial", requireAuth, async (req, res) => {
   const mensajes = await ChatMessage.find().sort({ createdAt: -1 }).limit(80);
   res.json({ mensajes: mensajes.reverse() });
+});
+
+// Borrar un mensaje: solo la cuenta marcada como administradora (ADMIN_EMAIL) puede hacerlo.
+app.delete("/api/chat/:id", requireAuth, async (req, res) => {
+  const usuario = await User.findById(req.usuarioId);
+  if (!usuario || !ADMIN_EMAIL || usuario.email !== ADMIN_EMAIL) {
+    return res.status(403).json({ error: "No tienes permiso para borrar mensajes." });
+  }
+  const borrado = await ChatMessage.findByIdAndDelete(req.params.id);
+  if (!borrado) return res.status(404).json({ error: "Mensaje no encontrado." });
+  io.emit("mensaje_borrado", { id: req.params.id });
+  res.json({ ok: true });
 });
 
 // ---------------------------------------------------------------------------
