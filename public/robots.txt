@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://onirico-backend-production.up.railway.app/sitemap.xml
