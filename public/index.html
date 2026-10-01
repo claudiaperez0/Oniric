@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Onírico — Sueños lúcidos</title>
+<title>Onírico — Aprende y practica sueños lúcidos</title>
+<meta name="description" content="Onírico es una app educativa para aprender la ciencia de los sueños lúcidos, practicar técnicas como MILD, WBTB o SSILD, llevar un diario de sueños y seguir tu progreso.">
+<meta property="og:title" content="Onírico — Aprende y practica sueños lúcidos">
+<meta property="og:description" content="Educación, técnicas de inducción, diario de sueños, comunidad y rutina de práctica, con base científica.">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
 <script src="/socket.io/socket.io.js"></script>
 <style>
   @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Sora:wght@400;500;600;700&display=swap");
@@ -696,6 +701,10 @@ function conectarSocket(){
     mensajesComunidad.push(msg);
     if(seccionActual==="comunidad") pintarMensajes();
   });
+  socket.on("mensaje_borrado", ({id})=>{
+    mensajesComunidad = mensajesComunidad.filter(m=>m._id!==id);
+    if(seccionActual==="comunidad") pintarMensajes();
+  });
 }
 function pintarMensajes(){
   const cont = document.getElementById("chat-mensajes");
@@ -706,9 +715,20 @@ function pintarMensajes(){
     const card = document.createElement("div"); card.className="post-tarjeta";
     card.innerHTML = `<div class="post-header">
         <span style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--niebla-100);"><span style="font-size:1.1rem;">${msg.autorAvatar||"🌙"}</span> ${msg.autorNombre}</span>
-        <span class="categoria-tag">${msg.categoria||"General"}</span>
+        <span style="display:flex;align-items:center;gap:8px;">
+          <span class="categoria-tag">${msg.categoria||"General"}</span>
+          ${usuarioActual?.esAdmin?'<button class="btn-peligro" data-borrar style="font-size:0.9rem;">🗑️</button>':""}
+        </span>
       </div>
       <p style="margin:0;color:var(--niebla-300);font-size:0.9rem;">${msg.texto}</p>`;
+    if(usuarioActual?.esAdmin){
+      card.querySelector("[data-borrar]").onclick = async ()=>{
+        if(!confirm(idioma==="en"?"Delete this message?":idioma==="ca"?"Esborrar aquest missatge?":"¿Borrar este mensaje?")) return;
+        await api(`/api/chat/${msg._id}`,{method:"DELETE"});
+        mensajesComunidad = mensajesComunidad.filter(m=>m._id!==msg._id);
+        pintarMensajes();
+      };
+    }
     cont.appendChild(card);
   });
   cont.scrollTop = cont.scrollHeight;
