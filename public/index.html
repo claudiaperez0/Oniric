@@ -317,22 +317,195 @@ ARTICULOS_POR_IDIOMA.en = [
 ];
 
 
+function pick(o){ return o ? (o[idioma]||o.es||"") : ""; }
+
+const CATS_EDU = {
+  son:{es:"El sueño",ca:"El son",en:"Sleep"},
+  somnis:{es:"Los sueños",ca:"Els somnis",en:"Dreams"},
+  lucids:{es:"Sueños lúcidos",ca:"Somnis lúcids",en:"Lucid dreams"},
+  memoria:{es:"Memoria",ca:"Memòria",en:"Memory"},
+  psicologia:{es:"Psicología",ca:"Psicologia",en:"Psychology"},
+  substancies:{es:"Sustancias",ca:"Substàncies",en:"Substances"},
+  treball:{es:"Investigación (TDR)",ca:"Recerca (TDR)",en:"Research (TDR)"}
+};
+// Categoría de los 10 artículos básicos ya existentes (mismo orden que ARTICULOS_POR_IDIOMA)
+const CAT_VIEJOS = ["lucids","son","son","lucids","somnis","somnis","somnis","son","lucids","lucids"];
+
+const ARTICULOS_NUEVOS = [
+ {cat:"son",
+  t:{es:"Las fases del sueño: N1, N2, N3 y REM",ca:"Les fases del son: N1, N2, N3 i REM",en:"The stages of sleep: N1, N2, N3 and REM"},
+  r:{es:"El sueño no es uniforme: se divide en fases que se repiten en ciclos.",ca:"El son no és uniforme: es divideix en fases que es repeteixen en cicles.",en:"Sleep is not uniform: it is divided into stages that repeat in cycles."},
+  x:{es:"El sueño se divide en sueño NREM (N1, N2 y N3) y sueño REM. N1 es el adormecimiento (1–10 min), con despertares muy fáciles. N2, el sueño ligero, ocupa cerca del 50 % de la noche: bajan la temperatura corporal, el pulso y la actividad cerebral. N3, el sueño profundo o de ondas lentas (delta), es la fase más difícil de interrumpir y, si te despiertas en ella, puedes sentirte confundido. Después llega el REM. Cada ciclo dura entre 70 y 120 minutos y una noche típica tiene de 4 a 6. Nota: clasificaciones antiguas dividían N3 en dos etapas (3 y 4), por eso algunas fuentes hablan de «cinco etapas».",
+     ca:"El son es divideix en son NREM (N1, N2 i N3) i son REM. N1 és l'adormiment (1–10 min), amb despertars molt fàcils. N2, el son lleuger, ocupa prop del 50 % de la nit: baixen la temperatura corporal, el pols i l'activitat cerebral. N3, el son profund o d'ones lentes (delta), és la fase més difícil d'interrompre i, si et despertes en ella, pots sentir-te confós. Després arriba el REM. Cada cicle dura entre 70 i 120 minuts i una nit típica en té de 4 a 6. Nota: classificacions antigues dividien N3 en dues etapes (3 i 4), per això algunes fonts parlen de «cinc etapes».",
+     en:"Sleep is divided into NREM sleep (N1, N2 and N3) and REM sleep. N1 is falling asleep (1–10 min), with very easy awakenings. N2, light sleep, takes up about 50% of the night: body temperature, pulse and brain activity drop. N3, deep or slow-wave (delta) sleep, is the hardest stage to interrupt and, if you wake up in it, you may feel confused. REM follows. Each cycle lasts 70 to 120 minutes and a typical night has 4 to 6. Note: older classifications split N3 into two stages (3 and 4), which is why some sources mention «five stages»."},
+  f:"NICHD (NIH); Previsora General"},
+ {cat:"son",
+  t:{es:"El sueño REM: fásico y tónico",ca:"El son REM: fàsic i tònic",en:"REM sleep: phasic and tonic"},
+  r:{es:"La fase de más actividad cerebral, con parálisis muscular temporal.",ca:"La fase de més activitat cerebral, amb paràlisi muscular temporal.",en:"The stage with the most brain activity, with temporary muscle paralysis."},
+  x:{es:"En REM el cerebro se activa intensamente y aparecen la mayoría de los sueños. El tronco encefálico envía señales a la médula espinal que paralizan temporalmente brazos y piernas (atonía muscular), y por eso no actuamos lo que soñamos. El REM se divide en REM fásico (más actividad cerebral, movimientos oculares rápidos y pequeños espasmos) y REM tónico (menos actividad, sin movimientos oculares). Dura unos 10–20 minutos en los primeros ciclos y se alarga a medida que avanza la noche.",
+     ca:"En REM el cervell s'activa intensament i apareixen la majoria dels somnis. El tronc encefàlic envia senyals a la medul·la espinal que paralitzen temporalment braços i cames (atonia muscular), i per això no actuem el que somiem. El REM es divideix en REM fàsic (més activitat cerebral, moviments oculars ràpids i petits espasmes) i REM tònic (menys activitat, sense moviments oculars). Dura uns 10–20 minuts en els primers cicles i s'allarga a mesura que avança la nit.",
+     en:"During REM the brain becomes intensely active and most dreams appear. The brainstem sends signals to the spinal cord that temporarily paralyze the arms and legs (muscle atonia), which is why we don't act out our dreams. REM is divided into phasic REM (more brain activity, rapid eye movements and small twitches) and tonic REM (less activity, no eye movements). It lasts about 10–20 minutes in the first cycles and gets longer as the night goes on."},
+  f:"NICHD (NIH)"},
+ {cat:"lucids",
+  t:{es:"REM y sueños lúcidos: el estudio de LaBerge",ca:"REM i somnis lúcids: l'estudi de LaBerge",en:"REM and lucid dreams: LaBerge's study"},
+  r:{es:"Dónde y cuándo aparecen los sueños lúcidos dentro de la noche.",ca:"On i quan apareixen els somnis lúcids dins de la nit.",en:"Where and when lucid dreams appear during the night."},
+  x:{es:"Según los estudios de LaBerge y colaboradores (1986), los sueños lúcidos aparecen durante el REM fásico, cuando hay más actividad cerebral. Son más probables cuando hay mucha densidad de movimientos oculares rápidos, sobre todo pasados 5–7 minutos desde que empieza esta fase. En REM los sueños suelen ser más vívidos y coloridos que en otras etapas. Esto explica por qué técnicas como WBTB intentan aprovechar los REM largos del final de la noche.",
+     ca:"Segons els estudis de LaBerge i col·laboradors (1986), els somnis lúcids apareixen durant el REM fàsic, quan hi ha més activitat cerebral. Són més probables quan hi ha molta densitat de moviments oculars ràpids, sobretot passats 5–7 minuts des que comença aquesta fase. En REM els somnis solen ser més vívids i colorits que en altres etapes. Això explica per què tècniques com WBTB intenten aprofitar els REM llargs del final de la nit.",
+     en:"According to LaBerge and colleagues (1986), lucid dreams occur during phasic REM, when brain activity is highest. They are more likely when rapid eye movements are dense, especially 5–7 minutes after this stage begins. In REM, dreams tend to be more vivid and colorful than in other stages. This explains why techniques like WBTB try to take advantage of the long REM periods at the end of the night."},
+  f:"LaBerge et al. (1986), a través de World of Lucid Dreaming"},
+ {cat:"lucids",
+  t:{es:"El descubrimiento de los sueños lúcidos",ca:"El descobriment dels somnis lúcids",en:"The discovery of lucid dreaming"},
+  r:{es:"De las señales con los ojos de Hearne a la comunicación en tiempo real.",ca:"Dels senyals amb els ulls de Hearne a la comunicació en temps real.",en:"From Hearne's eye signals to real-time communication."},
+  x:{es:"El 12 de abril de 1975, el psicólogo británico Keith Hearne registró por primera vez una señal enviada desde un sueño lúcido: pidió a un soñador que, al volverse lúcido, hiciera movimientos oculares izquierda-derecha, que siguen siendo posibles pese a la parálisis del REM. El polígrafo registró la secuencia en pleno sueño. Décadas después, un equipo internacional liderado por la Universidad Northwestern (Konkoly et al., 2021) logró comunicación bidireccional en tiempo real con personas dormidas en REM, confirmando que los sueños lúcidos son medibles e interactivos.",
+     ca:"El 12 d'abril de 1975, el psicòleg britànic Keith Hearne va registrar per primera vegada un senyal enviat des d'un somni lúcid: va demanar a un somiador que, en tornar-se lúcid, fes moviments oculars esquerra-dreta, que continuen sent possibles malgrat la paràlisi del REM. El polígraf va registrar la seqüència en ple somni. Dècades després, un equip internacional liderat per la Universitat Northwestern (Konkoly et al., 2021) va aconseguir comunicació bidireccional en temps real amb persones adormides en REM, confirmant que els somnis lúcids són mesurables i interactius.",
+     en:"On April 12, 1975, the British psychologist Keith Hearne recorded for the first time a signal sent from a lucid dream: he asked a dreamer to make left-right eye movements once lucid, which remain possible despite REM paralysis. The polygraph recorded the sequence mid-dream. Decades later, an international team led by Northwestern University (Konkoly et al., 2021) achieved real-time two-way communication with people sleeping in REM, confirming that lucid dreams are measurable and interactive."},
+  f:"Hearne (1975); Konkoly et al. (2021)"},
+ {cat:"lucids",
+  t:{es:"Neurobiología del sueño lúcido",ca:"Neurobiologia del somni lúcid",en:"Neurobiology of lucid dreaming"},
+  r:{es:"Un tercer estado de consciencia, entre el sueño y la vigilia.",ca:"Un tercer estat de consciència, entre el son i la vigília.",en:"A third state of consciousness, between sleep and wakefulness."},
+  x:{es:"Durante el REM lúcido se activa la corteza prefrontal dorsolateral, una región normalmente inhibida durante el sueño y responsable de la autorreflexión y el pensamiento crítico. El EEG muestra más actividad de ondas gamma (25–100 Hz) en zonas frontales, un patrón parecido al de una persona despierta y concentrada. Por eso se propone que el sueño lúcido no es ni un estado de sueño ni de vigilia, sino un tercer estado de consciencia. Explora el apartado Cerebro para ver estas regiones.",
+     ca:"Durant el REM lúcid s'activa l'escorça prefrontal dorsolateral, una regió normalment inhibida durant el son i responsable de l'autoreflexió i el pensament crític. L'EEG mostra més activitat d'ones gamma (25–100 Hz) a zones frontals, un patró semblant al d'una persona desperta i concentrada. Per això es proposa que el somni lúcid no és ni un estat de son ni de vigília, sinó un tercer estat de consciència. Explora l'apartat Cervell per veure aquestes regions.",
+     en:"During lucid REM the dorsolateral prefrontal cortex activates, a region normally inhibited during sleep and responsible for self-reflection and critical thinking. EEG shows increased gamma-wave activity (25–100 Hz) in frontal areas, a pattern similar to that of an awake, focused person. That's why lucid dreaming is proposed to be neither a sleep state nor a waking state, but a third state of consciousness. Explore the Brain section to see these regions."},
+  f:"Voss et al. (2009); Konkoly et al. (2021)"},
+ {cat:"lucids",
+  t:{es:"Duración y características de un sueño lúcido",ca:"Durada i característiques d'un somni lúcid",en:"Duration and features of a lucid dream"},
+  r:{es:"Cuánto duran, quién puede tenerlos y cómo se perciben.",ca:"Quant duren, qui en pot tenir i com es perceben.",en:"How long they last, who can have them and how they feel."},
+  x:{es:"Como la mayoría de sueños, pueden durar desde pocos segundos hasta una hora; el típico dura entre 10 y 20 minutos. Los principiantes suelen notar que se «desmoronan» en pocos segundos o minutos, porque la emoción de ser lúcido puede despertarte; existen métodos de estabilización y entrenamiento para alargarlos. Se considera que cualquier persona puede tenerlos: algunas de forma espontánea y otras con práctica. La percepción de los sentidos es parecida a la de la vigilia y, al despertar, el sueño se recuerda con mucho detalle.",
+     ca:"Com la majoria de somnis, poden durar des de pocs segons fins a una hora; el típic dura entre 10 i 20 minuts. Els principiants solen notar que s'«esfondren» en pocs segons o minuts, perquè l'emoció de ser lúcid pot despertar-te; existeixen mètodes d'estabilització i entrenament per allargar-los. Es considera que qualsevol persona en pot tenir: algunes de manera espontània i altres amb pràctica. La percepció dels sentits és semblant a la de la vigília i, en despertar, el somni es recorda amb molt de detall.",
+     en:"Like most dreams, they can last from a few seconds to an hour; the typical one lasts 10 to 20 minutes. Beginners often notice that the dream «collapses» within seconds or minutes, because the excitement of being lucid can wake you up; there are stabilization methods and training to make them last longer. Anyone is considered able to have them: some spontaneously, others with practice. Sensory perception is similar to wakefulness and, upon waking, the dream is remembered in great detail."},
+  f:"World of Lucid Dreaming"},
+ {cat:"lucids",
+  t:{es:"Beneficios y riesgos: una mirada honesta",ca:"Beneficis i riscos: una mirada honesta",en:"Benefits and risks: an honest look"},
+  r:{es:"Lo que se sugiere, lo que se sabe y lo que conviene vigilar.",ca:"El que se suggereix, el que se sap i el que convé vigilar.",en:"What is suggested, what is known and what to watch for."},
+  x:{es:"Posibles beneficios: más confianza e imaginación y el trabajo con pesadillas recurrentes; la investigación sobre efectos terapéuticos (ansiedad, estrés) todavía es limitada y no debe presentarse como garantía. Riesgos: algunas personas refieren dificultad para distinguir sueño y realidad, confusión, pérdida de sueño, parálisis del sueño, ansiedad o más pesadillas. Si practicas técnicas que interrumpen el sueño y notas cansancio o malestar, prioriza dormir bien. Si tienes algún trastorno del sueño o de salud mental, consúltalo antes con un profesional.",
+     ca:"Possibles beneficis: més confiança i imaginació i el treball amb malsons recurrents; la recerca sobre efectes terapèutics (ansietat, estrès) encara és limitada i no s'ha de presentar com a garantia. Riscos: algunes persones refereixen dificultat per distingir somni i realitat, confusió, pèrdua de son, paràlisi del son, ansietat o més malsons. Si practiques tècniques que interrompen el son i notes cansament o malestar, prioritza dormir bé. Si tens algun trastorn del son o de salut mental, consulta-ho abans amb un professional.",
+     en:"Possible benefits: more confidence and imagination and working with recurring nightmares; research on therapeutic effects (anxiety, stress) is still limited and should not be presented as a guarantee. Risks: some people report difficulty telling dreams from reality, confusion, lost sleep, sleep paralysis, anxiety or more nightmares. If you practice techniques that interrupt sleep and feel tired or unwell, prioritize sleeping well. If you have a sleep or mental health condition, talk to a professional first."},
+  f:"OpenSynaps; Psicología y Mente (webgrafía del TDR)"},
+ {cat:"lucids",
+  t:{es:"¿Hasta qué punto se puede controlar el sueño?",ca:"Fins a quin punt es pot controlar el somni?",en:"How far can you control the dream?"},
+  r:{es:"Tener un objetivo concreto marca la diferencia.",ca:"Tenir un objectiu concret marca la diferència.",en:"Having a specific goal makes the difference."},
+  x:{es:"Dentro de un sueño lúcido hay cierta libertad para actuar, pero ayuda mucho tener un objetivo concreto: si no sabes qué quieres hacer, es fácil que la lucidez se escape. Conviene plantearlo antes de dormir (por ejemplo: volar, atravesar una pared o explorar el mundo onírico). Hay distintos niveles de control: algunas cosas cuestan más o requieren práctica. En la encuesta de este trabajo, la respuesta más frecuente entre quienes habían tenido sueños lúcidos fue haber controlado solo algún elemento puntual (33,2 % de las 250 respuestas).",
+     ca:"Dins d'un somni lúcid hi ha una certa llibertat per actuar, però ajuda molt tenir un objectiu concret: si no saps què vols fer, és fàcil que la lucidesa s'escapi. Convé plantejar-lo abans de dormir (per exemple: volar, travessar una paret o explorar el món oníric). Hi ha diferents nivells de control: algunes coses costen més o requereixen pràctica. A l'enquesta d'aquest treball, la resposta més freqüent entre qui havia tingut somnis lúcids va ser haver controlat només algun element puntual (33,2 % de les 250 respostes).",
+     en:"Inside a lucid dream there is some freedom to act, but having a specific goal helps a lot: if you don't know what you want to do, lucidity easily slips away. It's best to set it before sleeping (for example: flying, walking through a wall or exploring the dream world). There are different levels of control: some things are harder or take practice. In this project's survey, the most common answer among people who had lucid dreams was having controlled only one specific element (33.2% of the 250 responses)."},
+  f:"Enquesta del TDR (2026)"},
+ {cat:"memoria",
+  t:{es:"Memoria declarativa y no declarativa",ca:"Memòria declarativa i no declarativa",en:"Declarative and non-declarative memory"},
+  r:{es:"Dos grandes tipos de memoria y su relación con el sueño.",ca:"Dos grans tipus de memòria i la seva relació amb el son.",en:"Two main types of memory and their link to sleep."},
+  x:{es:"El estudio del paciente Henry Molaison (H.M.), que no podía formar nuevos recuerdos tras una intervención cerebral, permitió distinguir dos tipos de memoria. La declarativa (explícita) se puede expresar con palabras: hechos y episodios. Endel Tulving (1972) la dividió en semántica (conceptos y conocimiento del mundo: «saber») y episódica (experiencias personales con tiempo y lugar: «recordar»). La no declarativa (implícita) es automática e inconsciente: memoria procedimental, condicionamiento clásico y priming. Se suele relacionar el sueño NREM con la consolidación de la memoria declarativa y el REM con la no declarativa.",
+     ca:"L'estudi del pacient Henry Molaison (H.M.), que no podia formar nous records després d'una intervenció cerebral, va permetre distingir dos tipus de memòria. La declarativa (explícita) es pot expressar amb paraules: fets i episodis. Endel Tulving (1972) la va dividir en semàntica (conceptes i coneixement del món: «saber») i episòdica (experiències personals amb temps i lloc: «recordar»). La no declarativa (implícita) és automàtica i inconscient: memòria procedimental, condicionament clàssic i priming. Se sol relacionar el son NREM amb la consolidació de la memòria declarativa i el REM amb la no declarativa.",
+     en:"The study of patient Henry Molaison (H.M.), who could not form new memories after brain surgery, made it possible to distinguish two types of memory. Declarative (explicit) memory can be put into words: facts and episodes. Endel Tulving (1972) divided it into semantic (concepts and world knowledge: «knowing») and episodic (personal experiences with time and place: «remembering»). Non-declarative (implicit) memory is automatic and unconscious: procedural memory, classical conditioning and priming. NREM sleep is usually linked to consolidating declarative memory and REM to non-declarative memory."},
+  f:"Tulving (1972); NeuroClass; CISNe"},
+ {cat:"memoria",
+  t:{es:"Dormir poco: memoria y limpieza del cerebro",ca:"Dormir poc: memòria i neteja del cervell",en:"Too little sleep: memory and brain cleaning"},
+  r:{es:"Por qué dormir bien es la base de todo lo demás.",ca:"Per què dormir bé és la base de tota la resta.",en:"Why sleeping well is the foundation of everything else."},
+  x:{es:"La falta de sueño, el insomnio o la apnea del sueño dificultan la consolidación de la memoria: aparecen olvidos frecuentes, problemas para aprender habilidades nuevas y menor concentración. Además, el equipo de Maiken Nedergaard (Universidad de Rochester) describió que durante el sueño se movilizan los líquidos del cerebro y se eliminan residuos acumulados (sistema glinfático), como la proteína beta-amiloide, relacionada con el Alzheimer. Algunos estudios asocian la falta de sueño con más placas de amiloide. Por eso, ninguna técnica de sueños lúcidos debería quitarte horas de descanso.",
+     ca:"La falta de son, l'insomni o l'apnea del son dificulten la consolidació de la memòria: apareixen oblits freqüents, problemes per aprendre habilitats noves i menys concentració. A més, l'equip de Maiken Nedergaard (Universitat de Rochester) va descriure que durant el son es mobilitzen els líquids del cervell i s'eliminen residus acumulats (sistema glinfàtic), com la proteïna beta-amiloide, relacionada amb l'Alzheimer. Alguns estudis associen la falta de son amb més plaques d'amiloide. Per això, cap tècnica de somnis lúcids hauria de treure't hores de descans.",
+     en:"Lack of sleep, insomnia or sleep apnea make memory consolidation harder: frequent forgetting, trouble learning new skills and poorer concentration. In addition, Maiken Nedergaard's team (University of Rochester) described how, during sleep, brain fluids are mobilized and accumulated waste is cleared (the glymphatic system), such as beta-amyloid protein, linked to Alzheimer's. Some studies associate sleep loss with more amyloid plaques. That's why no lucid dreaming technique should cost you hours of rest."},
+  f:"PNI España (De la Serna, 2025); Banner Health"},
+ {cat:"somnis",
+  t:{es:"¿Por qué olvidamos la mayoría de los sueños?",ca:"Per què oblidem la majoria dels somnis?",en:"Why do we forget most dreams?"},
+  r:{es:"Recordar depende, sobre todo, de cuándo te despiertas.",ca:"Recordar depèn, sobretot, de quan et despertes.",en:"Recall depends mostly on when you wake up."},
+  x:{es:"Se suele decir que olvidamos la gran mayoría de lo soñado (a menudo se cita un 95 %), aunque hay personas que lo recuerdan con todo detalle. Recordar está relacionado con los despertares: si te despiertas durante o justo después de una fase REM, es mucho más probable que recuerdes el sueño. También se asocian a más recuerdo el estrés o la ansiedad elevados, algunos trastornos del sueño, ciertos fármacos que alteran el REM y el alcohol. Recordar mucho no es malo en sí, pero puede indicar un sueño poco continuo.",
+     ca:"Se sol dir que oblidem la gran majoria del que somiem (sovint se cita un 95 %), tot i que hi ha persones que ho recorden amb tot detall. Recordar està relacionat amb els despertars: si et despertes durant o just després d'una fase REM, és molt més probable que recordis el somni. També s'associen a més record l'estrès o l'ansietat elevats, alguns trastorns del son, certs fàrmacs que alteren el REM i l'alcohol. Recordar molt no és dolent en si mateix, però pot indicar un son poc continu.",
+     en:"It is often said that we forget the vast majority of what we dream (a figure of 95% is often quoted), although some people remember it in great detail. Recall is linked to awakenings: if you wake up during or right after a REM stage, you are much more likely to remember the dream. High stress or anxiety, some sleep disorders, certain drugs that alter REM and alcohol are also associated with more recall. Remembering a lot isn't bad in itself, but it may indicate fragmented sleep."},
+  f:"Instituto de Medicina del Sueño; Campayo"},
+ {cat:"psicologia",
+  t:{es:"Freud y Jung: dos maneras de leer los sueños",ca:"Freud i Jung: dues maneres de llegir els somnis",en:"Freud and Jung: two ways of reading dreams"},
+  r:{es:"Del deseo reprimido al lenguaje de los símbolos.",ca:"Del desig reprimit al llenguatge dels símbols.",en:"From repressed desire to the language of symbols."},
+  x:{es:"Los sueños se han estudiado desde la psicología como un fenómeno ligado a la actividad cerebral durante el sueño, influido por experiencias, emociones, recuerdos y preocupaciones, aunque no existe una explicación única de su función. En 1900, Sigmund Freud publicó «La interpretación de los sueños»: para él, los sueños expresaban de forma simbólica deseos y conflictos inconscientes, y disfrazaban su verdadero contenido. Carl Jung pensaba lo contrario: los sueños no ocultan nada, sino que expresan ideas profundas con un lenguaje propio de metáforas y símbolos que la mente racional no comprende del todo.",
+     ca:"Els somnis s'han estudiat des de la psicologia com un fenomen lligat a l'activitat cerebral durant el son, influït per experiències, emocions, records i preocupacions, tot i que no existeix una explicació única de la seva funció. L'any 1900, Sigmund Freud va publicar «La interpretació dels somnis»: per a ell, els somnis expressaven de manera simbòlica desitjos i conflictes inconscients, i dissimulaven el seu veritable contingut. Carl Jung pensava el contrari: els somnis no amaguen res, sinó que expressen idees profundes amb un llenguatge propi de metàfores i símbols que la ment racional no comprèn del tot.",
+     en:"Psychology has studied dreams as a phenomenon linked to brain activity during sleep, influenced by experiences, emotions, memories and worries, although there is no single explanation of their function. In 1900, Sigmund Freud published «The Interpretation of Dreams»: for him, dreams symbolically expressed unconscious desires and conflicts, and disguised their true content. Carl Jung thought the opposite: dreams hide nothing, but express deep ideas in their own language of metaphors and symbols that the rational mind can't fully grasp."},
+  f:"Psicología y Mente (Ulloa Quevedo, 2025)"},
+ {cat:"substancies",
+  t:{es:"Sustancias y sueño: el alcohol",ca:"Substàncies i son: l'alcohol",en:"Substances and sleep: alcohol"},
+  r:{es:"Sedar no es lo mismo que dormir.",ca:"Sedar no és el mateix que dormir.",en:"Sedation is not the same as sleep."},
+  x:{es:"Las sustancias no actúan todas igual: se agrupan en depresoras (como el alcohol), estimulantes (nicotina, cafeína, cocaína) y perturbadoras (LSD, drogas de síntesis); algunas, como el cannabis, encajan en más de un grupo. El alcohol es un sedante: ayuda a perder la consciencia antes, pero no equivale al sueño natural. Fragmenta el descanso, provoca más despertares, reduce las fases profundas y bloquea el REM, lo que afecta a la consolidación de la memoria, las emociones y el ánimo del día siguiente. Este apartado es informativo, no una recomendación de consumo.",
+     ca:"Les substàncies no actuen totes igual: s'agrupen en depressores (com l'alcohol), estimulants (nicotina, cafeïna, cocaïna) i pertorbadores (LSD, drogues de síntesi); algunes, com el cànnabis, encaixen en més d'un grup. L'alcohol és un sedant: ajuda a perdre la consciència abans, però no equival al son natural. Fragmenta el descans, provoca més despertars, redueix les fases profundes i bloqueja el REM, cosa que afecta la consolidació de la memòria, les emocions i l'ànim del dia següent. Aquest apartat és informatiu, no una recomanació de consum.",
+     en:"Substances don't all act the same way: they are grouped into depressants (such as alcohol), stimulants (nicotine, caffeine, cocaine) and disruptors (LSD, synthetic drugs); some, like cannabis, fit in more than one group. Alcohol is a sedative: it helps you lose consciousness sooner, but it is not equivalent to natural sleep. It fragments rest, causes more awakenings, reduces deep stages and blocks REM, affecting memory consolidation, emotions and next-day mood. This section is informational, not a recommendation to use."},
+  f:"Umivale Activa; Quirónsalud"},
+ {cat:"substancies",
+  t:{es:"Sustancias y sueño: el cannabis",ca:"Substàncies i son: el cànnabis",en:"Substances and sleep: cannabis"},
+  r:{es:"Menos REM, y sueños más intensos al dejarlo.",ca:"Menys REM, i somnis més intensos en deixar-lo.",en:"Less REM, and more intense dreams after stopping."},
+  x:{es:"El THC, el principal componente psicoactivo del cannabis, inhibe el sueño REM. Por eso muchas personas que consumen con frecuencia dicen soñar menos y, al dejarlo, tienen sueños muy vívidos e intensos. Un estudio de 2008 publicado en la revista Sleep sugiere que quienes consumen mucho pasan menos tiempo en REM. Usar cannabis como somnífero no tiene una base científica sólida y conlleva riesgo de tolerancia y adicción; el CBD se investiga con fines terapéuticos, pero tampoco está libre de efectos secundarios como sequedad de boca o fatiga.",
+     ca:"El THC, el principal component psicoactiu del cànnabis, inhibeix el son REM. Per això moltes persones que en consumeixen amb freqüència diuen somiar menys i, en deixar-ho, tenen somnis molt vívids i intensos. Un estudi de 2008 publicat a la revista Sleep suggereix que qui en consumeix molt passa menys temps en REM. Usar el cànnabis com a somnífer no té una base científica sòlida i comporta risc de tolerància i addicció; el CBD s'investiga amb finalitats terapèutiques, però tampoc està exempt d'efectes secundaris com sequedat de boca o fatiga.",
+     en:"THC, the main psychoactive component of cannabis, inhibits REM sleep. That's why many frequent users say they dream less and, when they quit, have very vivid and intense dreams. A 2008 study published in the journal Sleep suggests that heavy users spend less time in REM. Using cannabis as a sleeping aid has no solid scientific basis and carries a risk of tolerance and addiction; CBD is being studied for therapeutic uses, but it is not free of side effects such as dry mouth or fatigue."},
+  f:"Royal Queen Seeds (Voser, 2023); Umivale Activa"},
+ {cat:"substancies",
+  t:{es:"Sustancias y sueño: nicotina y cafeína",ca:"Substàncies i son: nicotina i cafeïna",en:"Substances and sleep: nicotine and caffeine"},
+  r:{es:"Dos estimulantes cotidianos que pesan en el descanso.",ca:"Dos estimulants quotidians que pesen en el descans.",en:"Two everyday stimulants that weigh on rest."},
+  x:{es:"La nicotina es un estimulante: entre cigarrillos baja su nivel en el cuerpo (cada 1–3 horas) y la abstinencia puede provocar despertares continuos; además reduce el sueño profundo y el REM y se asocia a más ronquidos y apnea. La cafeína no da energía como tal: bloquea los receptores de adenosina, que señalan cansancio. Empieza a actuar a los 30 minutos, sus efectos pueden durar hasta 4 horas y se necesitan al menos 6 horas para eliminar la mitad de la consumida. Puede causar insomnio, somnolencia diurna y menos sueño profundo.",
+     ca:"La nicotina és un estimulant: entre cigarretes baixa el seu nivell al cos (cada 1–3 hores) i l'abstinència pot provocar despertars continus; a més redueix el son profund i el REM i s'associa a més roncs i apnea. La cafeïna no dóna energia com a tal: bloqueja els receptors d'adenosina, que assenyalen cansament. Comença a actuar als 30 minuts, els seus efectes poden durar fins a 4 hores i calen almenys 6 hores per eliminar la meitat de la consumida. Pot causar insomni, somnolència diürna i menys son profund.",
+     en:"Nicotine is a stimulant: between cigarettes its level in the body drops (every 1–3 hours) and withdrawal can cause repeated awakenings; it also reduces deep sleep and REM and is associated with more snoring and apnea. Caffeine doesn't give energy as such: it blocks adenosine receptors, which signal tiredness. It starts working after 30 minutes, its effects can last up to 4 hours and it takes at least 6 hours to eliminate half of what was consumed. It can cause insomnia, daytime sleepiness and less deep sleep."},
+  f:"Quirónsalud (Dr. Estivill); Umivale Activa"},
+ {cat:"substancies",
+  t:{es:"Sustancias y sueño: otras drogas",ca:"Substàncies i son: altres drogues",en:"Substances and sleep: other drugs"},
+  r:{es:"Estimulantes y depresoras también alteran el REM.",ca:"Estimulants i depressores també alteren el REM.",en:"Stimulants and depressants also alter REM."},
+  x:{es:"Las drogas estimulantes (cocaína, anfetaminas, metanfetamina, éxtasis) dificultan conciliar el sueño, reducen el REM y dejan a las personas agotadas física y mentalmente. Las depresoras (opiáceos como la heroína o la morfina, y benzodiazepinas) pueden dar somnolencia, pero a largo plazo empeoran la calidad del sueño, lo fragmentan y reducen el REM. Ninguna de las fuentes consultadas permite afirmar que el consumo de una sustancia provoque sueños lúcidos: pueden cambiar la intensidad, el recuerdo o el contenido de los sueños sin aumentar la lucidez. Si tienes dudas sobre el consumo, consulta con un profesional sanitario.",
+     ca:"Les drogues estimulants (cocaïna, amfetamines, metamfetamina, èxtasi) dificulten agafar el son, redueixen el REM i deixen les persones esgotades física i mentalment. Les depressores (opiacis com l'heroïna o la morfina, i benzodiazepines) poden donar somnolència, però a llarg termini empitjoren la qualitat del son, el fragmenten i redueixen el REM. Cap de les fonts consultades permet afirmar que el consum d'una substància provoqui somnis lúcids: poden canviar la intensitat, el record o el contingut dels somnis sense augmentar la lucidesa. Si tens dubtes sobre el consum, consulta amb un professional sanitari.",
+     en:"Stimulant drugs (cocaine, amphetamines, methamphetamine, ecstasy) make it hard to fall asleep, reduce REM and leave people physically and mentally exhausted. Depressants (opiates such as heroin or morphine, and benzodiazepines) can cause drowsiness, but in the long run they worsen sleep quality, fragment it and reduce REM. None of the sources consulted allows us to claim that using a substance causes lucid dreams: they can change the intensity, recall or content of dreams without increasing lucidity. If you have doubts about substance use, consult a health professional."},
+  f:"Adictalia; Centro Desintoxicación Valencia"},
+ {cat:"treball",
+  t:{es:"Mi encuesta: qué respondieron 250 personas",ca:"La meva enquesta: què van respondre 250 persones",en:"My survey: what 250 people answered"},
+  r:{es:"Datos reales de la investigación detrás de esta app.",ca:"Dades reals de la recerca darrere d'aquesta app.",en:"Real data from the research behind this app."},
+  x:{es:"Para este trabajo de investigación se hizo una encuesta anónima con 250 respuestas. La muestra es muy joven: el 63,2 % tenía menos de 15 años y el 29,6 %, entre 15 y 17. El 54 % dijo haber tenido algún sueño lúcido (19,2 % no y 26,8 % no estaba seguro), y un 40 % no había oído hablar de ellos antes. Solo un 10 % notó cambios en sus sueños tras consumir alguna sustancia: los más citados fueron sueños más extraños, más pesadillas y menos facilidad para recordar; solo 3 personas mencionaron más sueños lúcidos y 5, menos. Es compatible con la idea de que las sustancias modifican la experiencia del sueño sin aumentar la lucidez, aunque la muestra es pequeña y joven para confirmarlo.",
+     ca:"Per a aquest treball de recerca es va fer una enquesta anònima amb 250 respostes. La mostra és molt jove: el 63,2 % tenia menys de 15 anys i el 29,6 %, entre 15 i 17. El 54 % va dir haver tingut algun somni lúcid (19,2 % no i 26,8 % no n'estava segur), i un 40 % no n'havia sentit a parlar abans. Només un 10 % va notar canvis en els seus somnis després de consumir alguna substància: els més citats van ser somnis més estranys, més malsons i menys facilitat per recordar; només 3 persones van esmentar més somnis lúcids i 5, menys. És compatible amb la idea que les substàncies modifiquen l'experiència del son sense augmentar la lucidesa, tot i que la mostra és petita i jove per confirmar-ho.",
+     en:"For this research project, an anonymous survey with 250 responses was carried out. The sample is very young: 63.2% were under 15 and 29.6% were 15–17. 54% said they had had a lucid dream (19.2% no and 26.8% not sure), and 40% had never heard of them before. Only 10% noticed changes in their dreams after using a substance: the most cited were stranger dreams, more nightmares and less ease of recall; only 3 people mentioned more lucid dreams and 5 fewer. This is compatible with the idea that substances change the dream experience without increasing lucidity, although the sample is too small and young to confirm it."},
+  f:"Enquesta del TDR (2026)"}
+];
+
+let catEdu = "todas", busquedaEdu = "";
+
 async function renderEducacion(main){
-  const arts = ARTICULOS_POR_IDIOMA[idioma] || ARTICULOS_POR_IDIOMA.es;
+  const olds = (ARTICULOS_POR_IDIOMA[idioma] || ARTICULOS_POR_IDIOMA.es).map((a,i)=>({cat:CAT_VIEJOS[i]||"lucids", titulo:a.titulo, resumen:a.resumen, texto:a.texto, font:""}));
+  const news = ARTICULOS_NUEVOS.map(a=>({cat:a.cat, titulo:pick(a.t), resumen:pick(a.r), texto:pick(a.x), font:a.f||""}));
+  const orden = Object.keys(CATS_EDU);
+  const todos = [...olds, ...news].sort((a,b)=> orden.indexOf(a.cat)-orden.indexOf(b.cat));
+  const L = {buscar:{es:"Buscar en los artículos...",ca:"Cerca als articles...",en:"Search the articles..."},
+    todas:{es:"Todos",ca:"Tots",en:"All"}, fuente:{es:"Fuente",ca:"Font",en:"Source"},
+    nada:{es:"No hay artículos con esa búsqueda.",ca:"No hi ha articles amb aquesta cerca.",en:"No articles match your search."},
+    arts:{es:"artículos",ca:"articles",en:"articles"}};
+
   main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("educacion.titulo")}</h1>
   <p style="color:var(--niebla-300);line-height:1.6;">${t("educacion.intro")}</p></header>
-  <div class="tarjeta" id="lista-articulos"></div></div>`;
-  const cont = main.querySelector("#lista-articulos");
-  arts.forEach((a,i)=>{
-    const div = document.createElement("div"); div.className="articulo";
-    div.innerHTML = `<div class="articulo-header"><div><h3 style="margin:0;font-size:1rem;color:var(--niebla-100);">${a.titulo}</h3><p style="color:var(--niebla-500);font-size:0.85rem;margin:4px 0 0;">${a.resumen}</p></div><span style="color:var(--aurora-400);font-size:1.2rem;flex-shrink:0;">+</span></div>
-    <p class="oculto" style="color:var(--niebla-300);line-height:1.6;margin:12px 0 0;font-size:0.9rem;">${a.texto}</p>`;
-    div.querySelector(".articulo-header").onclick = ()=>{
-      const p = div.querySelector("p"); const s = div.querySelector("span");
-      p.classList.toggle("oculto"); s.textContent = p.classList.contains("oculto")?"+":"−";
-    };
-    cont.appendChild(div);
+  <div class="filtros" id="filtros-edu"></div>
+  <input id="buscar-edu" placeholder="${pick(L.buscar)}" value="${busquedaEdu.replace(/"/g,"&quot;")}" style="max-width:420px;">
+  <p id="contador-edu" style="color:var(--niebla-500);font-size:0.8rem;margin:0;"></p>
+  <div id="lista-articulos"></div></div>`;
+
+  const filtros = main.querySelector("#filtros-edu");
+  [["todas",L.todas], ...Object.entries(CATS_EDU)].forEach(([clave,label])=>{
+    const b = document.createElement("button"); b.className="filtro"+(catEdu===clave?" activo":"");
+    b.textContent = pick(label);
+    b.onclick = ()=>{ catEdu = clave; filtros.querySelectorAll(".filtro").forEach(x=>x.classList.remove("activo")); b.classList.add("activo"); pintarLista(); };
+    filtros.appendChild(b);
   });
+  main.querySelector("#buscar-edu").oninput = (e)=>{ busquedaEdu = e.target.value; pintarLista(); };
+
+  function pintarLista(){
+    const cont = main.querySelector("#lista-articulos"); cont.innerHTML = "";
+    const q = busquedaEdu.trim().toLowerCase();
+    const lista = todos.filter(a=> (catEdu==="todas"||a.cat===catEdu) && (!q || (a.titulo+" "+a.resumen+" "+a.texto).toLowerCase().includes(q)));
+    main.querySelector("#contador-edu").textContent = `${lista.length} ${pick(L.arts)}`;
+    if(lista.length===0){ cont.innerHTML = `<p style="color:var(--niebla-500);text-align:center;margin-top:20px;">${pick(L.nada)}</p>`; return; }
+    const tarjeta = document.createElement("div"); tarjeta.className = "tarjeta";
+    lista.forEach(a=>{
+      const div = document.createElement("div"); div.className = "articulo";
+      div.innerHTML = `<div class="articulo-header"><div>
+          <span class="categoria-tag" style="display:inline-block;margin-bottom:6px;">${pick(CATS_EDU[a.cat])}</span>
+          <h3 style="margin:0;font-size:1rem;color:var(--niebla-100);">${a.titulo}</h3>
+          <p style="color:var(--niebla-500);font-size:0.85rem;margin:4px 0 0;">${a.resumen}</p></div>
+          <span class="signo" style="color:var(--aurora-400);font-size:1.2rem;flex-shrink:0;">+</span></div>
+        <div class="oculto cuerpo-art"><p style="color:var(--niebla-300);line-height:1.65;margin:12px 0 0;font-size:0.9rem;">${a.texto}</p>
+        ${a.font?`<p style="color:var(--niebla-500);font-size:0.75rem;margin:8px 0 0;">${pick(L.fuente)}: ${a.font}</p>`:""}</div>`;
+      div.querySelector(".articulo-header").onclick = ()=>{
+        const c = div.querySelector(".cuerpo-art"); c.classList.toggle("oculto");
+        div.querySelector(".signo").textContent = c.classList.contains("oculto")?"+":"−";
+      };
+      tarjeta.appendChild(div);
+    });
+    cont.appendChild(tarjeta);
+  }
+  pintarLista();
 }
 
 // --- TÉCNICAS ---
@@ -524,79 +697,227 @@ function renderTecnicaDetalle(main, tec){
 }
 
 // --- CEREBRO ---
-const ZONAS_POR_IDIOMA = {
-  es: {
-    prefrontal:{nombre:"Corteza prefrontal",color:"#8b7fd6",texto:"Razonamiento y autoconciencia. En un sueño lúcido se reactiva parcialmente: por eso te 'das cuenta' de que sueñas."},
-    limbico:{nombre:"Sistema límbico",color:"#e8c97a",texto:"Incluye la amígdala, muy activa en REM. Explica la intensidad emocional de los sueños."},
-    tronco:{nombre:"Tronco encefálico",color:"#4fd1c5",texto:"Activa el REM y paraliza el cuerpo, evitando que actúes físicamente lo que sueñas."}
-  },
-  ca: {
-    prefrontal:{nombre:"Escorça prefrontal",color:"#8b7fd6",texto:"Raonament i autoconsciència. En un somni lúcid es reactiva parcialment: per això 't'adones' que estàs somiant."},
-    limbico:{nombre:"Sistema límbic",color:"#e8c97a",texto:"Inclou l'amígdala, molt activa en REM. Explica la intensitat emocional dels somnis."},
-    tronco:{nombre:"Tronc encefàlic",color:"#4fd1c5",texto:"Activa el REM i paralitza el cos, evitant que actuïs físicament el que somies."}
-  },
-  en: {
-    prefrontal:{nombre:"Prefrontal cortex",color:"#8b7fd6",texto:"Reasoning and self-awareness. In a lucid dream it partially reactivates: that's why you 'realize' you're dreaming."},
-    limbico:{nombre:"Limbic system",color:"#e8c97a",texto:"Includes the amygdala, very active during REM. This explains the emotional intensity of dreams."},
-    tronco:{nombre:"Brainstem",color:"#4fd1c5",texto:"Triggers REM sleep and paralyzes the body, stopping you from physically acting out your dreams."}
-  }
+const ZONAS_DATOS = {
+  prefrontal:{color:"#8b7fd6",
+    nombre:{es:"Corteza prefrontal",ca:"Escorça prefrontal",en:"Prefrontal cortex"},
+    rol:{es:"Razonamiento, planificación, toma de decisiones, control de impulsos y autorreflexión. Durante el sueño REM normal su parte dorsolateral está muy poco activa, y por eso en los sueños aceptamos situaciones absurdas sin cuestionarlas.",
+         ca:"Raonament, planificació, presa de decisions, control d'impulsos i autoreflexió. Durant el son REM normal la seva part dorsolateral està molt poc activa, i per això als somnis acceptem situacions absurdes sense qüestionar-les.",
+         en:"Reasoning, planning, decision-making, impulse control and self-reflection. During normal REM sleep its dorsolateral part is barely active, which is why in dreams we accept absurd situations without questioning them."},
+    lucido:{es:"Se reactiva parcialmente: se ha observado más actividad gamma (25–100 Hz) en zonas frontales, un patrón parecido al de una persona despierta y concentrada. Es la base de «darte cuenta» de que sueñas.",
+            ca:"Es reactiva parcialment: s'ha observat més activitat gamma (25–100 Hz) a zones frontals, un patró semblant al d'una persona desperta i concentrada. És la base d'«adonar-te» que somies.",
+            en:"It partially reactivates: more gamma activity (25–100 Hz) has been observed in frontal areas, a pattern similar to an awake, focused person. It is the basis of «realizing» you are dreaming."}},
+  occipital:{color:"#d98bb0",
+    nombre:{es:"Corteza visual (occipital)",ca:"Escorça visual (occipital)",en:"Visual cortex (occipital)"},
+    rol:{es:"Procesa las imágenes. Durante el REM las áreas visuales se activan y generan escenas vívidas y coloridas aunque tengas los ojos cerrados.",
+         ca:"Processa les imatges. Durant el REM les àrees visuals s'activen i generen escenes vívides i acolorides encara que tinguis els ulls tancats.",
+         en:"Processes images. During REM the visual areas activate and generate vivid, colorful scenes even though your eyes are closed."},
+    lucido:{es:"La vividez se mantiene: la percepción de los sentidos en un sueño lúcido es parecida a la de la vigilia, y por eso la experiencia se siente tan real.",
+            ca:"La vividesa es manté: la percepció dels sentits en un somni lúcid és semblant a la de la vigília, i per això l'experiència se sent tan real.",
+            en:"The vividness remains: sensory perception in a lucid dream is similar to wakefulness, which is why the experience feels so real."}},
+  talamo:{color:"#5fd8ce",
+    nombre:{es:"Tálamo",ca:"Tàlem",en:"Thalamus"},
+    rol:{es:"Es una estación de relevo: conecta el lóbulo temporal con el prefrontal y reparte la información sensorial hacia la corteza. Durante el sueño filtra la entrada de estímulos externos, lo que ayuda a que no nos despierte cualquier ruido.",
+         ca:"És una estació de relleu: connecta el lòbul temporal amb el prefrontal i reparteix la informació sensorial cap a l'escorça. Durant el son filtra l'entrada d'estímuls externs, cosa que ajuda que no ens desperti qualsevol soroll.",
+         en:"It is a relay station: it connects the temporal lobe with the prefrontal cortex and distributes sensory information to the cortex. During sleep it filters incoming external stimuli, which helps keep every noise from waking us up."},
+    lucido:{es:"Su papel concreto en la lucidez aún se investiga. Como puente entre el prefrontal y las regiones de memoria, es un candidato a participar en recordar la intención de «reconocer que sueño» (técnica MILD).",
+            ca:"El seu paper concret en la lucidesa encara s'investiga. Com a pont entre el prefrontal i les regions de memòria, és un candidat a participar en recordar la intenció de «reconèixer que somio» (tècnica MILD).",
+            en:"Its specific role in lucidity is still under study. As a bridge between the prefrontal cortex and memory regions, it is a candidate for helping remember the intention to «recognize I'm dreaming» (MILD technique)."}},
+  amigdala:{color:"#e8c97a",
+    nombre:{es:"Amígdala",ca:"Amígdala",en:"Amygdala"},
+    rol:{es:"Gestiona las emociones y participa en la memoria emocional. Está muy activa en REM, lo que explica la intensidad emocional de los sueños y las pesadillas.",
+         ca:"Gestiona les emocions i participa en la memòria emocional. Està molt activa en REM, cosa que explica la intensitat emocional dels somnis i els malsons.",
+         en:"Manages emotions and takes part in emotional memory. It is very active in REM, which explains the emotional intensity of dreams and nightmares."},
+    lucido:{es:"Las emociones siguen presentes, pero la lucidez permite observarlas con cierta distancia. De ahí surge la idea de trabajar pesadillas recurrentes (con evidencia todavía limitada).",
+            ca:"Les emocions continuen presents, però la lucidesa permet observar-les amb certa distància. D'aquí surt la idea de treballar malsons recurrents (amb evidència encara limitada).",
+            en:"Emotions are still present, but lucidity lets you observe them from a distance. This is where the idea of working with recurring nightmares comes from (with limited evidence so far)."}},
+  hipocampo:{color:"#f0a96e",
+    nombre:{es:"Hipocampo",ca:"Hipocamp",en:"Hippocampus"},
+    rol:{es:"Aprendizaje y almacenamiento de la memoria. Durante el sueño profundo, las ondas lentas coordinan la actividad cerebral con regiones de la memoria y ayudan a consolidar lo aprendido. Los sueños suelen mezclar recuerdos recientes.",
+         ca:"Aprenentatge i emmagatzematge de la memòria. Durant el son profund, les ones lentes coordinen l'activitat cerebral amb regions de la memòria i ajuden a consolidar el que s'ha après. Els somnis solen barrejar records recents.",
+         en:"Learning and memory storage. During deep sleep, slow waves coordinate brain activity with memory regions and help consolidate what you've learned. Dreams often mix recent memories."},
+    lucido:{es:"Aporta la memoria necesaria para recordar tu objetivo dentro del sueño y, al despertar, para recordar el sueño lúcido con mucho detalle.",
+            ca:"Aporta la memòria necessària per recordar el teu objectiu dins del somni i, en despertar, per recordar el somni lúcid amb molt de detall.",
+            en:"It provides the memory needed to remember your goal inside the dream and, on waking, to recall the lucid dream in great detail."}},
+  tronco:{color:"#4fd1c5",
+    nombre:{es:"Tronco encefálico",ca:"Tronc encefàlic",en:"Brainstem"},
+    rol:{es:"Genera el sueño REM y envía señales a la médula espinal que paralizan los músculos (atonía), evitando que actuemos lo soñado. También manda estímulos al resto del cerebro para que los procese.",
+         ca:"Genera el son REM i envia senyals a la medul·la espinal que paralitzen els músculs (atonia), evitant que actuem el que somiem. També envia estímuls a la resta del cervell perquè els processi.",
+         en:"Generates REM sleep and sends signals to the spinal cord that paralyze the muscles (atonia), preventing us from acting out our dreams. It also sends stimuli to the rest of the brain to be processed."},
+    lucido:{es:"La parálisis sigue activa, pero los ojos no se paralizan: por eso Hearne pudo recibir señales con movimientos oculares desde un sueño lúcido. Si la mente despierta con la atonía aún activa, aparece la parálisis del sueño.",
+            ca:"La paràlisi continua activa, però els ulls no es paralitzen: per això Hearne va poder rebre senyals amb moviments oculars des d'un somni lúcid. Si la ment es desperta amb l'atonia encara activa, apareix la paràlisi del son.",
+            en:"The paralysis stays on, but the eyes are not paralyzed: that's how Hearne could receive eye-movement signals from a lucid dream. If the mind wakes with atonia still active, sleep paralysis occurs."}},
+  cerebelo:{color:"#7f9cd6",
+    nombre:{es:"Cerebelo",ca:"Cerebel",en:"Cerebellum"},
+    rol:{es:"Coordina el movimiento y participa en el aprendizaje de habilidades (memoria procedimental), el tipo de memoria que se asocia con el sueño REM.",
+         ca:"Coordina el moviment i participa en l'aprenentatge d'habilitats (memòria procedimental), el tipus de memòria que s'associa amb el son REM.",
+         en:"Coordinates movement and takes part in skill learning (procedural memory), the type of memory associated with REM sleep."},
+    lucido:{es:"Su papel en la lucidez no está claro; se incluye aquí para completar el mapa del cerebro dormido.",
+            ca:"El seu paper en la lucidesa no està clar; s'inclou aquí per completar el mapa del cervell adormit.",
+            en:"Its role in lucidity is unclear; it is included here to complete the map of the sleeping brain."}}
 };
+const ORDEN_ZONAS = ["prefrontal","occipital","talamo","amigdala","hipocampo","tronco","cerebelo"];
 let zonaActiva = "prefrontal";
+
+const ETAPAS_DATOS = {
+  N1:{color:"#8a8fae",
+    titulo:{es:"N1 · Adormecimiento",ca:"N1 · Adormiment",en:"N1 · Falling asleep"},
+    dur:{es:"1–10 min",ca:"1–10 min",en:"1–10 min"},
+    texto:{es:"Transición de la vigilia al sueño. La actividad del cuerpo y del cerebro va bajando, todavía hay pequeñas contracciones y es muy fácil despertar. Es la fase de las imágenes que aparecen al dormirse (hipnagógicas).",
+           ca:"Transició de la vigília al son. L'activitat del cos i del cervell va baixant, encara hi ha petites contraccions i és molt fàcil despertar. És la fase de les imatges que apareixen en adormir-se (hipnagògiques).",
+           en:"Transition from wakefulness to sleep. Body and brain activity slow down, small twitches still occur and it is very easy to wake up. This is the stage of the images that appear as you fall asleep (hypnagogic)."}},
+  N2:{color:"#8b7fd6",
+    titulo:{es:"N2 · Sueño ligero",ca:"N2 · Son lleuger",en:"N2 · Light sleep"},
+    dur:{es:"10–25 min en el 1.er ciclo · ≈50 % de la noche",ca:"10–25 min al 1r cicle · ≈50 % de la nit",en:"10–25 min in the 1st cycle · ≈50% of the night"},
+    texto:{es:"El cuerpo se desconecta del entorno: bajan la temperatura corporal, el pulso y la respiración, y los músculos se relajan. La actividad cerebral se ralentiza, pero conserva algo de intensidad para resistir despertares por estímulos externos.",
+           ca:"El cos es desconnecta de l'entorn: baixen la temperatura corporal, el pols i la respiració, i els músculs es relaxen. L'activitat cerebral s'alenteix, però conserva una mica d'intensitat per resistir despertars per estímuls externs.",
+           en:"The body disconnects from its surroundings: body temperature, pulse and breathing drop, and muscles relax. Brain activity slows down but keeps some intensity to resist waking from external stimuli."}},
+  N3:{color:"#4fd1c5",
+    titulo:{es:"N3 · Sueño profundo (ondas lentas)",ca:"N3 · Son profund (ones lentes)",en:"N3 · Deep sleep (slow waves)"},
+    dur:{es:"≈30 min · predomina al inicio de la noche",ca:"≈30 min · predomina a l'inici de la nit",en:"≈30 min · dominant early in the night"},
+    texto:{es:"Ondas delta lentas y grandes. Pulso, tensión y respiración están en sus valores más bajos y despertar cuesta: puedes sentirte confundido. Se asocia a la consolidación de la memoria declarativa, a la liberación de hormona del crecimiento y a la limpieza de residuos del cerebro.",
+           ca:"Ones delta lentes i grans. Pols, tensió i respiració són als seus valors més baixos i despertar costa: pots sentir-te confós. S'associa a la consolidació de la memòria declarativa, a l'alliberament d'hormona del creixement i a la neteja de residus del cervell.",
+           en:"Slow, large delta waves. Pulse, blood pressure and breathing are at their lowest and waking is hard: you may feel confused. It is associated with consolidating declarative memory, growth hormone release and clearing waste from the brain."}},
+  REM:{color:"#e8c97a",
+    titulo:{es:"REM · Movimientos oculares rápidos",ca:"REM · Moviments oculars ràpids",en:"REM · Rapid eye movement"},
+    dur:{es:"10–20 min en los primeros ciclos · más largo al final",ca:"10–20 min als primers cicles · més llarg al final",en:"10–20 min in the first cycles · longer toward the end"},
+    texto:{es:"Cerebro muy activo y músculos paralizados. Aparecen la mayoría de los sueños y es la fase de los sueños lúcidos, sobre todo en REM fásico. Los REM se alargan hacia la mañana: por eso WBTB se practica tras 5–6 horas de sueño.",
+           ca:"Cervell molt actiu i músculs paralitzats. Apareixen la majoria dels somnis i és la fase dels somnis lúcids, sobretot en REM fàsic. Els REM s'allarguen cap al matí: per això WBTB es practica després de 5–6 hores de son.",
+           en:"Very active brain and paralyzed muscles. Most dreams appear and this is the stage of lucid dreams, especially in phasic REM. REM periods lengthen toward morning: that's why WBTB is practiced after 5–6 hours of sleep."}}
+};
+const NOCHE = [["N1",5],["N2",15],["N3",40],["N2",15],["REM",10],["N2",20],["N3",30],["N2",15],["REM",20],["N2",30],["N3",20],["N2",15],["REM",25],["N2",35],["N3",5],["N2",15],["REM",35],["N2",40],["REM",45]];
+let etapaActiva = "REM";
+
 async function renderCerebro(main){
-  const ZONAS = ZONAS_POR_IDIOMA[idioma] || ZONAS_POR_IDIOMA.es;
-  main.innerHTML = `<div class="seccion"><header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("cerebro.titulo")}</h1><p style="color:var(--niebla-300);">${t("cerebro.intro")}</p></header>
-  <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
-    <svg viewBox="0 0 320 280" style="width:100%;max-width:320px;">
-      <defs>
-        <clipPath id="clip-cerebro">
-          <path d="M52,102 C57,76 64,60 92,50 C112,42 132,38 152,40 C186,38 210,45 226,60 C246,75 259,96 255,116 C266,126 269,146 259,161 C267,171 261,183 246,181 C241,196 221,202 206,193 C196,206 176,211 161,201 C141,211 121,209 109,196 C86,199 66,191 63,171 C49,161 43,141 46,121 C41,113 45,105 52,102 Z"/>
-        </clipPath>
-      </defs>
+  const S = (es,ca,en)=> ({es,ca,en})[idioma] || es;
 
-      <!-- Silueta base del cerebro (vista lateral) -->
-      <path d="M52,102 C57,76 64,60 92,50 C112,42 132,38 152,40 C186,38 210,45 226,60 C246,75 259,96 255,116 C266,126 269,146 259,161 C267,171 261,183 246,181 C241,196 221,202 206,193 C196,206 176,211 161,201 C141,211 121,209 109,196 C86,199 66,191 63,171 C49,161 43,141 46,121 C41,113 45,105 52,102 Z"
-        fill="var(--noche-700)" stroke="var(--noche-600)" stroke-width="2"/>
+  // ---- Hipnograma (una noche de sueño) ----
+  const NIVEL = {REM:42,N1:77,N2:112,N3:147};
+  const x0 = 78, esc = 540/435;
+  let cursor = 0, rects = "", conect = "", prev = null;
+  NOCHE.forEach(([etapa,dur],i)=>{
+    const x = x0 + cursor*esc, w = Math.max(3, dur*esc-1.5);
+    if(prev && prev.nivel!==NIVEL[etapa]) conect += `<line x1="${x}" y1="${prev.nivel}" x2="${x}" y2="${NIVEL[etapa]}" stroke="#2c3350" stroke-width="1.5"/>`;
+    rects += `<rect class="seg" data-e="${etapa}" x="${x}" y="${NIVEL[etapa]-9}" width="${w}" height="18" rx="3" fill="${ETAPAS_DATOS[etapa].color}" style="cursor:pointer;"><title>${etapa} · ${dur} min</title></rect>`;
+    prev = {nivel:NIVEL[etapa]}; cursor += dur;
+  });
+  let ejeX = "";
+  for(let h=0; h<=7; h++){ const x = x0 + h*60*esc; ejeX += `<line x1="${x}" y1="168" x2="${x}" y2="173" stroke="#6d7196"/><text x="${x}" y="186" fill="#8a8fae" font-size="10" text-anchor="middle">${h}h</text>`; }
+  const xW = x0 + 300*esc;
+  const etiquetasY = Object.entries(NIVEL).map(([e,y])=>`<text x="${x0-8}" y="${y+4}" fill="#8a8fae" font-size="10" text-anchor="end">${e}</text>`).join("");
+  const svgNoche = `<svg viewBox="0 0 640 195" style="width:100%;height:auto;" role="img" aria-label="${S("Hipnograma de una noche","Hipnograma d'una nit","Hypnogram of one night")}">
+    <line x1="${x0}" y1="168" x2="${x0+540}" y2="168" stroke="#2c3350"/>
+    ${etiquetasY}${conect}${rects}${ejeX}
+    <line x1="${xW}" y1="20" x2="${xW}" y2="168" stroke="#e8c97a" stroke-dasharray="4 3" opacity="0.8"/>
+    <text x="${xW}" y="14" fill="#e8c97a" font-size="10" text-anchor="middle">WBTB ≈5 h</text>
+  </svg>`;
 
-      <!-- Líneas de la corteza (surcos), puramente decorativas -->
-      <g stroke="var(--noche-900)" stroke-width="2" fill="none" opacity="0.5" clip-path="url(#clip-cerebro)">
-        <path d="M75,65 q10,15 0,28 q-8,12 4,24"/>
-        <path d="M105,52 q10,16 -2,30 q-10,14 2,26"/>
-        <path d="M140,48 q10,16 -2,30 q-10,16 4,28"/>
-        <path d="M175,50 q10,14 0,28 q-8,14 4,26"/>
-        <path d="M208,58 q10,14 0,26 q-8,14 4,24"/>
-      </g>
+  main.innerHTML = `<div class="seccion">
+  <header><h1 class="font-display" style="font-size:1.9rem;margin:0 0 8px;">${t("cerebro.titulo")}</h1><p style="color:var(--niebla-300);">${t("cerebro.intro")}</p></header>
 
-      <!-- Cerebelo (decorativo, parte trasera-inferior) -->
-      <path d="M228,150 q18,-6 30,8 q8,12 -4,22 q-14,10 -28,-2 q-8,-10 2,-28 Z" fill="var(--noche-600)" stroke="var(--noche-500,#3a4160)" stroke-width="1.5" opacity="0.8"/>
-
-      <!-- Tronco encefálico (forma + zona clicable) -->
-      <path class="zona" data-z="tronco" d="M158,196 C162,212 166,228 170,244 C172,253 178,259 188,260 C197,258 200,247 197,237 C202,221 199,206 193,193 C182,199 169,199 158,196 Z"
-        fill="${ZONAS.tronco.color}" fill-opacity="0.4" stroke="#05060d" stroke-width="2"/>
-
-      <!-- Corteza prefrontal (zona clicable, lóbulo frontal) -->
-      <ellipse class="zona" data-z="prefrontal" cx="92" cy="86" rx="46" ry="40" fill="${ZONAS.prefrontal.color}" fill-opacity="0.4" stroke="#05060d" stroke-width="2" clip-path="url(#clip-cerebro)"/>
-
-      <!-- Sistema límbico (zona clicable, estructura profunda central) -->
-      <circle class="zona" data-z="limbico" cx="172" cy="118" r="26" fill="${ZONAS.limbico.color}" fill-opacity="0.45" stroke="#05060d" stroke-width="2" stroke-dasharray="4 3"/>
-    </svg>
-    <div class="tarjeta" id="info-zona" style="flex:1;min-width:240px;"></div>
+  <h2 class="font-display" style="font-size:1.25rem;margin:6px 0 -6px;color:var(--aurora-400);">${S("Mapa del cerebro dormido","Mapa del cervell adormit","Map of the sleeping brain")}</h2>
+  <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+    <div style="flex:0 1 320px;width:100%;">
+      <svg id="svg-cerebro" viewBox="0 0 320 280" style="width:100%;max-width:340px;" role="img" aria-label="${S("Diagrama interactivo del cerebro","Diagrama interactiu del cervell","Interactive brain diagram")}">
+        <defs><clipPath id="clip-cerebro"><path d="M52,102 C57,76 64,60 92,50 C112,42 132,38 152,40 C186,38 210,45 226,60 C246,75 259,96 255,116 C266,126 269,146 259,161 C267,171 261,183 246,181 C241,196 221,202 206,193 C196,206 176,211 161,201 C141,211 121,209 109,196 C86,199 66,191 63,171 C49,161 43,141 46,121 C41,113 45,105 52,102 Z"/></clipPath></defs>
+        <path d="M52,102 C57,76 64,60 92,50 C112,42 132,38 152,40 C186,38 210,45 226,60 C246,75 259,96 255,116 C266,126 269,146 259,161 C267,171 261,183 246,181 C241,196 221,202 206,193 C196,206 176,211 161,201 C141,211 121,209 109,196 C86,199 66,191 63,171 C49,161 43,141 46,121 C41,113 45,105 52,102 Z" fill="var(--noche-700)" stroke="var(--noche-600)" stroke-width="2"/>
+        <g stroke="var(--noche-900)" stroke-width="2" fill="none" opacity="0.45" clip-path="url(#clip-cerebro)">
+          <path d="M75,65 q10,15 0,28 q-8,12 4,24"/><path d="M105,52 q10,16 -2,30 q-10,14 2,26"/><path d="M140,48 q10,16 -2,30 q-10,16 4,28"/><path d="M175,50 q10,14 0,28 q-8,14 4,26"/><path d="M208,58 q10,14 0,26 q-8,14 4,24"/>
+        </g>
+        <path class="zona" data-z="cerebelo" d="M228,150 q18,-6 30,8 q8,12 -4,22 q-14,10 -28,-2 q-8,-10 2,-28 Z" fill="${ZONAS_DATOS.cerebelo.color}" stroke="#05060d" stroke-width="2"><title>${pick(ZONAS_DATOS.cerebelo.nombre)}</title></path>
+        <path class="zona" data-z="tronco" d="M158,196 C162,212 166,228 170,244 C172,253 178,259 188,260 C197,258 200,247 197,237 C202,221 199,206 193,193 C182,199 169,199 158,196 Z" fill="${ZONAS_DATOS.tronco.color}" stroke="#05060d" stroke-width="2"><title>${pick(ZONAS_DATOS.tronco.nombre)}</title></path>
+        <ellipse class="zona" data-z="prefrontal" cx="92" cy="86" rx="46" ry="40" fill="${ZONAS_DATOS.prefrontal.color}" stroke="#05060d" stroke-width="2" clip-path="url(#clip-cerebro)"><title>${pick(ZONAS_DATOS.prefrontal.nombre)}</title></ellipse>
+        <ellipse class="zona" data-z="occipital" cx="236" cy="100" rx="24" ry="38" fill="${ZONAS_DATOS.occipital.color}" stroke="#05060d" stroke-width="2" clip-path="url(#clip-cerebro)"><title>${pick(ZONAS_DATOS.occipital.nombre)}</title></ellipse>
+        <ellipse class="zona" data-z="talamo" cx="170" cy="116" rx="18" ry="13" fill="${ZONAS_DATOS.talamo.color}" stroke="#05060d" stroke-width="2" stroke-dasharray="4 3"><title>${pick(ZONAS_DATOS.talamo.nombre)}</title></ellipse>
+        <circle class="zona" data-z="amigdala" cx="146" cy="152" r="10" fill="${ZONAS_DATOS.amigdala.color}" stroke="#05060d" stroke-width="2" stroke-dasharray="4 3"><title>${pick(ZONAS_DATOS.amigdala.nombre)}</title></circle>
+        <ellipse class="zona" data-z="hipocampo" cx="188" cy="156" rx="24" ry="8" transform="rotate(-12 188 156)" fill="${ZONAS_DATOS.hipocampo.color}" stroke="#05060d" stroke-width="2" stroke-dasharray="4 3"><title>${pick(ZONAS_DATOS.hipocampo.nombre)}</title></ellipse>
+      </svg>
+      <p style="color:var(--niebla-500);font-size:0.72rem;margin:4px 0 0;">${S("Vista lateral esquemática. Las zonas con borde discontinuo son estructuras profundas.","Vista lateral esquemàtica. Les zones amb vora discontínua són estructures profundes.","Schematic side view. Dashed-border areas are deep structures.")}</p>
+    </div>
+    <div style="flex:1;min-width:250px;">
+      <div id="chips-zonas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
+      <div class="tarjeta" id="info-zona"></div>
+    </div>
   </div>
+
+  <h2 class="font-display" style="font-size:1.25rem;margin:14px 0 -6px;color:var(--aurora-400);">${S("Una noche de sueño","Una nit de son","A night of sleep")}</h2>
   <div class="tarjeta">
-    <h3 class="font-display" style="font-size:1.05rem;margin:0 0 8px;color:var(--rem-500);">${{es:"Los ciclos de la noche",ca:"Els cicles de la nit",en:"The cycles of the night"}[idioma]}</h3>
-    <p style="color:var(--niebla-300);line-height:1.6;margin:0;">${{es:"Cada noche atraviesas entre 4 y 6 ciclos de sueño de unos 90 minutos cada uno. Cada ciclo recorre sueño ligero, sueño profundo y sueño REM, pero no a partes iguales: el sueño profundo predomina en los primeros ciclos de la noche, mientras que el REM (y con él, la mayoría de los sueños vívidos) se va alargando en los últimos. Por eso las técnicas como WBTB se practican de madrugada: es cuando hay más 'materia prima' onírica con la que trabajar.",ca:"Cada nit travesses entre 4 i 6 cicles de son d'uns 90 minuts cadascun. Cada cicle recorre son lleuger, son profund i son REM, però no a parts iguals: el son profund predomina als primers cicles de la nit, mentre que el REM (i amb ell, la majoria dels somnis vívids) es va allargant als últims. Per això tècniques com WBTB es practiquen de matinada.",en:"Each night you go through 4 to 6 sleep cycles of about 90 minutes each. Every cycle moves through light sleep, deep sleep and REM sleep, but not in equal parts: deep sleep dominates the early cycles of the night, while REM (and with it, most vivid dreams) gets longer toward the end. That's why techniques like WBTB are practiced in the early morning."}[idioma]}</p>
+    <p style="color:var(--niebla-300);font-size:0.88rem;line-height:1.6;margin:0 0 12px;">${S("Modelo orientativo de una noche de unas 7 horas: el sueño profundo (N3) domina los primeros ciclos y el REM se va alargando hacia la mañana. Toca un bloque para ver qué ocurre en cada fase.","Model orientatiu d'una nit d'unes 7 hores: el son profund (N3) domina els primers cicles i el REM s'allarga cap al matí. Toca un bloc per veure què passa a cada fase.","Illustrative model of a night of about 7 hours: deep sleep (N3) dominates the first cycles and REM gets longer toward morning. Tap a block to see what happens in each stage.")}</p>
+    ${svgNoche}
+    <div id="botones-etapas" class="filtros" style="margin:10px 0;"></div>
+    <div id="info-etapa" style="border-top:1px solid var(--noche-700);padding-top:14px;"></div>
   </div>
-  <div class="tarjeta">
-    <h3 class="font-display" style="font-size:1.05rem;margin:0 0 8px;color:var(--luna-500);">${{es:"La química que hace posible soñar",ca:"La química que fa possible somiar",en:"The chemistry that makes dreaming possible"}[idioma]}</h3>
-    <p style="color:var(--niebla-300);line-height:1.6;margin:0;">${{es:"Durante el sueño REM, el cerebro reduce drásticamente la producción de serotonina y noradrenalina (relacionadas con la alerta y el juicio crítico), mientras que la acetilcolina —ligada a la actividad eléctrica intensa— se mantiene alta. Esta combinación explica por qué los sueños pueden parecer tan reales y a la vez tan poco cuestionados: la parte del cerebro que normalmente diría 'esto es raro' está funcionando a media máquina.",ca:"Durant el son REM, el cervell redueix dràsticament la producció de serotonina i noradrenalina (relacionades amb l'alerta i el judici crític), mentre que l'acetilcolina —lligada a l'activitat elèctrica intensa— es manté alta. Aquesta combinació explica per què els somnis poden semblar tan reals i alhora tan poc qüestionats.",en:"During REM sleep, the brain drastically reduces serotonin and norepinephrine production (linked to alertness and critical judgment), while acetylcholine —tied to intense electrical activity— stays high. This combination explains why dreams can feel so real and go so unquestioned: the part of the brain that would normally say 'this is odd' is running at half power."}[idioma]}</p>
+
+  <h2 class="font-display" style="font-size:1.25rem;margin:14px 0 -6px;color:var(--aurora-400);">${S("El cerebro en cuatro estados","El cervell en quatre estats","The brain in four states")}</h2>
+  <div class="tarjeta" style="padding:14px;overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.82rem;min-width:560px;">
+      <thead><tr style="color:var(--niebla-500);text-align:left;">
+        <th style="padding:8px;"></th><th style="padding:8px;">${S("Vigilia","Vigília","Wakefulness")}</th><th style="padding:8px;color:#4fd1c5;">${S("Sueño profundo (N3)","Son profund (N3)","Deep sleep (N3)")}</th><th style="padding:8px;color:#e8c97a;">REM</th><th style="padding:8px;color:#a99bf0;">${S("REM lúcido","REM lúcid","Lucid REM")}</th></tr></thead>
+      <tbody style="color:var(--niebla-300);">
+        ${[
+          [S("Actividad cerebral (EEG)","Activitat cerebral (EEG)","Brain activity (EEG)"), S("Rápida y desincronizada","Ràpida i desincronitzada","Fast and desynchronized"), S("Ondas delta lentas y grandes","Ones delta lentes i grans","Slow, large delta waves"), S("Parecida a la vigilia","Semblant a la vigília","Similar to wakefulness"), S("REM + más ondas gamma frontales","REM + més ones gamma frontals","REM + more frontal gamma waves")],
+          [S("Corteza prefrontal dorsolateral","Escorça prefrontal dorsolateral","Dorsolateral prefrontal cortex"), S("Activa","Activa","Active"), S("Poco activa","Poc activa","Low activity"), S("Muy reducida","Molt reduïda","Strongly reduced"), S("Reactivada parcialmente","Reactivada parcialment","Partially reactivated")],
+          [S("Músculos","Músculs","Muscles"), S("Tono normal, movimiento voluntario","To normal, moviment voluntari","Normal tone, voluntary movement"), S("Muy relajados","Molt relaxats","Very relaxed"), S("Atonía (parálisis temporal)","Atonia (paràlisi temporal)","Atonia (temporary paralysis)"), S("Atonía (los ojos sí se mueven)","Atonia (els ulls sí es mouen)","Atonia (eyes can still move)")],
+          [S("¿Sabes que sueñas?","Saps que somies?","Do you know you're dreaming?"), "—", S("No (pocos sueños, poco narrativos)","No (pocs somnis, poc narratius)","No (few, non-narrative dreams)"), S("No: aceptas lo absurdo","No: acceptes l'absurd","No: you accept the absurd"), S("Sí","Sí","Yes")]
+        ].map(f=>`<tr style="border-top:1px solid var(--noche-700);"><td style="padding:10px 8px;color:var(--niebla-100);font-weight:600;">${f[0]}</td>${f.slice(1).map(c=>`<td style="padding:10px 8px;">${c}</td>`).join("")}</tr>`).join("")}
+      </tbody>
+    </table>
+    <p style="color:var(--niebla-500);font-size:0.72rem;margin:10px 0 0;">${S("Fuentes: Voss et al. (2009); Konkoly et al. (2021); NICHD.","Fonts: Voss et al. (2009); Konkoly et al. (2021); NICHD.","Sources: Voss et al. (2009); Konkoly et al. (2021); NICHD.")}</p>
+  </div>
+
+  <h2 class="font-display" style="font-size:1.25rem;margin:14px 0 -6px;color:var(--aurora-400);">${S("La química de los sueños","La química dels somnis","The chemistry of dreams")}</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;">
+    <div class="tarjeta"><div style="font-size:1.4rem;color:#4fd1c5;">▲</div><h3 style="margin:4px 0;font-size:1rem;">${S("Acetilcolina","Acetilcolina","Acetylcholine")}</h3><p style="color:var(--niebla-300);font-size:0.85rem;line-height:1.55;margin:0;">${S("Se mantiene alta en REM y se asocia a la activación eléctrica intensa de la corteza.","Es manté alta en REM i s'associa a l'activació elèctrica intensa de l'escorça.","Stays high in REM and is linked to the intense electrical activation of the cortex.")}</p></div>
+    <div class="tarjeta"><div style="font-size:1.4rem;color:#d98bb0;">▼</div><h3 style="margin:4px 0;font-size:1rem;">${S("Serotonina","Serotonina","Serotonin")}</h3><p style="color:var(--niebla-300);font-size:0.85rem;line-height:1.55;margin:0;">${S("Baja mucho durante el REM. Se relaciona con la alerta y el juicio crítico.","Baixa molt durant el REM. Es relaciona amb l'alerta i el judici crític.","Drops strongly during REM. Linked to alertness and critical judgment.")}</p></div>
+    <div class="tarjeta"><div style="font-size:1.4rem;color:#d98bb0;">▼</div><h3 style="margin:4px 0;font-size:1rem;">${S("Noradrenalina","Noradrenalina","Norepinephrine")}</h3><p style="color:var(--niebla-300);font-size:0.85rem;line-height:1.55;margin:0;">${S("También baja en REM. Con las anteriores explica por qué los sueños parecen reales y casi nunca los cuestionamos.","També baixa en REM. Amb les anteriors explica per què els somnis semblen reals i gairebé mai els qüestionem.","Also drops in REM. Together with the others, it helps explain why dreams feel real and we almost never question them.")}</p></div>
+  </div>
+
+  <div class="tarjeta" style="border-color:var(--aurora-500);">
+    <h3 class="font-display" style="margin:0 0 8px;font-size:1.05rem;">${S("De la neurociencia a la práctica","De la neurociència a la pràctica","From neuroscience to practice")}</h3>
+    <ul style="color:var(--niebla-300);font-size:0.88rem;line-height:1.7;padding-left:20px;margin:0 0 12px;">
+      <li><strong>WBTB</strong>: ${S("aprovecha que los REM son más largos hacia el final de la noche.","aprofita que els REM són més llargs cap al final de la nit.","takes advantage of REM periods being longer toward the end of the night.")}</li>
+      <li><strong>MILD</strong>: ${S("usa la memoria prospectiva (recordar una intención futura), ligada al prefrontal y a las regiones de memoria.","usa la memòria prospectiva (recordar una intenció futura), lligada al prefrontal i a les regions de memòria.","uses prospective memory (remembering a future intention), tied to the prefrontal cortex and memory regions.")}</li>
+      <li><strong>Reality checks</strong>: ${S("buscan activar la reflexión crítica asociada a la corteza prefrontal.","busquen activar la reflexió crítica associada a l'escorça prefrontal.","aim to activate the critical reflection associated with the prefrontal cortex.")}</li>
+    </ul>
+    <button class="btn-secundario" id="ir-tecnicas" style="font-size:0.85rem;padding:7px 18px;">${S("Ver las técnicas","Veure les tècniques","See the techniques")} →</button>
   </div>
   </div>`;
-  function actualizar(){
-    const z = ZONAS[zonaActiva];
-    main.querySelector("#info-zona").innerHTML = `<h3 class="font-display" style="color:${z.color};margin:0 0 8px;">${z.nombre}</h3><p style="color:var(--niebla-300);line-height:1.6;margin:0;">${z.texto}</p>`;
-    main.querySelectorAll(".zona").forEach(el=> el.setAttribute("fill-opacity", el.dataset.z===zonaActiva?"0.85":"0.4"));
+
+  // --- Interacción: mapa del cerebro ---
+  function actualizarZona(){
+    const z = ZONAS_DATOS[zonaActiva];
+    main.querySelector("#info-zona").innerHTML = `<h3 class="font-display" style="color:${z.color};margin:0 0 8px;">${pick(z.nombre)}</h3>
+      <p style="color:var(--niebla-300);line-height:1.6;margin:0 0 12px;font-size:0.9rem;">${pick(z.rol)}</p>
+      <div style="border-top:1px solid var(--noche-700);padding-top:10px;"><p style="margin:0 0 4px;font-size:0.78rem;color:var(--aurora-400);font-weight:600;">${S("En un sueño lúcido","En un somni lúcid","In a lucid dream")}</p>
+      <p style="color:var(--niebla-300);line-height:1.6;margin:0;font-size:0.88rem;">${pick(z.lucido)}</p></div>`;
+    main.querySelectorAll(".zona").forEach(el=>{ el.setAttribute("fill-opacity", el.dataset.z===zonaActiva?"0.9":"0.4"); el.style.cursor="pointer"; el.style.transition="fill-opacity 0.2s"; });
+    main.querySelectorAll(".chip-zona").forEach(c=>{ const on = c.dataset.z===zonaActiva; c.style.background = on? ZONAS_DATOS[c.dataset.z].color : "var(--noche-800)"; c.style.color = on? "#05060d":"var(--niebla-300)"; });
   }
-  main.querySelectorAll(".zona").forEach(el=> el.onclick=()=>{ zonaActiva=el.dataset.z; actualizar(); });
-  actualizar();
+  const chips = main.querySelector("#chips-zonas");
+  ORDEN_ZONAS.forEach(k=>{
+    const b = document.createElement("button"); b.className="chip-zona filtro"; b.dataset.z=k; b.textContent = pick(ZONAS_DATOS[k].nombre);
+    b.onclick = ()=>{ zonaActiva=k; actualizarZona(); }; chips.appendChild(b);
+  });
+  main.querySelectorAll(".zona").forEach(el=> el.onclick = ()=>{ zonaActiva = el.dataset.z; actualizarZona(); });
+  actualizarZona();
+
+  // --- Interacción: hipnograma ---
+  function actualizarEtapa(){
+    const e = ETAPAS_DATOS[etapaActiva];
+    main.querySelector("#info-etapa").innerHTML = `<h3 class="font-display" style="color:${e.color};margin:0 0 4px;font-size:1.05rem;">${pick(e.titulo)}</h3>
+      <p style="color:var(--niebla-500);font-size:0.78rem;margin:0 0 8px;">⏱ ${pick(e.dur)}</p>
+      <p style="color:var(--niebla-300);line-height:1.6;margin:0;font-size:0.9rem;">${pick(e.texto)}</p>`;
+    main.querySelectorAll(".seg").forEach(r=> r.setAttribute("opacity", r.dataset.e===etapaActiva?"1":"0.35"));
+    main.querySelectorAll(".btn-etapa").forEach(b=> b.classList.toggle("activo", b.dataset.e===etapaActiva));
+  }
+  const botones = main.querySelector("#botones-etapas");
+  ["N1","N2","N3","REM"].forEach(k=>{
+    const b = document.createElement("button"); b.className="filtro btn-etapa"; b.dataset.e=k; b.textContent=k;
+    b.onclick = ()=>{ etapaActiva=k; actualizarEtapa(); }; botones.appendChild(b);
+  });
+  main.querySelectorAll(".seg").forEach(r=> r.onclick = ()=>{ etapaActiva = r.dataset.e; actualizarEtapa(); });
+  actualizarEtapa();
+
+  main.querySelector("#ir-tecnicas").onclick = ()=> irA("tecnicas");
 }
 
 // --- LOGIN / REGISTRO ---
